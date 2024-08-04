@@ -1,0 +1,6 @@
+@ZoidUpAPI_HostAddress = http://localhost:5012
+
+GET {{ZoidUpAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

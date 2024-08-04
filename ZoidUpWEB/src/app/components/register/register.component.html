@@ -1,0 +1,25 @@
+<div class="container">
+  <div class="wrapper" *ngIf="!isLoading">
+    <div class="title">
+      <img src="/Images/Logo/ZoidUp.png" [routerLink]="['/']" />
+      <h1>Welcome to ZoidUp!</h1>
+      <p>Socialize anywhere, anytime, for free</p>
+    </div>
+    <form [formGroup]="form">
+      <div class="form-group">
+        <input type="text" formControlName="username" placeholder="username" />
+      </div>
+      <div class="form-group">
+        <input
+          type="password"
+          formControlName="password"
+          placeholder="password"
+        />
+      </div>
+      <div class="btns">
+        <button type="submit" (click)="Register()">Register</button>
+      </div>
+    </form>
+  </div>
+  <app-spinner *ngIf="isLoading"></app-spinner>
+</div>

@@ -1,0 +1,147 @@
+@import "../../../sass/mixins";
+@import "../../../sass/variables";
+
+@media (min-width: 768px) {
+  .container {
+    height: 100vh;
+    padding: 20px 50px;
+    nav {
+      @include flex(space-between, center);
+      position: sticky;
+      top: 0px;
+
+      background-color: $plain-white;
+      margin-bottom: 50px;
+
+      .logo {
+        width: 4rem;
+        img {
+          width: 4rem;
+        }
+      }
+      .items {
+        ul {
+          li {
+            list-style: none;
+            cursor: pointer;
+            &:hover {
+              text-decoration-line: underline;
+              text-decoration-color: $lime;
+              text-decoration-thickness: 5px;
+            }
+          }
+        }
+      }
+    }
+    main {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr;
+      gap: 30px;
+      .login {
+        .title {
+          h1 {
+            font-size: 72px;
+            background: linear-gradient(90deg, $green, $lime);
+            -webkit-background-clip: text;
+            color: transparent;
+            display: inline-block;
+          }
+          p {
+            margin: 10px 0px;
+            color: $lime;
+            font-size: 18px;
+          }
+        }
+        .form-part {
+          margin-top: 20px;
+          form {
+            * {
+              display: block;
+            }
+            input:not([type="checkbox"]) {
+              border: none;
+              border-radius: 5px;
+              background-color: $white;
+              padding: 8px;
+              font-size: 18px;
+              margin-top: 15px;
+              width: 250px;
+              &::placeholder {
+                color: $gray;
+              }
+
+              &:focus {
+                outline: none;
+              }
+            }
+
+            .form-checkbox-group {
+              margin: 15px 0px;
+              label {
+                @include flex(start, center);
+                input {
+                  margin-right: 15px;
+                }
+              }
+            }
+            .actions {
+              @include flex(start, center);
+              button:is([type="submit"]) {
+                color: $white;
+                border: none;
+                padding: 8px;
+                background-color: $lime;
+                margin-right: 10px;
+                border-radius: 20px;
+                width: 100px;
+                text-align: center;
+                font-size: 20px;
+                cursor: pointer;
+
+                &:hover {
+                  background: darken($lime, 1);
+                }
+              }
+              .forgot-password {
+                font-size: 16px;
+                color: $dark-green;
+                cursor: pointer;
+
+                &:hover {
+                  text-decoration: underline;
+                }
+              }
+            }
+          }
+        }
+        .information-text {
+          margin-top: 30px;
+          p {
+            font-size: 36px;
+            font-weight: 400;
+          }
+        }
+      }
+      .info {
+        position: relative;
+        width: 30rem;
+        border-radius: 15px;
+        @include flex(center, center);
+        img {
+          width: 25rem;
+        }
+        .text {
+          position: absolute;
+          width: 20rem;
+        }
+      }
+    }
+  }
+  .error {
+    border: 1px solid red !important;
+  }
+  .error-text {
+    color: red;
+  }
+}

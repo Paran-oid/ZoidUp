@@ -20,7 +20,7 @@ namespace ZoidUpAPI.Data.Services.UserService
             _token = token;
         }
 
-        public async Task<User> GetUser(string token)
+        public async Task<User?> GetUser(string token)
         {
             var claims = _token.ReadAuthToken(token);
 
@@ -30,14 +30,14 @@ namespace ZoidUpAPI.Data.Services.UserService
 
             if (name == null)
             {
-                throw new Exception("Invalid Token");
+                return null;
             }
 
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == name);
 
             if (user == null)
             {
-                throw new Exception("User Invalid");
+                return null;
             }
 
             return user;
@@ -48,7 +48,7 @@ namespace ZoidUpAPI.Data.Services.UserService
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == model.Username);
             if (user == null)
             {
-                throw new Exception("We couldn't find your account");
+                return null;
             }
             bool isSamePassword = _hasher.VerifyPassword(user.Password, model.Password);
 
@@ -59,7 +59,7 @@ namespace ZoidUpAPI.Data.Services.UserService
 
                 return result;
             }
-            throw new Exception("There was an error with your username or password...");
+            return null;
         }
 
         public async Task<AccessTokenResponse?> Register(RegisterEntry model)
@@ -67,7 +67,7 @@ namespace ZoidUpAPI.Data.Services.UserService
             var temp = await _context.Users.FirstOrDefaultAsync(u => u.Username == model.Username);
             if (temp != null)
             {
-                throw new Exception("User already exists");
+                return null;
             }
             //if no user exists, we will create a the user
 

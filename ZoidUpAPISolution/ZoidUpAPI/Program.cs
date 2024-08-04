@@ -37,6 +37,17 @@ opt.UseNpgsql(builder.Configuration.GetConnectionString("Default"))
 //AutoMapper
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
+//Cors
+builder.Services.AddCors(options =>
+  options.AddPolicy("Default", builder =>
+  {
+      builder
+      .WithOrigins("http://localhost:4200")
+      .AllowAnyHeader()
+      .AllowAnyMethod()
+      .AllowCredentials();
+  }));
+
 //App Services
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<Hash>();
@@ -49,6 +60,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors("Default");
 
 app.UseHttpsRedirection();
 

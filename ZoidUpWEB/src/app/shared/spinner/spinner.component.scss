@@ -1,0 +1,19 @@
+.spinner {
+  width: 10rem;
+  height: 10rem;
+  border: 16px solid white;
+  border-radius: 50%;
+  border-top: 16px solid black;
+  margin: 0 auto;
+
+  animation: spinner 1s linear infinite;
+}
+
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

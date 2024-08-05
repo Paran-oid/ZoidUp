@@ -23,6 +23,13 @@ namespace ZoidUpAPI.Controllers
         }
 
         [HttpGet]
+        public async Task<ActionResult<List<User>>> GetAllUsers()
+        {
+            var users = await _userService.GetAllUsers();
+            return Ok(users);
+        }
+
+        [HttpGet]
         public async Task<ActionResult<AccessTokenResponse>> Login([FromQuery] LoginEntry model)
         {
             var result = await _userService.Login(model);

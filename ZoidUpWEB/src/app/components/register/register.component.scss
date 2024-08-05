@@ -16,6 +16,12 @@
         }
       }
       form {
+        border: 1px solid black;
+        border-radius: 20px;
+        padding: 20px;
+        .subtitle {
+          margin-bottom: 20px;
+        }
         .form-group {
           input {
             border: none;

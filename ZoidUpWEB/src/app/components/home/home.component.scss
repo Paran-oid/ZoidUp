@@ -1,3 +1,40 @@
+@import "../../../sass/mixins";
+
 .container {
   height: 100vh;
+  .public-messages {
+    margin-bottom: 50px;
+
+    .user-interaction {
+      @include flex(start, center);
+      p {
+        margin-right: 20px;
+      }
+    }
+    form {
+      label,
+      input {
+        display: block;
+      }
+    }
+  }
+
+  .users {
+    margin-bottom: 50px;
+    .user {
+      @include flex(start, center);
+      p {
+        margin-right: 10px;
+      }
+      b {
+        font-weight: bold;
+      }
+    }
+  }
+
+  .join-messages {
+    position: absolute;
+    bottom: 100px;
+    right: 100px;
+  }
 }

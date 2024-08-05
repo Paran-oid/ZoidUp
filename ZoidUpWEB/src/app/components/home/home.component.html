@@ -1,2 +1,45 @@
-<p>home works!</p>
-<button (click)="SignOut()">Logout</button>
+<div class="container">
+  <div class="public-messages">
+    <h1>Send Public Messages</h1>
+    <form>
+      <div class="user-interaction">
+        <p *ngIf="user?.username; else displayFetching">
+          Hello {{ user?.username }}!
+        </p>
+        <ng-template #displayFetching>connecting...</ng-template>
+        <button (click)="SignOut()">Logout</button>
+      </div>
+
+      <label>Message</label>
+      <input type="text" name="text" [(ngModel)]="text" />
+      <button type="button" (click)="SendMessage()">submit</button>
+    </form>
+    <div>
+      <h3>Public Messages:</h3>
+      <ul>
+        <li *ngFor="let conversation of conversations">
+          <b>{{ conversation.user }}</b> : {{ conversation.message }}
+        </li>
+      </ul>
+      <h3>Private Messages:</h3>
+      <ul>
+        <li *ngFor="let conversation of privateConversations">
+          <b>{{ conversation.user }}</b> : {{ conversation.message }}
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="users">
+    <h1>Available Users:</h1>
+    <div class="user" *ngFor="let user of otherUsers">
+      <p (click)="selectedUser = user.username">{{ user.username }}</p>
+      <b *ngIf="user.username == selectedUser">selected</b>
+    </div>
+    <button (click)="selectedUser = null">select all</button>
+  </div>
+  <div class="join-messages">
+    <div class="message" *ngFor="let message of messages">
+      {{ message }}
+    </div>
+  </div>
+</div>

@@ -125,7 +125,7 @@
       }
       .info {
         position: relative;
-        width: 30rem;
+        width: 100%;
         border-radius: 15px;
         @include flex(center, center);
         img {

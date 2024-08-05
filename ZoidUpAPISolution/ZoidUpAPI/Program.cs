@@ -6,6 +6,7 @@ using ZoidUpAPI.Data.Services.UserService;
 using System.Text;
 using AutoMapper;
 using ZoidUpAPI.Utilities.Tokens_Hashers;
+using ZoidUpAPI.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+//SignalR
+builder.Services.AddSignalR();
 
 //Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -68,5 +72,8 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+//Our hubs
+app.MapHub<ChatHub>("/chathub");
 
 app.Run();

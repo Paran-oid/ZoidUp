@@ -20,6 +20,12 @@ namespace ZoidUpAPI.Data.Services.UserService
             _token = token;
         }
 
+        public async Task<List<User>?> GetAllUsers()
+        {
+            var users = await _context.Users.ToListAsync();
+            return users;
+        }
+
         public async Task<User?> GetUser(string token)
         {
             var claims = _token.ReadAuthToken(token);

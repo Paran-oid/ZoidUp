@@ -7,14 +7,13 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { RegisterEntry } from '../../models/other/register-entry.model';
-import { SpinnerComponent } from '../../shared/spinner/spinner.component';
 import { CommonModule } from '@angular/common';
+import { RegisterEntry } from '../../models/other/register-entry.model';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [RouterLink, ReactiveFormsModule, SpinnerComponent, CommonModule],
+  imports: [RouterLink, ReactiveFormsModule, CommonModule],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss',
 })

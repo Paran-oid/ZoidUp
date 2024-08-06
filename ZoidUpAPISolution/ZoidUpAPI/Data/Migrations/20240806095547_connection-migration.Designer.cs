@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ZoidUpAPI.Data;
@@ -11,9 +12,11 @@ using ZoidUpAPI.Data;
 namespace ZoidUpAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240806095547_connection-migration")]
+    partial class connectionmigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -27,9 +30,6 @@ namespace ZoidUpAPI.Migrations
                     b.Property<string>("ID")
                         .HasColumnType("text");
 
-                    b.Property<bool>("Connected")
-                        .HasColumnType("boolean");
-
                     b.Property<string>("UserAgent")
                         .IsRequired()
                         .HasColumnType("text");
@@ -37,11 +37,14 @@ namespace ZoidUpAPI.Migrations
                     b.Property<int?>("UserID")
                         .HasColumnType("integer");
 
+                    b.Property<bool>("connected")
+                        .HasColumnType("boolean");
+
                     b.HasKey("ID");
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("Connections", "ath");
+                    b.ToTable("Connections");
                 });
 
             modelBuilder.Entity("ZoidUpAPI.Models.User", b =>
@@ -51,10 +54,6 @@ namespace ZoidUpAPI.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
-
-                    b.Property<string>("ChatID")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<string>("Password")
                         .IsRequired()

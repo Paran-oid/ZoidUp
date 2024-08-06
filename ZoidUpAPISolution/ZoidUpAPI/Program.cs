@@ -18,7 +18,7 @@ builder.Services.AddSwaggerGen();
 //SignalR
 builder.Services.AddSignalR();
 
-//Authentication
+//Authentication and httpcontext
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(opt =>
     {
@@ -28,6 +28,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetSection("JwtSettings:SecretKey").Value))
         };
     });
+builder.Services.AddHttpContextAccessor();
 
 //PostgreSQL
 builder.Services.AddDbContext<AppDbContext>(opt =>
@@ -69,6 +70,8 @@ app.UseCors("Default");
 
 app.UseHttpsRedirection();
 
+//when token gets created IT SHOULD assign User object to the token's object...
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

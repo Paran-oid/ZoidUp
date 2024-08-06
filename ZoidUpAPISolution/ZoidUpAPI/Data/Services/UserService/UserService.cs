@@ -20,7 +20,7 @@ namespace ZoidUpAPI.Data.Services.UserService
             _token = token;
         }
 
-        public async Task<List<User>?> GetAllUsers()
+        public async Task<IEnumerable<User>?> GetAllUsers()
         {
             var users = await _context.Users.ToListAsync();
             return users;
@@ -45,6 +45,7 @@ namespace ZoidUpAPI.Data.Services.UserService
             {
                 return null;
             }
+
 
             return user;
         }

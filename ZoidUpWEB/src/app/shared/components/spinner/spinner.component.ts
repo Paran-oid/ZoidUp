@@ -1,5 +1,6 @@
+import { Component, Input } from '@angular/core';
+import { SpinnerService } from '../../../services/spinner.service';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-spinner',
@@ -7,7 +8,8 @@ import { Component } from '@angular/core';
   imports: [CommonModule],
   templateUrl: './spinner.component.html',
   styleUrl: './spinner.component.scss',
+  providers: [SpinnerService],
 })
 export class SpinnerComponent {
-  constructor() {}
+  @Input() isLoading: boolean = false;
 }

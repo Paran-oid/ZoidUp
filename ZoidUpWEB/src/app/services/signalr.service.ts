@@ -14,7 +14,6 @@ export class SignalrService {
   hubConnection!: HubConnection;
   MessageReceived = new Subject<any>();
   HasJoined = new Subject<any>();
-  ReceivePrivateMessage = new Subject<any>();
 
   constructor(private http: HttpClient) {
     this.hubConnection = new HubConnectionBuilder()
@@ -39,13 +38,6 @@ export class SignalrService {
     this.hubConnection.on('HasJoined', (message: string) => {
       this.HasJoined.next(message);
     });
-
-    this.hubConnection.on(
-      'ReceivePrivateMessage',
-      (user: string, message: string) => {
-        this.ReceivePrivateMessage.next({ user: user, message: message });
-      }
-    );
   }
 
   SendMessageToAll(user: string, message: string) {

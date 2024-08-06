@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using ZoidUpAPI.Data.Services.UserService;
 using ZoidUpAPI.Models;
 using ZoidUpAPI.Models.Others.AuthRelated;
@@ -19,11 +22,19 @@ namespace ZoidUpAPI.Controllers
             {
                 return NotFound("User not found");
             }
+            //we set the user for our app
+
+            var identity = new ClaimsIdentity(new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, user.Username),
+            });
+            HttpContext.User = new ClaimsPrincipal(identity);
+
             return Ok(user);
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<User>>> GetAllUsers()
+        public async Task<ActionResult<IEnumerable<User>>> GetAllUsers()
         {
             var users = await _userService.GetAllUsers();
             return Ok(users);
@@ -38,6 +49,14 @@ namespace ZoidUpAPI.Controllers
                 return BadRequest("Please enter valid credentials");
             }
             return Ok(result);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<string>> Logout()
+        {
+            var result = HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            var temp = HttpContext.User;
+            return Ok("successfully logged out");
         }
 
         [HttpPost]

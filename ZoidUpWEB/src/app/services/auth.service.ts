@@ -2,10 +2,17 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { LoginEntry } from '../models/other/login-entry.model';
 import { AccessTokenResponse } from '../models/other/access-token-response.model';
-import { catchError, map, BehaviorSubject, Observable } from 'rxjs';
+import {
+  catchError,
+  map,
+  BehaviorSubject,
+  Observable,
+  ReplaySubject,
+} from 'rxjs';
 import { environment } from '../../environments/environment.development';
 import { User } from '../models/user/user.model';
 import { RegisterEntry } from '../models/other/register-entry.model';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -13,46 +20,53 @@ import { RegisterEntry } from '../models/other/register-entry.model';
 export class AuthService {
   url: string = environment.url;
 
-  private userSubject!: BehaviorSubject<User | null>;
-  private usersSubject!: BehaviorSubject<User[]>;
-  public user!: Observable<User | null>;
-  public users!: Observable<User[]>;
-  constructor(private http: HttpClient) {
+  private user = new BehaviorSubject<User | null>(null);
+  private users = new BehaviorSubject<User[]>([]);
+
+  //subject gets data
+
+  //observer reads data
+  public user$ = this.user.asObservable();
+  public users$ = this.users.asObservable();
+
+  constructor(private http: HttpClient, private router: Router) {
     const token: string | null = localStorage.getItem('token');
 
-    this.userSubject = new BehaviorSubject<User | null>(null);
-    this.usersSubject = new BehaviorSubject<User[]>([]);
-
-    this.user = this.userSubject.asObservable();
-    this.users = this.usersSubject.asObservable();
     if (token) {
-      this.GetUser(token).subscribe({
-        next: (response) => {
-          this.userSubject.next(response);
-          this.GetAllUsers().subscribe({
-            next: (response) => {
-              this.usersSubject.next(response);
-            },
-          });
-        },
-        error: (error) => {
-          console.error(error);
-          this.userSubject.next(null);
-          alert("We couldn't log you in. going back to home page");
-        },
-      });
+      this.GetUser(token).subscribe();
+      this.GetAllUsers().subscribe();
     }
   }
 
   //turn this to get all friends
   public GetAllUsers() {
-    return this.http.get<User[]>(this.url + '/User/GetAllUsers');
+    return this.http.get<User[]>(this.url + '/User/GetAllUsers').pipe(
+      map((users) => {
+        console.log(users);
+        this.users.next(users);
+      })
+    );
   }
 
   public GetUser(token: string) {
     let params = new HttpParams();
     params = params.append('token', token);
-    return this.http.get<User>(this.url + '/User/GetUser', { params: params });
+    return this.http
+      .get<User>(this.url + '/User/GetUser', { params: params })
+      .pipe(
+        map((user) => {
+          this.user.next(user);
+        }),
+        catchError((error) => {
+          {
+            console.error(error);
+            this.user.next(null);
+            alert("We couldn't log you in. going back to home page");
+            this.router.navigate(['/']);
+            return error;
+          }
+        })
+      );
   }
 
   public Login(model: LoginEntry) {
@@ -86,6 +100,6 @@ export class AuthService {
 
   public Logout() {
     localStorage.removeItem('token');
-    this.userSubject.next(null);
+    this.user.next(null);
   }
 }

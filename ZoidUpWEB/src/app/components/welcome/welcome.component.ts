@@ -8,13 +8,12 @@ import {
 import { AuthService } from '../../services/auth.service';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { SpinnerComponent } from '../../shared/spinner/spinner.component';
 import { LoginEntry } from '../../models/other/login-entry.model';
 
 @Component({
   selector: 'app-welcome',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, SpinnerComponent, RouterLink],
+  imports: [ReactiveFormsModule, CommonModule, RouterLink],
   templateUrl: './welcome.component.html',
   styleUrl: './welcome.component.scss',
 })

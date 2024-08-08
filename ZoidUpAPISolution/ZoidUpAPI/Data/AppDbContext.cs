@@ -11,6 +11,5 @@ namespace ZoidUpAPI.Data
         }
 
         public DbSet<User> Users { get; set; }
-        public DbSet<Connection> Connections { get; set; }
     }
 }

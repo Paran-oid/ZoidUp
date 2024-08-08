@@ -29,7 +29,9 @@ namespace ZoidUpAPI.Utilities.Tokens_Hashers
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, user.Username),
+                new Claim("username", user.Username),
+                new Claim("token", user.Token),
+                new Claim("date", DateTime.Now.ToString())
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("JwtSettings:SecretKey").Value));

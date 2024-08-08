@@ -26,20 +26,25 @@ namespace ZoidUpAPI.Data.Services.UserService
             return users;
         }
 
-        public async Task<User?> GetUser(string token)
+        public async Task<object?> GetUser(string token)
         {
             var claims = _token.ReadAuthToken(token);
 
-            //we get the claim whose type is name
-            var nameClaim = claims.FirstOrDefault(c => c.Type == ClaimTypes.Name);
-            string name = nameClaim.Value;
-
-            if (name == null)
+            if (claims.Count == 0)
             {
                 return null;
             }
 
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == name);
+
+            var result = new
+            {
+                username = claims.FirstOrDefault(c => c.Type == "username")!.Value,
+                token = claims.FirstOrDefault(c => c.Type == "token")!.Value,
+                date = claims.FirstOrDefault(c => c.Type == "date")!.Value,
+            };
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == result.username
+            );
 
             if (user == null)
             {
@@ -47,7 +52,7 @@ namespace ZoidUpAPI.Data.Services.UserService
             }
 
 
-            return user;
+            return result;
         }
 
         public async Task<AccessTokenResponse?> Login(LoginEntry model)
@@ -62,6 +67,10 @@ namespace ZoidUpAPI.Data.Services.UserService
             if (isSamePassword)
             {
                 var token = _token.GenerateAuthToken(user);
+
+                user.Token = token;
+                await _context.SaveChangesAsync();
+
                 var result = new AccessTokenResponse(token, Convert.ToInt32((DateTime.UtcNow.AddMinutes(60) - DateTime.UtcNow).TotalSeconds));
 
                 return result;
@@ -85,16 +94,17 @@ namespace ZoidUpAPI.Data.Services.UserService
                 Password = hashedPassword
             };
 
+
+            var token = _token.GenerateAuthToken(user: userCreated);
+            userCreated.Token = token;
+
             await _context.Users.AddAsync(userCreated);
             await _context.SaveChangesAsync();
 
-            var token = _token.GenerateAuthToken(user: userCreated);
-
             var result = new AccessTokenResponse(token,
                 (int)(DateTime.UtcNow.AddMinutes(60) - DateTime.UtcNow).TotalSeconds);
+
             return result;
-
-
         }
     }
 }

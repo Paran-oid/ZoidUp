@@ -1,4 +1,4 @@
-@import "../../../../sass/variables";
+@import "../../../../scss/variables";
 
 .spinner-overlay {
   position: fixed;
@@ -15,7 +15,7 @@
 
 .spinner-container {
   border: 12px solid #f3f3f3; /* Light grey */
-  border-top: 12px solid $lime; /* Blue */
+  border-top: 12px solid $green; /* Blue */
   border-radius: 50%;
   width: 100px;
   height: 100px;

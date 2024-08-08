@@ -1,40 +1,11 @@
-@import "../../../sass/mixins";
+@import "../../../scss/mixins";
 
-.container {
-  height: 100vh;
-  .public-messages {
-    margin-bottom: 50px;
+@media (min-width: 768px) {
+  .container {
+    height: 100vh;
 
-    .user-interaction {
-      @include flex(start, center);
-      p {
-        margin-right: 20px;
-      }
-    }
-    form {
-      label,
-      input {
-        display: block;
-      }
-    }
-  }
-
-  .users {
-    margin-bottom: 50px;
-    .user {
-      @include flex(start, center);
-      p {
-        margin-right: 10px;
-      }
-      b {
-        font-weight: bold;
-      }
-    }
-  }
-
-  .join-messages {
-    position: absolute;
-    bottom: 100px;
-    right: 100px;
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    grid-template-rows: 1fr;
   }
 }

@@ -1,0 +1,42 @@
+@import "../../../../scss/mixins";
+@import "../../../../scss/variables";
+
+@media (min-width: 768px) {
+  .container {
+    .wrapper {
+      background-color: $green;
+      height: 64px;
+      .header {
+        height: 64px;
+        padding: 10px 20px;
+        @include flex(space-between, center);
+        .left {
+          @include flex(center, center);
+          .profile-picture {
+            border-radius: 50%;
+            width: 3rem;
+            margin-right: 15px;
+            img {
+              border-radius: 50%;
+              width: 3rem;
+            }
+          }
+          .about-model {
+            p {
+              color: $gray;
+            }
+          }
+        }
+        .right {
+          img {
+            mix-blend-mode: multiply;
+            width: 2rem;
+            height: 2rem;
+            margin-left: 20px;
+          }
+        }
+      }
+    }
+    height: 100vh;
+  }
+}

@@ -49,10 +49,10 @@ export class AuthService {
   }
 
   public GetUser(token: string) {
-    let params = new HttpParams();
-    params = params.append('token', token);
+    let headers = new HttpHeaders();
+    headers = headers.append('token', token);
     return this.http
-      .get<User>(this.url + '/User/GetUser', { params: params })
+      .get<User>(this.url + '/User/GetUser', { headers: headers })
       .pipe(
         map((user) => {
           this.user.next(user);
@@ -60,9 +60,12 @@ export class AuthService {
         catchError((error) => {
           {
             console.error(error);
-            this.user.next(null);
             alert("We couldn't log you in. going back to home page");
+
+            localStorage.removeItem('token');
+            this.user.next(null);
             this.router.navigate(['/']);
+
             return error;
           }
         })
@@ -101,5 +104,6 @@ export class AuthService {
   public Logout() {
     localStorage.removeItem('token');
     this.user.next(null);
+    this.router.navigate(['/']);
   }
 }

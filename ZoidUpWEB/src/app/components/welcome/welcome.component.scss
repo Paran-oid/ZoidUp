@@ -1,5 +1,5 @@
-@import "../../../sass/mixins";
-@import "../../../sass/variables";
+@import "../../../scss/mixins";
+@import "../../../scss/variables";
 
 @media (min-width: 768px) {
   .container {
@@ -26,8 +26,8 @@
             cursor: pointer;
             &:hover {
               text-decoration-line: underline;
-              text-decoration-color: $lime;
-              text-decoration-thickness: 5px;
+              text-decoration-color: $green;
+              text-decoration-thickness: 2px;
             }
           }
         }
@@ -42,14 +42,14 @@
         .title {
           h1 {
             font-size: 72px;
-            background: linear-gradient(90deg, $green, $lime);
+            background: linear-gradient(90deg, $light-green, $green);
             -webkit-background-clip: text;
             color: transparent;
             display: inline-block;
           }
           p {
             margin: 10px 0px;
-            color: $lime;
+            color: $green;
             font-size: 18px;
           }
         }
@@ -91,7 +91,7 @@
                 color: $white;
                 border: none;
                 padding: 8px;
-                background-color: $lime;
+                background-color: $green;
                 margin-right: 10px;
                 border-radius: 20px;
                 width: 100px;
@@ -100,7 +100,7 @@
                 cursor: pointer;
 
                 &:hover {
-                  background: darken($lime, 1);
+                  background: darken($green, 1);
                 }
               }
               .forgot-password {

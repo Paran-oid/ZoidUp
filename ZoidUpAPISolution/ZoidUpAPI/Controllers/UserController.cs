@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using System.Security.Principal;
 using ZoidUpAPI.Data.Services.UserService;
 using ZoidUpAPI.Models;
 using ZoidUpAPI.Models.Others.AuthRelated;
@@ -15,22 +16,23 @@ namespace ZoidUpAPI.Controllers
     {
 
         [HttpGet]
-        public async Task<ActionResult<User>> GetUser([FromQuery] string token)
+        public async Task<ActionResult> GetUser([FromHeader] string token)
         {
-            var user = await _userService.GetUser(token);
-            if (user == null)
+            try
+            {
+                var result = await _userService.GetUser(token);
+
+                if (result == null)
+                {
+                    return NotFound("User not found");
+                }
+
+                return Ok(result);
+            }
+            catch (Exception e)
             {
                 return NotFound("User not found");
             }
-            //we set the user for our app
-
-            var identity = new ClaimsIdentity(new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, user.Username),
-            });
-            HttpContext.User = new ClaimsPrincipal(identity);
-
-            return Ok(user);
         }
 
         [HttpGet]
@@ -48,14 +50,14 @@ namespace ZoidUpAPI.Controllers
             {
                 return BadRequest("Please enter valid credentials");
             }
+
             return Ok(result);
         }
 
         [HttpGet]
         public async Task<ActionResult<string>> Logout()
         {
-            var result = HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            var temp = HttpContext.User;
+            await HttpContext.SignOutAsync();
             return Ok("successfully logged out");
         }
 

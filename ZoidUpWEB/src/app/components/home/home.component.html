@@ -1,14 +1,4 @@
 <div class="container">
-  <div class="currentUser">
-    <p *ngIf="authService.user$ | async">
-      username: {{ CurrentUser?.username }}
-    </p>
-    <button (click)="authService.Logout()">logout</button>
-    <!-- follow the tutorial to see how to add currently logged in user -->
-  </div>
-  <div class="users">
-    <div class="user" *ngFor="let user of users">
-      {{ user.username }}
-    </div>
-  </div>
+  <app-panel [friends]="friends"></app-panel>
+  <app-chat></app-chat>
 </div>

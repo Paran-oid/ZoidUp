@@ -1,0 +1,31 @@
+<div class="container">
+  <div class="header">
+    <div class="wrapper">
+      <div class="profile-picture">
+        <img src="/User Images/AzizHmidi/ProfilePictures/profilepicture.png" />
+      </div>
+      <div class="title">
+        <h3>ZoidUp</h3>
+      </div>
+      <div class="gear">
+        <img src="/Images/Icons/gear.svg" />
+      </div>
+    </div>
+  </div>
+  <div class="friends">
+    <div class="friend" *ngFor="let friend of friends">
+      <div class="profile-picture">
+        <img src="/User Images/AzizHmidi/ProfilePictures/profilepicture.png" />
+      </div>
+      <div class="info">
+        <h4>{{ friend.username }}</h4>
+        <p>cool message</p>
+      </div>
+      <div class="status">
+        <div class="tick-icon">
+          <img src="/Images/Icons/tick.png" />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

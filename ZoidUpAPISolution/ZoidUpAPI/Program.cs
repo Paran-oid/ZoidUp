@@ -6,7 +6,6 @@ using ZoidUpAPI.Data.Services.UserService;
 using System.Text;
 using AutoMapper;
 using ZoidUpAPI.Utilities.Tokens_Hashers;
-using ZoidUpAPI.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,30 +18,48 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSignalR();
 
 //Authentication and httpcontext
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+builder.Services.AddAuthentication(opt =>
+{
+    opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
     .AddJwtBearer(opt =>
     {
         opt.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
         {
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetSection("JwtSettings:SecretKey").Value))
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetSection("JwtSettings:SecretKey").Value)),
+            ValidateIssuer = true,
+            ValidateAudience = true
+        };
+
+        opt.Events = new JwtBearerEvents
+        {
+            //we need this so we can use users with signal r
+            OnMessageReceived = context =>
+            {
+                var accessToken = context.Request.Query["access_token"];
+                var path = context.HttpContext.Request.Path;
+                if (string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/chathub"))
+                {
+                    context.Token = accessToken;
+                }
+                return Task.CompletedTask;
+            }
         };
     });
 builder.Services.AddHttpContextAccessor();
 
-//PostgreSQL
+//POSTGRESQL
 builder.Services.AddDbContext<AppDbContext>(opt =>
 opt.UseNpgsql(builder.Configuration.GetConnectionString("Default"))
 );
 
-//Add Cookies
 
-//Add JWT
 
 //AutoMapper
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
-//Cors
+//CORS
 builder.Services.AddCors(options =>
   options.AddPolicy("Default", builder =>
   {
@@ -68,15 +85,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("Default");
 
-app.UseHttpsRedirection();
-
-//when token gets created IT SHOULD assign User object to the token's object...
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
 
-//Our hubs
-app.MapHub<ChatHub>("/chathub");
 
 app.Run();

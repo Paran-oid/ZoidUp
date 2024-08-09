@@ -1,15 +1,22 @@
 <div class="container">
   <div class="header">
     <div class="wrapper">
-      <div class="profile-picture">
-        <img src="/User Images/AzizHmidi/ProfilePictures/profilepicture.png" />
-      </div>
       <div class="title">
-        <h3>ZoidUp</h3>
+        <h3>Chats</h3>
       </div>
       <div class="gear">
         <img src="/Images/Icons/gear.svg" />
       </div>
+    </div>
+    <div class="search">
+      <form>
+        <div class="input-group">
+          <div class="icon">
+            <img src="/Images/Icons/search.png" />
+          </div>
+          <input type="text" placeholder="search" />
+        </div>
+      </form>
     </div>
   </div>
   <div class="friends">
@@ -21,7 +28,7 @@
         <h4>{{ friend.username }}</h4>
         <p>cool message</p>
       </div>
-      <div class="status">
+      <div class="status" [hidden]="true">
         <div class="tick-icon">
           <img src="/Images/Icons/tick.png" />
         </div>

@@ -1,38 +1,65 @@
-@import "../../../../scss/mixins";
-@import "../../../../scss/variables";
+@import "../../../../scss/global";
 
 @media (min-width: 768px) {
   .container {
-    height: 100vh;
+    height: 100%;
     .header {
       background-color: $dark-green;
       padding: 10px 2px;
       .wrapper {
         @include flex(space-between, center);
         padding: 0px 15px;
-        .profile-picture {
-          border-radius: 50%;
-          width: 2.5rem;
-          img {
-            border-radius: 50%;
-            width: 2.5rem;
-          }
-        }
+
         .title {
           color: $white;
         }
         .gear {
-          width: 2rem;
+          width: 1.5rem;
           img {
-            width: 2rem;
+            width: 1.5rem;
+          }
+        }
+      }
+      .search {
+        margin: 10px 0px;
+        @include flex(center, center);
+        form {
+          @include flex(center, center);
+          width: 100%;
+
+          .input-group {
+            position: relative;
+            .icon {
+              height: 100%;
+              width: 2rem;
+              @include flex(start, center);
+              img {
+                mix-blend-mode: multiply;
+
+                position: absolute;
+                left: 0px;
+                top: 50%;
+                transform: translateY(-50%);
+
+                width: 2rem;
+              }
+            }
+            input {
+              padding: 8px 8px 8px 2rem;
+              border: 1px solid transparent;
+              border-radius: 15px;
+              outline: none;
+              background-color: $gray;
+              width: 250px;
+            }
           }
         }
       }
     }
     .friends {
       background-color: $gray;
-      height: 100%;
       padding: 15px 6px;
+      height: auto;
       .friend {
         position: relative;
         margin-bottom: 20px;
@@ -40,10 +67,10 @@
         .profile-picture {
           border-radius: 50%;
           margin-right: 20px;
-          width: 2rem;
+          width: 3rem;
           img {
             border-radius: 50%;
-            width: 2rem;
+            width: 3rem;
           }
         }
         .status {

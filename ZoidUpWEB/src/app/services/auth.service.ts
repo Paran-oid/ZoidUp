@@ -42,7 +42,6 @@ export class AuthService {
   public GetAllUsers() {
     return this.http.get<User[]>(this.url + '/User/GetAllUsers').pipe(
       map((users) => {
-        console.log(users);
         this.users.next(users);
       })
     );

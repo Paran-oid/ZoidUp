@@ -1,8 +1,8 @@
-@import "../../../../scss/mixins";
-@import "../../../../scss/variables";
+@import "../../../../scss/global";
 
 @media (min-width: 768px) {
   .container {
+    height: 100%;
     .wrapper {
       background-color: $green;
       height: 64px;
@@ -36,7 +36,14 @@
           }
         }
       }
+      .messages {
+        .message {
+          @include flex(start, center);
+        }
+      }
     }
-    height: 100vh;
+  }
+  .right {
+    justify-content: right !important;
   }
 }

@@ -7,11 +7,18 @@ import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { User } from '../../models/user/user.model';
 import { PanelComponent } from './panel/panel.component';
 import { ChatComponent } from './chat/chat.component';
+import { AboutComponent } from './about/about.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [FormsModule, CommonModule, PanelComponent, ChatComponent],
+  imports: [
+    FormsModule,
+    CommonModule,
+    PanelComponent,
+    ChatComponent,
+    AboutComponent,
+  ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
@@ -29,7 +36,6 @@ export class HomeComponent implements OnInit {
       this.currentUser = user;
       this.authService.users$.subscribe((users) => {
         this.friends = users;
-        console.log(users);
       });
     });
   }

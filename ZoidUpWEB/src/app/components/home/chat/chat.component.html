@@ -18,5 +18,20 @@
         <img src="/Images/Icons/more.jpg" />
       </div>
     </div>
+    <div class="messages">
+      <div
+        class="message"
+        [ngClass]="{ right: message.userId === currentUser.id }"
+        *ngFor="let message of messages"
+      >
+        <!-- user profile picture here -->
+        <div class="profile-picture">
+          <img
+            src="/User Images/AzizHmidi/ProfilePictures/profilepicture.png"
+          />
+        </div>
+        <div class="message-body">{{ message.body }}</div>
+      </div>
+    </div>
   </div>
 </div>

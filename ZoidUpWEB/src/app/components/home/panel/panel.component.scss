@@ -2,26 +2,32 @@
 
 @media (min-width: 768px) {
   .container {
-    height: 100%;
+    height: 100vh;
     .header {
       background-color: $dark-green;
-      padding: 10px 2px;
-      .wrapper {
-        @include flex(space-between, center);
-        padding: 0px 15px;
+      padding: 10px 2px 0px 2px;
+      height: 65px;
+      @include flex(space-between, center);
+      @include flex(space-between, center);
+      padding: 0px 15px;
 
-        .title {
-          color: $white;
-        }
-        .gear {
+      .title {
+        color: $white;
+      }
+      .gear {
+        width: 1.5rem;
+        img {
           width: 1.5rem;
-          img {
-            width: 1.5rem;
-          }
         }
       }
+    }
+    .friends {
+      background-color: $gray;
+      padding: 15px 6px;
+      height: calc(100% - 65px);
+
       .search {
-        margin: 10px 0px;
+        margin-bottom: 20px;
         @include flex(center, center);
         form {
           @include flex(center, center);
@@ -49,17 +55,17 @@
               border: 1px solid transparent;
               border-radius: 15px;
               outline: none;
-              background-color: $gray;
+              border: 1px 10px black;
               width: 250px;
+
+              &::placeholder {
+                font-weight: 700;
+              }
             }
           }
         }
       }
-    }
-    .friends {
-      background-color: $gray;
-      padding: 15px 6px;
-      height: auto;
+
       .friend {
         position: relative;
         margin-bottom: 20px;

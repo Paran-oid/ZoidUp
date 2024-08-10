@@ -1,25 +1,23 @@
 <div class="container">
   <div class="header">
-    <div class="wrapper">
-      <div class="title">
-        <h3>Chats</h3>
-      </div>
-      <div class="gear">
-        <img src="/Images/Icons/gear.svg" />
-      </div>
+    <div class="title">
+      <h3>Chats</h3>
     </div>
+    <div class="gear">
+      <img src="/Images/Icons/gear.svg" />
+    </div>
+  </div>
+  <div class="friends">
     <div class="search">
       <form>
         <div class="input-group">
           <div class="icon">
             <img src="/Images/Icons/search.png" />
           </div>
-          <input type="text" placeholder="search" />
+          <input type="text" placeholder="Search" />
         </div>
       </form>
     </div>
-  </div>
-  <div class="friends">
     <div class="friend" *ngFor="let friend of friends">
       <div class="profile-picture">
         <img src="/User Images/AzizHmidi/ProfilePictures/profilepicture.png" />

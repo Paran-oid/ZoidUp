@@ -18,20 +18,36 @@
         <img src="/Images/Icons/more.jpg" />
       </div>
     </div>
-    <div class="messages">
+  </div>
+  <div class="messages">
+    <div
+      class="message"
+      *ngFor="let message of messages"
+      [ngClass]="{ right: message.userId === currentUser.id }"
+    >
+      <!-- user profile picture here -->
       <div
-        class="message"
-        [ngClass]="{ right: message.userId === currentUser.id }"
-        *ngFor="let message of messages"
+        class="profile-picture"
+        [ngStyle]="{
+          display: message.userId === currentUser.id ? 'none' : 'block'
+        }"
       >
-        <!-- user profile picture here -->
-        <div class="profile-picture">
-          <img
-            src="/User Images/AzizHmidi/ProfilePictures/profilepicture.png"
-          />
-        </div>
-        <div class="message-body">{{ message.body }}</div>
+        <img src="/User Images/AzizHmidi/ProfilePictures/profilepicture.png" />
+      </div>
+      <div
+        class="message-body"
+        [ngClass]="{ 'own-message': message.userId === currentUser.id }"
+      >
+        {{ message.body }}
       </div>
     </div>
+  </div>
+  <div class="add-message">
+    <form (submit)="OnSubmit()">
+      <img src="Images/Icons/image.png" (click)="OnSubmit()" class="image" />
+      <img src="Images/Icons/gif.png" (click)="OnSubmit()" class="gif" />
+      <input type="text" placeholder="Aa" class="send-message" />
+      <img src="Images/Icons/send.png" (click)="OnSubmit()" class="send" />
+    </form>
   </div>
 </div>

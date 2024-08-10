@@ -12,6 +12,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 })
 export class PanelComponent implements OnInit {
   @Input() friends: User[] = [];
+  filteredFriends: User[] = [];
 
   searchForm: FormGroup = new FormGroup({});
   constructor(private fb: FormBuilder) {}
@@ -20,5 +21,17 @@ export class PanelComponent implements OnInit {
     this.searchForm = this.fb.group({
       search: [''],
     });
+    this.filteredFriends = this.friends;
+  }
+
+  Search() {
+    const search = this.searchForm.get('search')?.value.toLowerCase();
+    if (search != '') {
+      this.filteredFriends = this.friends.filter((friend) =>
+        friend.username.toLowerCase().includes(search)
+      );
+    } else {
+      this.filteredFriends = this.friends;
+    }
   }
 }

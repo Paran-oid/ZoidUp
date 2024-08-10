@@ -10,6 +10,14 @@ namespace API.Data
 
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            AppDbConfig.Configure(modelBuilder);
+            AppDbSeeder.Seed(modelBuilder);
+            base.OnModelCreating(modelBuilder);
+        }
+
         public DbSet<User> Users { get; set; }
+        public DbSet<Message> Messages { get; set; }
     }
 }

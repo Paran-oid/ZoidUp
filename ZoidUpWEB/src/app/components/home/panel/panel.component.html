@@ -9,16 +9,21 @@
   </div>
   <div class="friends">
     <div class="search">
-      <form>
+      <form [formGroup]="searchForm">
         <div class="input-group">
           <div class="icon">
             <img src="/Images/Icons/search.png" />
           </div>
-          <input type="text" placeholder="Search" />
+          <input
+            type="text"
+            placeholder="Search"
+            (input)="Search()"
+            formControlName="search"
+          />
         </div>
       </form>
     </div>
-    <div class="friend" *ngFor="let friend of friends">
+    <div class="friend" *ngFor="let friend of filteredFriends">
       <div class="profile-picture">
         <img src="/User Images/AzizHmidi/ProfilePictures/profilepicture.png" />
       </div>

@@ -87,7 +87,7 @@
             }
             .actions {
               @include flex(start, center);
-              button:is([type="submit"]) {
+              button:is([type="button"]) {
                 color: $white;
                 border: none;
                 padding: 8px;

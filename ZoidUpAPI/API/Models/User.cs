@@ -10,7 +10,10 @@ namespace API.Models
         public string Password { get; set; } = string.Empty;
         public string Token { get; set; } = string.Empty;
 
-        public ICollection<Message>? Messages { get; set; }
+
+        public ICollection<Message>? SentMessages { get; set; }
+        public ICollection<Message>? ReceivedMessages { get; set; }
+
 
     }
 }

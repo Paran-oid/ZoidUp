@@ -85,7 +85,6 @@ namespace API.Data.Services.UserService
             {
                 return null;
             }
-            //if no user exists, we will create a the user
 
             var hashedPassword = _hasher.HashPassword(model.Password);
             var userCreated = new User

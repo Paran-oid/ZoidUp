@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { User } from '../../../models/user/user.model';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-panel',
@@ -15,7 +16,7 @@ export class PanelComponent implements OnInit {
   filteredFriends: User[] = [];
 
   searchForm: FormGroup = new FormGroup({});
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder, public auth: AuthService) {}
 
   ngOnInit() {
     this.searchForm = this.fb.group({

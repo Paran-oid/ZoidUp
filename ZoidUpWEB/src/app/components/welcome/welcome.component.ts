@@ -9,6 +9,17 @@ import { AuthService } from '../../services/auth.service';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { LoginEntry } from '../../models/other/login-entry.model';
+import {
+  BehaviorSubject,
+  catchError,
+  finalize,
+  map,
+  mergeMap,
+  Observable,
+  of,
+  throwError,
+} from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-welcome',
@@ -20,13 +31,22 @@ import { LoginEntry } from '../../models/other/login-entry.model';
 export class WelcomeComponent implements OnInit {
   isLoading: boolean = false;
   isSubmitted: boolean = false;
-  message: string = '';
+  message = '';
+  test: string = '';
   form: FormGroup = new FormGroup({});
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router
   ) {}
+
+  get username() {
+    return this.form.get('username');
+  }
+
+  get password() {
+    return this.form.get('password');
+  }
 
   ngOnInit(): void {
     if (localStorage.getItem('token')) {
@@ -42,21 +62,25 @@ export class WelcomeComponent implements OnInit {
   Login() {
     this.isLoading = true;
     this.isSubmitted = true;
-    const model: LoginEntry = {
-      username: this.form.get('username')?.value,
-      password: this.form.get('password')?.value,
-    };
-    this.authService.Login(model).subscribe({
-      next: (response) => {},
-      error: (error: Response) => {
-        if (error.status === 400) {
-          this.message = 'Verify your credentials please';
-        }
-        this.isLoading = false;
-      },
-      complete: () => {
-        this.isLoading = false;
-      },
-    });
+    if (this.form.invalid) {
+      this.message = 'Please enter the following fields';
+      this.isLoading = false;
+      return;
+    } else {
+      const model: LoginEntry = {
+        username: this.form.get('username')?.value,
+        password: this.form.get('password')?.value,
+      };
+      this.authService.Login(model).subscribe({
+        next: (response) => {
+          localStorage.setItem('token', response.token);
+          window.location.reload();
+        },
+        error: (err: HttpErrorResponse) => {
+          this.message = err.error;
+          this.isLoading = false;
+        },
+      });
+    }
   }
 }

@@ -5,20 +5,29 @@
       <h1>Welcome to ZoidUp!</h1>
       <p>Socialize anywhere, anytime, for free</p>
     </div>
-    <form [formGroup]="form">
+    <form autocomplete="off" [formGroup]="form">
       <h4 class="subtitle">Enter the following:</h4>
       <div class="form-group">
-        <input type="text" formControlName="username" placeholder="username" />
+        <input
+          type="text"
+          formControlName="username"
+          placeholder="username"
+          [ngClass]="{
+            error: username?.invalid && hasSubmitted
+          }"
+        />
       </div>
       <div class="form-group">
         <input
           type="password"
           formControlName="password"
           placeholder="password"
+          [ngClass]="{ error: password?.invalid && hasSubmitted }"
         />
       </div>
+      <p class="error-text" *ngIf="message">{{ message }}</p>
       <div class="btns">
-        <button type="submit" (click)="Register()">Register</button>
+        <button type="button" (click)="Register()">Register</button>
       </div>
     </form>
   </div>

@@ -9,6 +9,8 @@ import {
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RegisterEntry } from '../../models/other/register-entry.model';
+import { mergeMap, of, throwError } from 'rxjs';
+import { HttpErrorResponse, HttpResponseBase } from '@angular/common/http';
 
 @Component({
   selector: 'app-register',
@@ -19,6 +21,8 @@ import { RegisterEntry } from '../../models/other/register-entry.model';
 })
 export class RegisterComponent implements OnInit {
   form: FormGroup = new FormGroup({});
+  message: string = '';
+  hasSubmitted: boolean = false;
   isLoading: boolean = false;
   constructor(
     private authService: AuthService,
@@ -33,23 +37,40 @@ export class RegisterComponent implements OnInit {
     });
   }
 
+  get username() {
+    return this.form.get('username');
+  }
+
+  get password() {
+    return this.form.get('password');
+  }
+
   Register() {
     this.isLoading = true;
-    const model: RegisterEntry = {
-      username: this.form.get('username')?.value,
-      password: this.form.get('password')?.value,
-    };
-    this.authService.Register(model).subscribe({
-      next: (response) => {
-        localStorage.setItem('token', response.token);
-        this.router.navigate(['/home']);
-      },
-      error: (error) => {
-        console.error(error);
-      },
-      complete: () => {
-        this.isLoading = false;
-      },
-    });
+    this.hasSubmitted = true;
+    if (this.form.invalid) {
+      this.message =
+        'All fields are required and must be at least 6 characters long.';
+      this.isLoading = false;
+      return;
+    } else {
+      const model: RegisterEntry = {
+        username: this.form.get('username')?.value,
+        password: this.form.get('password')?.value,
+      };
+      this.authService.Register(model).subscribe({
+        next: (response) => {
+          localStorage.setItem('token', response.token);
+          this.router.navigate(['/home']);
+        },
+        error: (err: HttpErrorResponse) => {
+          this.message = err.error;
+          this.isLoading = false;
+        },
+        complete: () => {
+          this.isLoading = false;
+        },
+      });
+    }
   }
 }

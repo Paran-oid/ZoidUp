@@ -1,4 +1,9 @@
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpHeaders,
+  HttpParams,
+} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { LoginEntry } from '../models/other/login-entry.model';
 import { AccessTokenResponse } from '../models/other/access-token-response.model';
@@ -8,6 +13,7 @@ import {
   BehaviorSubject,
   Observable,
   ReplaySubject,
+  throwError,
 } from 'rxjs';
 import { environment } from '../../environments/environment.development';
 import { User } from '../models/user/user.model';
@@ -79,18 +85,11 @@ export class AuthService {
     params = params.append('username', model.username);
     params = params.append('password', model.password);
 
-    return this.http
-      .get<AccessTokenResponse>(this.url + '/User/Login', {
-        headers: headers,
-        params: params,
-        responseType: 'json',
-      })
-      .pipe(
-        map((response) => {
-          localStorage.setItem('token', response.token);
-          window.location.reload();
-        })
-      );
+    return this.http.get<AccessTokenResponse>(this.url + '/User/Login', {
+      headers: headers,
+      params: params,
+      responseType: 'json',
+    });
   }
 
   public Register(model: RegisterEntry) {

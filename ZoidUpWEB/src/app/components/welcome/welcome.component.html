@@ -21,14 +21,15 @@
           ZoidUp makes it easy and fun to stay close to your favorite people
         </p>
       </div>
+      <p>{{ test }}</p>
       <div class="form-part">
-        <form [formGroup]="form" method="get">
+        <form autocomplete="off" [formGroup]="form">
           <input
             formControlName="username"
             type="text"
             placeholder="Username"
             [ngClass]="{
-              error: this.isSubmitted && this.form.get('username')?.invalid
+              error: this.isSubmitted && username?.invalid
             }"
           />
           <input
@@ -36,7 +37,7 @@
             type="password"
             placeholder="Password"
             [ngClass]="{
-              error: this.isSubmitted && this.form.get('password')?.invalid
+              error: this.isSubmitted && password?.invalid
             }"
           />
           <div class="form-checkbox-group">
@@ -46,10 +47,12 @@
             </label>
           </div>
           <div class="actions">
-            <button type="submit" (click)="Login()">Login</button>
+            <button type="button" (click)="Login()">Login</button>
             <p class="forgot-password">Forgotten your password?</p>
           </div>
-          <div class="error-text" *ngIf="message">{{ message }}</div>
+          <div class="error-text" *ngIf="message">
+            {{ message }}
+          </div>
         </form>
       </div>
       <div class="information-text">

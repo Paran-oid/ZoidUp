@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using API.Data.Services.RequestFriendshipService;
+using API.Data.Services.MessageService;
 
 namespace API
 {
@@ -49,7 +51,9 @@ namespace API
 
         public static void ConfigureAppServices(this IServiceCollection services)
         {
+            services.AddScoped<IRequestFriendshipService, RequestFriendshipService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IMessageService, MessageService>();
             services.AddScoped<Hash>();
             services.AddScoped<TokenAuth>();
         }

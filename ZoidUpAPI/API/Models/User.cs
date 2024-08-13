@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace API.Models
 {
@@ -11,7 +12,18 @@ namespace API.Models
         public string Token { get; set; } = string.Empty;
 
 
+        //friends section
+        [JsonIgnore]
+        public ICollection<RequestedFriendship>? ReceivedFriendship { get; set; }
+        [JsonIgnore]
+        public ICollection<RequestedFriendship>? SentFriendship { get; set; }
+
+
+
+        //messages section
+        [JsonIgnore]
         public ICollection<Message>? SentMessages { get; set; }
+        [JsonIgnore]
         public ICollection<Message>? ReceivedMessages { get; set; }
 
 

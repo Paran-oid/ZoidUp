@@ -20,11 +20,12 @@ import {
   throwError,
 } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
+import { SpinnerComponent } from '../../shared/components/spinner/spinner.component';
 
 @Component({
   selector: 'app-welcome',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [ReactiveFormsModule, CommonModule, RouterLink, SpinnerComponent],
   templateUrl: './welcome.component.html',
   styleUrl: './welcome.component.scss',
 })
@@ -78,6 +79,7 @@ export class WelcomeComponent implements OnInit {
         },
         error: (err: HttpErrorResponse) => {
           this.message = err.error;
+          this.form.reset();
           this.isLoading = false;
         },
       });

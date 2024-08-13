@@ -48,7 +48,7 @@ namespace API.Controllers
             var result = await _userService.Login(model);
             if (result == null)
             {
-                return BadRequest("Please enter valid credentials");
+                return BadRequest("This user doesn't exist");
             }
 
             return Ok(result);
@@ -67,7 +67,7 @@ namespace API.Controllers
             var result = await _userService.Register(model);
             if (result == null)
             {
-                return BadRequest("Please enter valid credentials");
+                return BadRequest("This user already exists");
             }
             return Ok(result);
         }

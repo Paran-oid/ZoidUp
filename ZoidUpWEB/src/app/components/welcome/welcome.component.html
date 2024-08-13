@@ -1,12 +1,14 @@
 <div class="container">
   <nav>
-    <div class="logo">
-      <img src="/Images/Logo/ZoidUp-No-Background.png" />
-    </div>
-    <div class="items">
-      <ul>
-        <li [routerLink]="['/register']">Register</li>
-      </ul>
+    <div class="wrapper">
+      <div class="logo">
+        <img src="/Images/Logo/ZoidUp-No-Background.png" />
+      </div>
+      <div class="items">
+        <ul>
+          <li [routerLink]="['/register']">Register</li>
+        </ul>
+      </div>
     </div>
   </nav>
   <main *ngIf="!isLoading">
@@ -68,4 +70,5 @@
       <img class="text" src="/Images/App-Preview.png" />
     </section>
   </main>
+  <app-spinner *ngIf="isLoading"></app-spinner>
 </div>

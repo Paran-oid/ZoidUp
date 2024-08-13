@@ -7,7 +7,7 @@ namespace API.Data
     {
         public static void Configure(ModelBuilder builder)
         {
-            //for messages and users
+            //for messages
             builder.Entity<Message>()
                     .HasOne(m => m.Sender)
                     .WithMany(u => u.SentMessages)
@@ -17,6 +17,20 @@ namespace API.Data
            .HasOne(m => m.Receiver)
            .WithMany(u => u.ReceivedMessages)
            .HasForeignKey(m => m.ReceiverID);
+
+            //for friendships
+            builder.Entity<RequestedFriendship>()
+                .HasKey(f => new { f.SenderID, f.ReceiverID });
+
+            builder.Entity<RequestedFriendship>()
+               .HasOne(f => f.Sender)
+               .WithMany(u => u.SentFriendship)
+               .HasForeignKey(f => f.SenderID);
+
+            builder.Entity<RequestedFriendship>()
+                .HasOne(f => f.Receiver)
+                .WithMany(u => u.ReceivedFriendship)
+                .HasForeignKey(f => f.ReceiverID);
         }
     }
 }

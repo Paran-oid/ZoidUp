@@ -4,30 +4,34 @@
 @media (min-width: 768px) {
   .container {
     height: 100vh;
-    padding: 20px 50px;
     nav {
-      @include flex(space-between, center);
       position: sticky;
       top: 0px;
+      z-index: 4;
 
-      background-color: $plain-white;
+      background-color: $green;
       margin-bottom: 50px;
 
-      .logo {
-        width: 4rem;
-        img {
+      .wrapper {
+        padding: 0px 50px;
+        @include flex(space-between, center);
+        .logo {
           width: 4rem;
+          img {
+            width: 4rem;
+          }
         }
-      }
-      .items {
-        ul {
-          li {
-            list-style: none;
-            cursor: pointer;
-            &:hover {
-              text-decoration-line: underline;
-              text-decoration-color: $green;
-              text-decoration-thickness: 2px;
+        .items {
+          ul {
+            li {
+              color: $white;
+              list-style: none;
+              cursor: pointer;
+              &:hover {
+                text-decoration-line: underline;
+                text-decoration-color: $white;
+                text-decoration-thickness: 2px;
+              }
             }
           }
         }
@@ -38,6 +42,8 @@
       grid-template-columns: 1fr 1fr;
       grid-template-rows: 1fr;
       gap: 30px;
+      padding: 20px 50px;
+
       .login {
         .title {
           h1 {
@@ -125,6 +131,7 @@
       }
       .info {
         position: relative;
+        z-index: 3;
         width: 100%;
         border-radius: 15px;
         @include flex(center, center);

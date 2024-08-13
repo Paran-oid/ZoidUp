@@ -22,7 +22,10 @@ export class PanelComponent implements OnInit {
     this.searchForm = this.fb.group({
       search: [''],
     });
-    this.filteredFriends = this.friends;
+    this.auth.users$.subscribe((users) => {
+      this.friends = users;
+      this.filteredFriends = this.friends;
+    });
   }
 
   Search() {

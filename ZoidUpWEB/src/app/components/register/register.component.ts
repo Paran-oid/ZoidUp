@@ -11,11 +11,12 @@ import { CommonModule } from '@angular/common';
 import { RegisterEntry } from '../../models/other/register-entry.model';
 import { mergeMap, of, throwError } from 'rxjs';
 import { HttpErrorResponse, HttpResponseBase } from '@angular/common/http';
+import { SpinnerComponent } from '../../shared/components/spinner/spinner.component';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [RouterLink, ReactiveFormsModule, CommonModule],
+  imports: [RouterLink, ReactiveFormsModule, CommonModule, SpinnerComponent],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss',
 })
@@ -65,6 +66,7 @@ export class RegisterComponent implements OnInit {
         },
         error: (err: HttpErrorResponse) => {
           this.message = err.error;
+          this.form.reset();
           this.isLoading = false;
         },
         complete: () => {

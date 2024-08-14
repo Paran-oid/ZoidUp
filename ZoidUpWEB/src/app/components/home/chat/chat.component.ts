@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { PassUserService } from '../../../services/frontend/pass-user.service';
+import { User } from '../../../models/user/user.model';
 
 @Component({
   selector: 'app-chat',
@@ -11,7 +13,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 })
 export class ChatComponent implements OnInit {
   currentUser: any = { id: 1, username: 'Aziz' };
-  model: any = { username: 'Yasmin', status: 'offline since 3 days ago' };
+  friend: User | null = null;
 
   sentMessageForm: FormGroup = new FormGroup({});
 
@@ -43,11 +45,17 @@ export class ChatComponent implements OnInit {
     },
   ];
 
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private passUserService: PassUserService
+  ) {}
 
   ngOnInit() {
     this.sentMessageForm = this.fb.group({
       send: [''],
+    });
+    this.passUserService.passedUser$.subscribe((friend) => {
+      this.friend = friend;
     });
   }
 

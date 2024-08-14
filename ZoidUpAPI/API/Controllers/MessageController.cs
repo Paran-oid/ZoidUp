@@ -1,6 +1,7 @@
 ﻿using API.Data.Services.MessageService;
 using API.Models;
 using API.Models.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -40,6 +41,7 @@ namespace API.Controllers
             return Ok(message);
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Message>>> GetAll([FromQuery] int userID)
         {

@@ -26,53 +26,40 @@ import { Router } from '@angular/router';
 export class AuthService {
   url: string = environment.url;
 
-  private user = new BehaviorSubject<User | null>(null);
-  private users = new BehaviorSubject<User[]>([]);
-
   //subject gets data
+  private user = new BehaviorSubject<User | null>(null);
 
   //observer reads data
   public user$ = this.user.asObservable();
-  public users$ = this.users.asObservable();
 
   constructor(private http: HttpClient, private router: Router) {
     const token: string | null = localStorage.getItem('token');
-
     if (token) {
       this.GetUser(token).subscribe();
-      this.GetAllUsers().subscribe();
     }
   }
 
   //turn this to get all friends
-  public GetAllUsers() {
-    return this.http.get<User[]>(this.url + '/User/GetAllUsers').pipe(
-      map((users) => {
-        this.users.next(users);
-      })
-    );
-  }
 
   public GetUser(token: string) {
     let headers = new HttpHeaders();
     headers = headers.append('token', token);
     return this.http
-      .get<User>(this.url + '/User/GetUser', { headers: headers })
+      .get<User>(this.url + '/User/GetUser', {
+        headers: headers,
+      })
       .pipe(
         map((user) => {
           this.user.next(user);
         }),
         catchError((error) => {
-          {
-            console.error(error);
-            alert("We couldn't log you in. going back to home page");
+          console.error(error);
+          alert("We couldn't log you in. Going back to the home page");
 
-            localStorage.removeItem('token');
-            this.user.next(null);
-            this.router.navigate(['/']);
-
-            return error;
-          }
+          localStorage.removeItem('token');
+          this.user.next(null);
+          this.router.navigate(['/']);
+          return error;
         })
       );
   }

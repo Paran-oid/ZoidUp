@@ -1,4 +1,4 @@
-﻿using API.Data.Services.UserService;
+﻿    using API.Data.Services.UserService;
 using API.Data;
 using API.Utilities.Tokens_Hashers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -14,18 +14,15 @@ namespace API
     {
         public static void ConfigureAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddAuthentication(opt =>
-            {
-                opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(opt =>
             {
                 opt.TokenValidationParameters = new TokenValidationParameters
                 {
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetSection("JwtSettings:SecretKey").Value)),
-                    ValidateIssuer = true,
-                    ValidateAudience = true
                 };
             });
         }

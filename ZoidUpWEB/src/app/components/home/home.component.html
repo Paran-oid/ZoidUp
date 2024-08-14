@@ -1,5 +1,6 @@
 <div class="container">
   <app-panel [friends]="friends"></app-panel>
-  <app-chat></app-chat>
-  <app-about></app-about>
+  <app-chat *ngIf="selectedUser"></app-chat>
+  <app-about *ngIf="selectedUser"></app-about>
+  <!-- add isLoading to the whole document -->
 </div>

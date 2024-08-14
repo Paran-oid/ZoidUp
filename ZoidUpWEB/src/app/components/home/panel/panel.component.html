@@ -7,7 +7,7 @@
       <img src="/Images/Icons/gear.svg" />
     </div>
   </div>
-  <div class="friends">
+  <div class="users">
     <div class="search">
       <form [formGroup]="searchForm">
         <div class="input-group">
@@ -22,20 +22,34 @@
           />
         </div>
       </form>
+      <img
+        class="plus"
+        (click)="findFriendsMode = !findFriendsMode"
+        src="/Images/Icons/plus.png"
+      />
     </div>
-    <div class="friend" *ngFor="let friend of filteredFriends">
-      <div class="profile-picture">
-        <img src="/User Images/AzizHmidi/ProfilePictures/profilepicture.png" />
-      </div>
-      <div class="info">
-        <h4>{{ friend.username }}</h4>
-        <p>cool message</p>
-      </div>
-      <div class="status" [hidden]="true">
-        <div class="tick-icon">
-          <img src="/Images/Icons/tick.png" />
+    <div class="friends" *ngIf="!findFriendsMode">
+      <div
+        class="friend"
+        *ngFor="let friend of filteredFriends"
+        (click)="DisplayFriend(friend.id)"
+      >
+        <div class="profile-picture">
+          <img
+            src="/User Images/AzizHmidi/ProfilePictures/profilepicture.png"
+          />
+        </div>
+        <div class="info">
+          <h4>{{ friend.username }}</h4>
+          <p>cool message</p>
+        </div>
+        <div class="status" [hidden]="true">
+          <div class="tick-icon">
+            <img src="/Images/Icons/tick.png" />
+          </div>
         </div>
       </div>
     </div>
+    <div class="other-members" *ngIf="findFriendsMode"></div>
   </div>
 </div>

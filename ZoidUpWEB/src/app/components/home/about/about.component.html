@@ -1,9 +1,15 @@
 <div class="container">
   <div class="user">
     <div class="profile-picture">
-      <img src="/User Images/AzizHmidi/ProfilePictures/profilepicture.png" />
+      <img
+        [src]="
+          friend?.profilePicturePath == 'default'
+            ? '/User Images/AzizHmidi/ProfilePictures/profilepicture.png'
+            : friend?.profilePicturePath
+        "
+      />
     </div>
-    <h3>Yasmin Hmidi</h3>
+    <h3>{{ friend?.username }}</h3>
   </div>
 
   <div class="info">

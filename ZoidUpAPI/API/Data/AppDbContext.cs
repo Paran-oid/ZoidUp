@@ -20,5 +20,6 @@ namespace API.Data
         public DbSet<User> Users { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<RequestedFriendship> Requests { get; set; }
+        public DbSet<Friendship> Friendships { get; set; }
     }
 }

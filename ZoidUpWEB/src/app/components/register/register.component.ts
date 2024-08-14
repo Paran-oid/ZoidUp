@@ -61,7 +61,6 @@ export class RegisterComponent implements OnInit {
       };
       this.authService.Register(model).subscribe({
         next: (response) => {
-          localStorage.setItem('token', response.token);
           this.router.navigate(['/home']);
         },
         error: (err: HttpErrorResponse) => {

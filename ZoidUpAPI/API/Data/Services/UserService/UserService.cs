@@ -38,9 +38,10 @@ namespace API.Data.Services.UserService
 
             var result = new
             {
+                id = claims.FirstOrDefault(c => c.Type == "id")!.Value,
                 username = claims.FirstOrDefault(c => c.Type == "username")!.Value,
-                token = claims.FirstOrDefault(c => c.Type == "token")!.Value,
                 date = claims.FirstOrDefault(c => c.Type == "date")!.Value,
+                profilePicturePath = claims.FirstOrDefault(c => c.Type == "profilePicturePath")!.Value
             };
 
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == result.username
@@ -50,8 +51,6 @@ namespace API.Data.Services.UserService
             {
                 return null;
             }
-
-
             return result;
         }
 

@@ -14,6 +14,19 @@ namespace API.Controllers
             _rfs = rfs;
         }
 
+        [HttpGet("{userID}")]
+        public async Task<ActionResult<IEnumerable<User>>> GetAllFriends(int userID)
+        {
+            var friends = await _rfs.GetAllFriends(userID);
+
+            if(friends == null)
+            {
+                return NotFound("User wasn't found");
+            }
+
+            return Ok(friends);
+        }
+
         [HttpGet("{receiverID}")]
         public async Task<ActionResult<IEnumerable<User>>> GetAllReceivedRequests(int receiverID)
         {
@@ -39,7 +52,7 @@ namespace API.Controllers
             return Ok(result);
         }
 
-        [HttpDelete()]
+        [HttpDelete]
         public async Task<ActionResult<string>> RemoveRequest([FromQuery] int senderID, [FromQuery] int receiverID)
         {
             string result = await _rfs.RemoveRequest(senderID, receiverID);
@@ -51,6 +64,17 @@ namespace API.Controllers
             return Ok(result);
         }
 
-        //test this controller then do the message controller and do friendship controller
+        [HttpDelete]
+        public async Task<ActionResult<string>> RemoveFriendship([FromQuery] int userID, [FromQuery] int friendID)
+        {
+            string result = await _rfs.RemoveFriendship(userID, friendID);
+            if (result == "request doesn't exist")
+            {
+                return NotFound(result);
+            }
+
+            return Ok(result);
+        }
+
     }
 }

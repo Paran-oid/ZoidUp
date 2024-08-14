@@ -8,6 +8,8 @@ import { User } from '../../models/user/user.model';
 import { PanelComponent } from './panel/panel.component';
 import { ChatComponent } from './chat/chat.component';
 import { AboutComponent } from './about/about.component';
+import { FriendshipService } from '../../services/friendship.service';
+import { PassUserService } from '../../services/frontend/pass-user.service';
 
 @Component({
   selector: 'app-home',
@@ -25,18 +27,29 @@ import { AboutComponent } from './about/about.component';
 export class HomeComponent implements OnInit {
   friends: User[] = [];
   currentUser: User | null = null;
+  selectedUser: User | null = null;
 
-  constructor(public authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private friendshipService: FriendshipService,
+    private passUserService: PassUserService
+  ) {}
   ngOnInit() {
     this.SetCurrentUser();
+    this.passUserService.passedUser$.subscribe((selectedUser) => {
+      this.selectedUser = selectedUser;
+      console.log(selectedUser);
+    });
   }
 
   SetCurrentUser() {
     this.authService.user$.subscribe((user) => {
       this.currentUser = user;
-      this.authService.users$.subscribe((users) => {
-        this.friends = users;
-      });
+      if (user) {
+        this.friendshipService.GetFriends(user?.id!).subscribe((friends) => {
+          this.friends = friends;
+        });
+      }
     });
   }
 

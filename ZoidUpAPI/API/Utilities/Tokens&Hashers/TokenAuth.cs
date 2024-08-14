@@ -29,18 +29,18 @@ namespace API.Utilities.Tokens_Hashers
         {
             var claims = new List<Claim>
             {
+                new Claim("id", user.ID.ToString()),
                 new Claim("username", user.Username),
-                new Claim("token", user.Token),
-                new Claim("date", DateTime.Now.ToString())
+                new Claim("date", DateTime.Now.ToString()),
+                new Claim("profilePicturePath", user.ProfilePicturePath)
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("JwtSettings:SecretKey").Value));
-
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(60),
+                expires: DateTime.Now.AddDays(3),
                 signingCredentials: creds);
 
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);

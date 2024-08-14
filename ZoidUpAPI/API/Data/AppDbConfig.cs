@@ -18,9 +18,10 @@ namespace API.Data
            .WithMany(u => u.ReceivedMessages)
            .HasForeignKey(m => m.ReceiverID);
 
-            //for friendships
+            //for friendship requests
             builder.Entity<RequestedFriendship>()
                 .HasKey(f => new { f.SenderID, f.ReceiverID });
+
 
             builder.Entity<RequestedFriendship>()
                .HasOne(f => f.Sender)
@@ -31,6 +32,24 @@ namespace API.Data
                 .HasOne(f => f.Receiver)
                 .WithMany(u => u.ReceivedFriendship)
                 .HasForeignKey(f => f.ReceiverID);
+
+            //for friendships
+            builder.Entity<Friendship>()
+                .HasKey(f => new { f.UserID, f.FriendID });
+
+            builder.Entity<Friendship>()
+                .HasIndex(f => new { f.UserID, f.FriendID })
+                .IsUnique();
+
+            builder.Entity<Friendship>()
+                .HasOne(f => f.User)
+                .WithMany()
+                .HasForeignKey(f => f.UserID);
+
+            builder.Entity<Friendship>()
+                .HasOne(f => f.Friend)
+                .WithMany()
+                .HasForeignKey(f => f.FriendID);
         }
     }
 }

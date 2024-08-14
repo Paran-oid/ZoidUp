@@ -4,6 +4,7 @@ import { AuthService } from './services/auth.service';
 import { SpinnerService } from './services/spinner.service';
 import { CommonModule } from '@angular/common';
 import { SpinnerComponent } from './shared/components/spinner/spinner.component';
+import { PassUserService } from './services/frontend/pass-user.service';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +12,7 @@ import { SpinnerComponent } from './shared/components/spinner/spinner.component'
   imports: [RouterOutlet, CommonModule, SpinnerComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
-  providers: [AuthService],
+  providers: [AuthService, PassUserService],
 })
 export class AppComponent implements OnInit {
   constructor(public spinnerService: SpinnerService) {}

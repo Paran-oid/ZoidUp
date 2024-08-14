@@ -11,6 +11,32 @@ namespace API.Data.Services.RequestFriendshipService
         {
             _context = context;
         }
+
+        public async Task<IEnumerable<User>>? GetAllFriends(int userID)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.ID == userID);
+            if (user == null)
+            {
+                return null;
+            }
+            var friendsIDs1 = await _context.Friendships
+                .Where(f => f.UserID == userID)
+                .Select(f => f.FriendID)
+                .ToListAsync();
+
+            var friendsIDs2 = await _context.Friendships
+                .Where(f => f.FriendID == userID)
+                .Select(f => f.UserID)
+                .ToListAsync();
+
+            var friendsIDs = friendsIDs1.Concat(friendsIDs2).ToList();
+
+            var friends = _context.Users
+                .Where(u => friendsIDs.Contains(u.ID));
+
+            return friends;
+        }
+
         public async Task<IEnumerable<RequestUserDTO>>? GetAllReceivedRequests(int receiverID)
         {
             var temp = await _context.Users.FirstOrDefaultAsync(u => u.ID == receiverID);
@@ -79,6 +105,19 @@ namespace API.Data.Services.RequestFriendshipService
             return result;
         }
 
+        public async Task<string> RemoveFriendship(int userID, int friendID)
+        {
+            var friendship = await _context.Friendships.FirstOrDefaultAsync(f => f.UserID == userID && f.FriendID == friendID);
+            if (friendship == null)
+            {
+                return null;
+            }
+            _context.Remove(friendship);
+            await _context.SaveChangesAsync();
+
+            return "success!";
+        }
+
         public async Task<string> RemoveRequest(int SenderID, int ReceiverID)
         {
             var request = await _context.Requests.FirstOrDefaultAsync(r => r.SenderID == SenderID && r.ReceiverID == ReceiverID);
@@ -110,6 +149,28 @@ namespace API.Data.Services.RequestFriendshipService
 
             _context.Add(model);
             await _context.SaveChangesAsync();
+
+            //if there is a request already by the other user
+            var exists = await _context.Requests.FirstOrDefaultAsync(r => r.ReceiverID == SenderID && r.SenderID == ReceiverID);
+
+            if (exists != null)
+            {
+
+                _context.Remove(model);
+                _context.Remove(exists);
+
+                var friendship = new Friendship()
+                {
+                    UserID = ReceiverID,
+                    FriendID = SenderID,
+                    Since = DateTime.UtcNow
+                };
+
+                _context.Friendships.Add(friendship);
+                await _context.SaveChangesAsync();
+
+                return "friendship created!";
+            }
 
             return "success!";
         }

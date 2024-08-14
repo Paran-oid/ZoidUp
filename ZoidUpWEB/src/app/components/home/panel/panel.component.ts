@@ -27,7 +27,10 @@ export class PanelComponent implements OnInit, OnChanges {
   @Input() friends: User[] = [];
   @Input() currentUser: User | null = null;
   filteredItems: User[] = this.friends;
+
   findFriendsMode: boolean = false;
+  sentFriendRequests: User[] = [];
+  receivedFriendRequests: User[] = [];
 
   searchForm: FormGroup = new FormGroup({});
   constructor(
@@ -45,6 +48,23 @@ export class PanelComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     this.filteredItems = this.friends;
+    this.friendshipService
+      .GetAllReceivedRequests(this.currentUser?.id!)
+      .subscribe({
+        next: (users) => {
+          console.log('received requests:');
+          console.log(users);
+          this.receivedFriendRequests = users;
+        },
+      });
+
+    this.friendshipService.GetAllSentRequests(this.currentUser?.id!).subscribe({
+      next: (users) => {
+        console.log('sent requests:');
+        console.log(users);
+        this.sentFriendRequests = users;
+      },
+    });
   }
 
   LoadRecommendations() {
@@ -86,5 +106,18 @@ export class PanelComponent implements OnInit, OnChanges {
   DisplayFriend(id: number) {
     let friend = this.friends.find((friend) => friend.id === id);
     this.passUserService.passedUser.next(friend!);
+  }
+
+  SendRequest(receiverID: number) {
+    this.friendshipService
+      .SendRequest(this.currentUser?.id!, receiverID)
+      .subscribe({
+        next: (response) => {
+          console.log(response);
+        },
+        error: (error) => {
+          console.log(error);
+        },
+      });
   }
 }

@@ -149,26 +149,35 @@ namespace API.Data.Services.RequestFriendshipService
         }
 
 
-        public async Task<string> SendRequest(int SenderID, int ReceiverID)
+        public async Task<string> SendRequest(int senderID, int receiverID)
         {
-            var request = await _context.Requests.FirstOrDefaultAsync(r => r.SenderID == SenderID && r.ReceiverID == ReceiverID);
+            var request = await _context.Requests.FirstOrDefaultAsync(r => r.SenderID == senderID && r.ReceiverID == receiverID);
             if (request != null)
             {
                 return "request already sent";
             }
 
+            var friendshipExists = await _context.Friendships.FirstOrDefaultAsync(f =>
+                (f.UserID == senderID && f.FriendID == receiverID)
+                || f.UserID == receiverID && f.FriendID == senderID);
+
+            if (friendshipExists != null)
+            {
+                return "friendship already exists, can't send request";
+            }
+
             RequestedFriendship model = new RequestedFriendship
             {
-                SenderID = SenderID,
-                ReceiverID = ReceiverID,
+                SenderID = senderID,
+                ReceiverID = receiverID,
                 RequestedOn = DateTime.UtcNow
             };
 
-            _context.Add(model);
+            _context.Requests.Add(model);
             await _context.SaveChangesAsync();
 
             //if there is a request already by the other user
-            var exists = await _context.Requests.FirstOrDefaultAsync(r => r.ReceiverID == SenderID && r.SenderID == ReceiverID);
+            var exists = await _context.Requests.FirstOrDefaultAsync(r => r.ReceiverID == senderID && r.SenderID == receiverID);
 
             if (exists != null)
             {
@@ -178,8 +187,8 @@ namespace API.Data.Services.RequestFriendshipService
 
                 var friendship = new Friendship()
                 {
-                    UserID = ReceiverID,
-                    FriendID = SenderID,
+                    UserID = receiverID,
+                    FriendID = senderID,
                     Since = DateTime.UtcNow
                 };
 

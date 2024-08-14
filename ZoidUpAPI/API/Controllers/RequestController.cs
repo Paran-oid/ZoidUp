@@ -53,7 +53,7 @@ namespace API.Controllers
             return Ok(users);
         }
 
-        [HttpPost()]
+        [HttpGet]
         public async Task<ActionResult<string>> SendRequest([FromQuery] int SenderID, [FromQuery] int receiverID)
         {
             string result = await _rfs.SendRequest(SenderID, receiverID);

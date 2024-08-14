@@ -5,7 +5,8 @@ namespace API.Data.Services.RequestFriendshipService
 {
     public interface IRequestFriendshipService
     {
-        public Task<IEnumerable<User>>? GetAllFriends(int userID);
+        public Task<IEnumerable<User>>? GetAllRecommendedFriends(int userID);
+        public Task<List<User>>? GetAllFriends(int userID);
         public Task<IEnumerable<RequestUserDTO>>? GetAllReceivedRequests(int receiverID);
         public Task<IEnumerable<RequestUserDTO>>? GetAllSentRequests(int senderID);
         public Task<string> SendRequest(int SenderID, int ReceiverID);

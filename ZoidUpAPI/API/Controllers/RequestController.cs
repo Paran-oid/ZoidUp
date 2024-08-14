@@ -15,16 +15,28 @@ namespace API.Controllers
         }
 
         [HttpGet("{userID}")]
-        public async Task<ActionResult<IEnumerable<User>>> GetAllFriends(int userID)
+        public async Task<ActionResult<List<User>>> GetAllFriends(int userID)
         {
             var friends = await _rfs.GetAllFriends(userID);
 
-            if(friends == null)
+            if (friends == null)
             {
                 return NotFound("User wasn't found");
             }
 
             return Ok(friends);
+        }
+
+        [HttpGet("{userID}")]
+        public async Task<ActionResult<IEnumerable<User>>> GetAllRecommendedFriends(int userID)
+        {
+            var users = await _rfs.GetAllRecommendedFriends(userID);
+            if (users == null)
+            {
+                return NotFound("user wasn't found");
+            }
+            return Ok(users);
+
         }
 
         [HttpGet("{receiverID}")]

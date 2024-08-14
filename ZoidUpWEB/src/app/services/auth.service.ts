@@ -39,8 +39,9 @@ export class AuthService {
     }
   }
 
-  //turn this to get all friends
-
+  public GetAllUsers() {
+    return this.http.get<User[]>(this.url + '/User/GetAllUsers');
+  }
   public GetUser(token: string) {
     let headers = new HttpHeaders();
     headers = headers.append('token', token);

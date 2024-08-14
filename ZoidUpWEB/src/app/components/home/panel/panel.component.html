@@ -17,21 +17,29 @@
           <input
             type="text"
             placeholder="Search"
-            (input)="Search()"
+            (input)="SearchFriends()"
             formControlName="search"
+            *ngIf="!findFriendsMode"
+          />
+          <input
+            type="text"
+            placeholder="Search"
+            (input)="SearchRecommendedFriends()"
+            formControlName="search"
+            *ngIf="findFriendsMode"
           />
         </div>
       </form>
       <img
         class="plus"
-        (click)="findFriendsMode = !findFriendsMode"
+        (click)="LoadRecommendations()"
         src="/Images/Icons/plus.png"
       />
     </div>
     <div class="friends" *ngIf="!findFriendsMode">
       <div
         class="friend"
-        *ngFor="let friend of filteredFriends"
+        *ngFor="let friend of filteredItems"
         (click)="DisplayFriend(friend.id)"
       >
         <div class="profile-picture">
@@ -50,6 +58,30 @@
         </div>
       </div>
     </div>
-    <div class="other-members" *ngIf="findFriendsMode"></div>
+    <div class="other-members" *ngIf="findFriendsMode">
+      <h3>Friend requests</h3>
+      <hr />
+      <h3>Add new friends</h3>
+      <hr />
+      <div class="member" *ngFor="let friend of filteredItems">
+        <div class="profile-picture">
+          <img
+            src="/User Images/AzizHmidi/ProfilePictures/profilepicture.png"
+          />
+        </div>
+        <div class="info">
+          <h4>{{ friend.username }}</h4>
+          <p>cool message</p>
+        </div>
+        <div class="status" [hidden]="true">
+          <div class="send-request-icon">
+            <img src="/Images/Icons/send-friend-request.png" />
+          </div>
+          <div class="unsend-request-icon">
+            <img src="/Images/Icons/unsend-friend-request.png" />
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

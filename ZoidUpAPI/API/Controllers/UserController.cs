@@ -35,12 +35,6 @@ namespace API.Controllers
             }
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetAllUsers()
-        {
-            var users = await _userService.GetAllUsers();
-            return Ok(users);
-        }
 
         [HttpGet]
         public async Task<ActionResult<AccessTokenResponse>> Login([FromQuery] LoginEntry model)

@@ -20,11 +20,6 @@ namespace API.Data.Services.UserService
             _token = token;
         }
 
-        public async Task<IEnumerable<User>?> GetAllUsers()
-        {
-            var users = await _context.Users.ToListAsync();
-            return users;
-        }
 
         public async Task<object?> GetUser(string token)
         {

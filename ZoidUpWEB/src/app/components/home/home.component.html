@@ -1,5 +1,5 @@
 <div class="container">
-  <app-panel [friends]="friends"></app-panel>
+  <app-panel [friends]="friends" [currentUser]="currentUser"></app-panel>
   <app-chat *ngIf="selectedUser"></app-chat>
   <app-about *ngIf="selectedUser"></app-about>
   <!-- add isLoading to the whole document -->

@@ -12,7 +12,7 @@ namespace API.Data.Services.RequestFriendshipService
             _context = context;
         }
 
-        public async Task<IEnumerable<User>>? GetAllFriends(int userID)
+        public async Task<List<User>>? GetAllFriends(int userID)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.ID == userID);
             if (user == null)
@@ -31,8 +31,9 @@ namespace API.Data.Services.RequestFriendshipService
 
             var friendsIDs = friendsIDs1.Concat(friendsIDs2).ToList();
 
-            var friends = _context.Users
-                .Where(u => friendsIDs.Contains(u.ID));
+            var friends = await _context.Users
+                .Where(u => friendsIDs.Contains(u.ID))
+                .ToListAsync();
 
             return friends;
         }
@@ -68,6 +69,22 @@ namespace API.Data.Services.RequestFriendshipService
                          };
 
             return result;
+        }
+
+        public async Task<IEnumerable<User>>? GetAllRecommendedFriends(int userID)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.ID == userID);
+            if (user == null)
+            {
+                return null;
+            }
+            List<User> friends = await this.GetAllFriends(userID);
+
+            var users = await _context.Users
+                   .Where(u => !friends.Contains(u) && !friends.Contains(u))
+                   .ToListAsync();
+
+            return users;
         }
 
         public async Task<IEnumerable<RequestUserDTO>>? GetAllSentRequests(int senderID)

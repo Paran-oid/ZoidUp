@@ -76,38 +76,84 @@
         }
       }
 
-      .friend {
-        @include flex(start, center);
-        position: relative;
-        margin-bottom: 20px;
-        padding: 10px 5px;
-        border-radius: 5px;
-        cursor: pointer;
-        user-select: none;
+      .friends {
+        .friend {
+          @include flex(start, center);
+          position: relative;
+          padding: 10px 5px;
+          border-radius: 5px;
+          cursor: pointer;
+          user-select: none;
 
-        .profile-picture {
-          border-radius: 50%;
-          margin-right: 20px;
-          width: 3rem;
-          img {
+          .profile-picture {
             border-radius: 50%;
+            margin-right: 20px;
             width: 3rem;
-          }
-        }
-        .status {
-          position: absolute;
-          right: 10px;
-          .tick-icon {
-            width: 1rem;
             img {
-              width: 1rem;
-              mix-blend-mode: multiply;
+              border-radius: 50%;
+              width: 3rem;
             }
           }
-        }
+          .status {
+            position: absolute;
+            right: 10px;
+            .tick-icon {
+              width: 1rem;
+              img {
+                width: 1rem;
+                mix-blend-mode: multiply;
+              }
+            }
+          }
 
-        &:active {
-          background-color: lighten($gray, 20%);
+          &:active {
+            background-color: lighten($gray, 20%);
+          }
+        }
+      }
+
+      .other-members {
+        .member {
+          @include flex(start, center);
+          position: relative;
+          padding: 10px 5px;
+          border-radius: 5px;
+          cursor: pointer;
+          user-select: none;
+
+          .profile-picture {
+            border-radius: 50%;
+            margin-right: 20px;
+            width: 3rem;
+            img {
+              border-radius: 50%;
+              width: 3rem;
+            }
+          }
+          .status {
+            @include flex(center, center);
+            position: absolute;
+            right: 10px;
+            .send-request-icon {
+              width: 1.5rem;
+              img {
+                width: 1.5rem;
+                mix-blend-mode: multiply;
+              }
+            }
+            .unsend-request-icon {
+              width: 1.5rem;
+              margin-left: 10px;
+              img {
+                width: 1.5rem;
+                mix-blend-mode: multiply;
+              }
+            }
+          }
+
+          &:active {
+            background-color: darken($gray, 20%);
+          }
         }
       }
     }

@@ -12,6 +12,11 @@ export class FriendshipService {
 
   constructor(private http: HttpClient) {}
 
+  public GetAllRecommendedFriends(userID: number) {
+    return this.http.get<User[]>(
+      this.url + '/GetAllRecommendedFriends/' + userID
+    );
+  }
   public GetFriends(userID: number) {
     return this.http.get<User[]>(this.url + '/GetAllFriends/' + userID);
   }

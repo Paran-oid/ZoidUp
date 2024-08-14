@@ -38,7 +38,6 @@ export class HomeComponent implements OnInit {
     this.SetCurrentUser();
     this.passUserService.passedUser$.subscribe((selectedUser) => {
       this.selectedUser = selectedUser;
-      console.log(selectedUser);
     });
   }
 

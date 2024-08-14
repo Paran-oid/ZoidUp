@@ -61,7 +61,7 @@ export class RegisterComponent implements OnInit {
       };
       this.authService.Register(model).subscribe({
         next: (response) => {
-          this.router.navigate(['/home']);
+          this.router.navigate(['']);
         },
         error: (err: HttpErrorResponse) => {
           this.message = err.error;

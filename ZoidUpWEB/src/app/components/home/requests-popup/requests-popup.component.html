@@ -1,0 +1,32 @@
+<div class="container">
+  <div class="wrapper">
+    <div class="title">
+      <h3>Sent Requests</h3>
+      <img src="/Images/Icons/cancel.png" (click)="CloseTab()" />
+    </div>
+    <div class="requests">
+      <div class="request" *ngFor="let request of requests">
+        <div class="user">
+          <img
+            [src]="
+              request.profilePicturePath == 'default'
+                ? '/User Images/profilepicture.png'
+                : request.profilePicturePath
+            "
+          />
+          <div class="info">
+            <p>{{ request.username }}</p>
+            <p>{{ FormatRequestDate(request.time) }}</p>
+          </div>
+        </div>
+        <div class="actions">
+          <img
+            class="unsend-request"
+            src="/Images/Icons/unaccept-friend-request.png"
+            (click)="UnsendRequest(request.id)"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -3,8 +3,19 @@
     <div class="title">
       <h3>Chats</h3>
     </div>
-    <div class="gear" (click)="auth.Logout()">
-      <img src="/Images/Icons/gear.svg" />
+    <div class="dropdown-settings">
+      <div class="gear" (click)="displayDropdown = !displayDropdown">
+        <img src="/Images/Icons/gear.svg" />
+      </div>
+      <div class="dropdown" *ngIf="displayDropdown" #dropdown>
+        <ul>
+          <p>{{ currentUser?.username }} actions</p>
+          <hr />
+          <li (click)="GoToSentRequests()">Sent Requests</li>
+          <li>Settings</li>
+          <li (click)="auth.Logout()">Logout</li>
+        </ul>
+      </div>
     </div>
   </div>
   <div class="users">
@@ -17,26 +28,47 @@
           <input
             type="text"
             placeholder="Search"
-            (input)="SearchFriends()"
+            (input)="Search()"
             formControlName="search"
             *ngIf="!findFriendsMode"
           />
           <input
             type="text"
             placeholder="Search"
-            (input)="SearchRecommendedFriends()"
+            (input)="Search()"
             formControlName="search"
             *ngIf="findFriendsMode"
           />
         </div>
       </form>
-      <img
-        class="plus"
-        (click)="LoadRecommendations()"
-        src="/Images/Icons/plus.png"
-      />
+      <div class="media">
+        <img
+          class="plus"
+          (click)="FetchData('recommendations')"
+          src="/Images/Icons/plus.png"
+          *ngIf="!(findFriendsMode || notificationMode)"
+        />
+        <div
+          class="notification-icon"
+          *ngIf="!(findFriendsMode || notificationMode)"
+        >
+          <img
+            class="bell"
+            src="/Images/Icons/bell.png"
+            (click)="FetchData('notifications')"
+          />
+          <div class="circle" *ngIf="hasRequests"></div>
+        </div>
+        <div class="go-back">
+          <img
+            src="/Images/Icons/cancel.png"
+            *ngIf="findFriendsMode || notificationMode"
+            (click)="GoBack()"
+          />
+        </div>
+      </div>
     </div>
-    <div class="friends" *ngIf="!findFriendsMode">
+    <div class="friends" *ngIf="!findFriendsMode && !notificationMode">
       <div
         class="friend"
         *ngFor="let friend of filteredItems"
@@ -58,9 +90,32 @@
         </div>
       </div>
     </div>
-    <div class="other-members" *ngIf="findFriendsMode">
+    <div class="notifications" *ngIf="notificationMode">
       <h3>Friend requests</h3>
       <hr />
+      <div class="friend-requests">
+        <div class="friend-request" *ngFor="let user of filteredItems">
+          <div class="profile-picture">
+            <img
+              src="/User Images/AzizHmidi/ProfilePictures/profilepicture.png"
+            />
+          </div>
+          <div class="info">
+            <h4>{{ user.username }}</h4>
+            <p>cool message</p>
+          </div>
+          <div class="status">
+            <div class="accept-request-icon">
+              <img src="/Images/Icons/accept-friend-request.png" />
+            </div>
+            <div class="decline-request-icon">
+              <img src="/Images/Icons/unaccept-friend-request.png" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="other-members" *ngIf="findFriendsMode">
       <h3>Add new friends</h3>
       <hr />
       <div class="member" *ngFor="let user of filteredItems">
@@ -74,8 +129,20 @@
           <p>cool message</p>
         </div>
         <div class="status" [hidden]="true">
-          <div class="send-request-icon" (click)="SendRequest(user.id)">
-            <img src="/Images/Icons/send-friend-request.png" />
+          <div class="btns">
+            <button
+              class="send-request-button"
+              (click)="SendRequest(user.id, $event)"
+            >
+              Send Request
+            </button>
+            <button
+              class="unsend-request-button"
+              [ngStyle]="{ display: 'none' }"
+              (click)="UnsendRequest(user.id, $event)"
+            >
+              Unsend Request
+            </button>
           </div>
         </div>
       </div>

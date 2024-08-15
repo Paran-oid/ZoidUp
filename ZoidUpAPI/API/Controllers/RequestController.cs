@@ -1,5 +1,6 @@
 ﻿using API.Data.Services.RequestFriendshipService;
 using API.Models;
+using API.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -13,9 +14,15 @@ namespace API.Controllers
         {
             _rfs = rfs;
         }
+        [HttpGet("{userID}")]
+        public async Task<ActionResult<bool>> HasRequests(int userID)
+        {
+            bool result = await _rfs.HasRequests(userID);
+            return result;
+        }
 
         [HttpGet("{userID}")]
-        public async Task<ActionResult<List<User>>> GetAllFriends(int userID)
+        public async Task<ActionResult<IEnumerable<User>>> GetAllFriends(int userID)
         {
             var friends = await _rfs.GetAllFriends(userID);
 
@@ -47,7 +54,7 @@ namespace API.Controllers
         }
 
         [HttpGet("{senderID}")]
-        public async Task<ActionResult<IEnumerable<User>>> GetAllSentRequests(int senderID)
+        public async Task<ActionResult<IEnumerable<RequestUserDTO?>>> GetAllSentRequests(int senderID)
         {
             var users = await _rfs.GetAllSentRequests(senderID);
             return Ok(users);
@@ -57,24 +64,25 @@ namespace API.Controllers
         public async Task<ActionResult<string>> SendRequest([FromQuery] int SenderID, [FromQuery] int receiverID)
         {
             string result = await _rfs.SendRequest(SenderID, receiverID);
-            if (result == "request doesn't exist")
+            if (result == "request already exists" || result == "friendship already exists, can't send request")
             {
-                return NotFound(result);
+                return Conflict(result);
             }
             return Ok(result);
         }
 
         [HttpDelete]
-        public async Task<ActionResult<string>> RemoveRequest([FromQuery] int senderID, [FromQuery] int receiverID)
+        public async Task<ActionResult<string>> UnsendRequest([FromQuery] int SenderID, [FromQuery] int receiverID)
         {
-            string result = await _rfs.RemoveRequest(senderID, receiverID);
-            if (result == "request doesn't exist")
+            string result = await _rfs.UnsendRequest(SenderID, receiverID);
+            if (result == "request doesn't exist" || result == "friendship already exists, can't unsend request")
             {
                 return NotFound(result);
             }
-
             return Ok(result);
         }
+
+
 
         [HttpDelete]
         public async Task<ActionResult<string>> RemoveFriendship([FromQuery] int userID, [FromQuery] int friendID)

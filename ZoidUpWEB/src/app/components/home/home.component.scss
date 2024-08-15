@@ -11,4 +11,11 @@
 
     overflow-y: hidden;
   }
+  .requests-popup {
+    height: 100vh;
+    position: absolute;
+    top: 0px;
+
+    width: 100%;
+  }
 }

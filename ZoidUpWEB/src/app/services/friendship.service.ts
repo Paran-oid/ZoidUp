@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { User } from '../models/user/user.model';
+import { RequestUserDTO, User } from '../models/user/user.model';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
@@ -12,6 +12,9 @@ export class FriendshipService {
 
   constructor(private http: HttpClient) {}
 
+  public HasRequests(userID: number) {
+    return this.http.get<boolean>(this.url + '/HasRequests/' + userID, {});
+  }
   public GetAllRecommendedFriends(userID: number) {
     return this.http.get<User[]>(
       this.url + '/GetAllRecommendedFriends/' + userID
@@ -22,7 +25,13 @@ export class FriendshipService {
   }
   public SendRequest(senderID: number, receiverID: number) {
     return this.http.get(
-      this.url + `/SendRequest?receiverID=${receiverID}&senderID=${senderID}`,
+      this.url + `/SendRequest?senderID=${senderID}&receiverID=${receiverID}`,
+      { responseType: 'text' }
+    );
+  }
+  public UnsendRequest(senderID: number, receiverID: number) {
+    return this.http.delete(
+      this.url + `/UnsendRequest?senderID=${senderID}&receiverID=${receiverID}`,
       { responseType: 'text' }
     );
   }
@@ -32,6 +41,8 @@ export class FriendshipService {
     );
   }
   public GetAllSentRequests(senderID: number) {
-    return this.http.get<User[]>(this.url + '/GetAllSentRequests/' + senderID);
+    return this.http.get<RequestUserDTO[]>(
+      this.url + '/GetAllSentRequests/' + senderID
+    );
   }
 }

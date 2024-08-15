@@ -1,0 +1,56 @@
+@import "../../../../scss/global";
+
+@media (min-width: 768px) {
+  .container {
+    @include flex(center, center);
+    height: 100%;
+    background-color: rgba($black, 0.5);
+
+    .wrapper {
+      background-color: $white;
+      padding: 20px;
+      width: 450px;
+      height: 500px;
+
+      overflow-y: auto;
+
+      .title {
+        @include flex(space-between, center);
+
+        img {
+          width: 2rem;
+          cursor: pointer;
+        }
+      }
+
+      .requests {
+        margin: 20px 0px;
+
+        .request {
+          @include flex(space-between, center);
+          margin-bottom: 10px;
+
+          .user {
+            @include flex(start, center);
+
+            img {
+              width: 4rem;
+              border-radius: 50%;
+              margin-right: 20px;
+            }
+
+            .info {
+            }
+          }
+
+          .actions {
+            img {
+              width: 2rem;
+              cursor: pointer;
+            }
+          }
+        }
+      }
+    }
+  }
+}

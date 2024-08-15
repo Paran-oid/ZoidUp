@@ -4,3 +4,6 @@
   <app-about *ngIf="selectedUser"></app-about>
   <!-- add isLoading to the whole document -->
 </div>
+<div class="requests-popup" [hidden]="!isInSendRequest">
+  <app-requests-popup [currentUser]="currentUser"></app-requests-popup>
+</div>

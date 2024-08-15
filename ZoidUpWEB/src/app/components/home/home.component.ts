@@ -10,6 +10,8 @@ import { ChatComponent } from './chat/chat.component';
 import { AboutComponent } from './about/about.component';
 import { FriendshipService } from '../../services/friendship.service';
 import { PassUserService } from '../../services/frontend/pass-user.service';
+import { RequestsPopupComponent } from './requests-popup/requests-popup.component';
+import { SendRequestsService } from '../../services/frontend/send-requests.service';
 
 @Component({
   selector: 'app-home',
@@ -20,6 +22,7 @@ import { PassUserService } from '../../services/frontend/pass-user.service';
     PanelComponent,
     ChatComponent,
     AboutComponent,
+    RequestsPopupComponent,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
@@ -29,15 +32,21 @@ export class HomeComponent implements OnInit {
   currentUser: User | null = null;
   selectedUser: User | null = null;
 
+  isInSendRequest: boolean = false;
+
   constructor(
     private authService: AuthService,
     private friendshipService: FriendshipService,
-    private passUserService: PassUserService
+    private passUserService: PassUserService,
+    private sendRequestsService: SendRequestsService
   ) {}
   ngOnInit() {
     this.SetCurrentUser();
     this.passUserService.passedUser$.subscribe((selectedUser) => {
       this.selectedUser = selectedUser;
+    });
+    this.sendRequestsService.sendRequests$.subscribe((response) => {
+      this.isInSendRequest = response;
     });
   }
 

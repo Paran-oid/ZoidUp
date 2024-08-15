@@ -4,3 +4,10 @@ export interface User {
   loggedOn: string;
   profilePicturePath: string;
 }
+
+export interface RequestUserDTO {
+  id: number;
+  username: string;
+  time: string;
+  profilePicturePath: string;
+}

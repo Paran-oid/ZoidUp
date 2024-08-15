@@ -1,6 +1,7 @@
 ﻿using API.Models;
 using API.Models.DTOs;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace API.Data.Services.RequestFriendshipService
 {
@@ -11,8 +12,16 @@ namespace API.Data.Services.RequestFriendshipService
         {
             _context = context;
         }
+        public async Task<bool> HasRequests(int userID)
+        {
+            IEnumerable<RequestUserDTO> requestsEnum = await this.GetAllReceivedRequests(userID);
+            int size = requestsEnum
+                .ToList()
+                .Count;
+            return size > 0;
+        }
 
-        public async Task<List<User>>? GetAllFriends(int userID)
+        public async Task<IEnumerable<User>>? GetAllFriends(int userID)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.ID == userID);
             if (user == null)
@@ -78,11 +87,25 @@ namespace API.Data.Services.RequestFriendshipService
             {
                 return null;
             }
-            List<User> friends = await this.GetAllFriends(userID);
+            var friendsEnum = await this.GetAllFriends(userID);
+            var sentRequestsEnum = await this.GetAllSentRequests(userID);
+
+            List<string> friends = friendsEnum
+                .Select(f => f.Username)
+                .ToList();
+
+            List<string> sentRequests = sentRequestsEnum
+                .Select(f => f.username)
+                .ToList();
+
+            List<string> total = friends.Concat(sentRequests)
+                .ToList();
 
             var users = await _context.Users
-                   .Where(u => !friends.Contains(u) && !friends.Contains(u))
+                   .Where(u => !total.Contains(u.Username))
                    .ToListAsync();
+
+            users.Remove(user);
 
             return users;
         }
@@ -107,15 +130,22 @@ namespace API.Data.Services.RequestFriendshipService
             //select all users with receiverID
             var users = _context.Users
                 .Where(u => receivers.Contains(u.ID))
-                .Select(u => new { u.ID, u.Username });
+                .Select(u => new
+                {
+                    u.ID,
+                    u.Username,
+                    u.ProfilePicturePath
+                });
 
             //now we join and return request user dto
             var result = from request in requests
                          join user in users on request.ReceiverID equals user.ID
                          select new RequestUserDTO
                          {
+                             id = user.ID,
                              username = user.Username,
-                             time = request.RequestedOn
+                             time = request.RequestedOn,
+                             profilePicturePath = user.ProfilePicturePath
                          };
 
 
@@ -135,9 +165,18 @@ namespace API.Data.Services.RequestFriendshipService
             return "success!";
         }
 
-        public async Task<string> RemoveRequest(int SenderID, int ReceiverID)
+        public async Task<string> UnsendRequest(int senderID, int receiverID)
         {
-            var request = await _context.Requests.FirstOrDefaultAsync(r => r.SenderID == SenderID && r.ReceiverID == ReceiverID);
+            var friendshipExists = await _context.Friendships.FirstOrDefaultAsync(f =>
+            (f.UserID == senderID && f.FriendID == receiverID)
+            || f.UserID == receiverID && f.FriendID == senderID);
+
+            if (friendshipExists != null)
+            {
+                return "friendship already exists, can't unsend request";
+            }
+
+            var request = await _context.Requests.FirstOrDefaultAsync(r => r.SenderID == senderID && r.ReceiverID == receiverID);
             if (request == null)
             {
                 return "request doesn't exist";
@@ -200,5 +239,6 @@ namespace API.Data.Services.RequestFriendshipService
 
             return "success!";
         }
+
     }
 }

@@ -1,4 +1,4 @@
 ﻿namespace API.Models.DTOs
 {
-    public record struct RequestUserDTO(string username, DateTime time);
+    public record struct RequestUserDTO(int id,string username, DateTime time, string profilePicturePath);
 }

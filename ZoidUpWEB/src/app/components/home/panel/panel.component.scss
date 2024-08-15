@@ -14,14 +14,49 @@
       .title {
         color: $white;
       }
-      .gear {
-        width: 1.5rem;
-        img {
+
+      .dropdown-settings {
+        position: relative;
+
+        .gear {
           width: 1.5rem;
+          img {
+            width: 1.5rem;
+          }
+
+          &:hover {
+            cursor: pointer;
+          }
         }
 
-        &:hover {
-          cursor: pointer;
+        .dropdown {
+          width: 100px;
+          font-size: 14px;
+          text-align: left;
+          z-index: 3;
+          background-color: $white;
+
+          position: absolute;
+          right: 50%;
+          transform: translate(50%, 10%);
+
+          ul {
+            p {
+              text-align: center;
+              cursor: default;
+            }
+            hr {
+              margin: 10px 0px;
+            }
+            li {
+              padding: 10px;
+              list-style: none;
+              cursor: pointer;
+              &:hover {
+                background: darken($gray, 20%);
+              }
+            }
+          }
         }
       }
     }
@@ -32,11 +67,10 @@
 
       .search {
         margin-bottom: 20px;
-        @include flex(center, center);
+        @include flex(space-between, center);
         form {
           @include flex(center, center);
           width: 100%;
-
           .input-group {
             position: relative;
             .icon {
@@ -68,11 +102,31 @@
             }
           }
         }
-        .plus {
-          width: 1rem;
-          mix-blend-mode: multiply;
-          cursor: pointer;
-          user-select: none;
+
+        .media {
+          @include flex(center, center);
+          img {
+            width: 1rem;
+            mix-blend-mode: multiply;
+            cursor: pointer;
+            user-select: none;
+          }
+          .notification-icon {
+            position: relative;
+            .bell {
+              margin: auto 0;
+            }
+            .circle {
+              position: absolute;
+              bottom: -2px;
+              right: -5px;
+
+              background-color: $red;
+              width: 10px;
+              height: 10px;
+              border-radius: 50%;
+            }
+          }
         }
       }
 
@@ -112,13 +166,46 @@
         }
       }
 
+      .notifications {
+        .friend-requests {
+          .friend-request {
+            @include flex(start, center);
+            position: relative;
+            padding: 10px 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            user-select: none;
+
+            .profile-picture {
+              border-radius: 50%;
+              margin-right: 20px;
+              width: 3rem;
+              img {
+                border-radius: 50%;
+                width: 3rem;
+              }
+            }
+            .status {
+              @include flex(center, center);
+
+              position: absolute;
+              right: 10px;
+              gap: 10px;
+              img {
+                width: 1.5rem;
+                mix-blend-mode: multiply;
+              }
+            }
+          }
+        }
+      }
+
       .other-members {
         .member {
           @include flex(start, center);
           position: relative;
           padding: 10px 5px;
           border-radius: 5px;
-          cursor: pointer;
           user-select: none;
 
           .profile-picture {
@@ -134,25 +221,11 @@
             @include flex(center, center);
             position: absolute;
             right: 10px;
-            .send-request-icon {
-              width: 1.5rem;
-              img {
-                width: 1.5rem;
-                mix-blend-mode: multiply;
-              }
+            .send-request-button,
+            .unsend-request-button {
+              cursor: pointer;
+              padding: 3px 10px;
             }
-            .unsend-request-icon {
-              width: 1.5rem;
-              margin-left: 10px;
-              img {
-                width: 1.5rem;
-                mix-blend-mode: multiply;
-              }
-            }
-          }
-
-          &:active {
-            background-color: darken($gray, 20%);
           }
         }
       }

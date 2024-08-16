@@ -16,7 +16,7 @@ import { User } from '../../../models/user/user.model';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
 import { FriendshipService } from '../../../services/friendship.service';
-import { Subject } from 'rxjs';
+import { Subject, timeInterval } from 'rxjs';
 import { PassUserService } from '../../../services/frontend/pass-user.service';
 import { SendRequestsService } from '../../../services/frontend/send-requests.service';
 
@@ -41,6 +41,8 @@ export class PanelComponent implements OnInit, OnChanges {
   receivedFriendRequests: User[] = [];
   filteredItems: User[] = this.friends;
 
+  @Output() isLoadingEvent = new EventEmitter<boolean>();
+
   @ViewChild('dropdown') dropdown!: ElementRef;
   searchForm: FormGroup = new FormGroup({});
   constructor(
@@ -60,14 +62,11 @@ export class PanelComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     this.filteredItems = this.friends;
     if (this.currentUser) {
-      this.friendshipService.HasRequests(this.currentUser.id).subscribe({
-        next: (result) => {
-          this.hasRequests = result;
-        },
-        error: (error) => {
-          console.log(error);
-        },
-      });
+      this.friendshipService
+        .HasRequests(this.currentUser?.id!)
+        .subscribe((response) => {
+          this.hasRequests = response;
+        });
       this.friendshipService
         .GetAllReceivedRequests(this.currentUser.id)
         .subscribe({
@@ -139,7 +138,7 @@ export class PanelComponent implements OnInit, OnChanges {
     this.passUserService.passedUser.next(friend!);
   }
 
-  SendRequest(receiverID: number, event: Event) {
+  SendRequestRecommended(receiverID: number, event: Event) {
     // this will hide the current send button and display the below button for unsending requests
     const sendBtn = event.target as HTMLButtonElement;
     const parentEl = sendBtn.parentElement;
@@ -152,6 +151,40 @@ export class PanelComponent implements OnInit, OnChanges {
       .SendRequest(this.currentUser?.id!, receiverID)
       .subscribe({
         next: (response) => {},
+        error: (error) => {
+          console.log(error);
+        },
+      });
+  }
+  AddFriend(senderID: number) {
+    console.log(this.filteredItems);
+    this.friendshipService
+      .SendRequest(senderID, this.currentUser?.id!)
+      .subscribe({
+        next: (response) => {
+          const index = this.filteredItems.findIndex(
+            (user) => user.id === senderID
+          );
+          this.filteredItems.splice(index, 1);
+          this.CheckIfHasRequests();
+        },
+        error: (error) => {
+          console.log(error);
+        },
+      });
+  }
+  UnacceptRequest(senderID: number) {
+    console.log(senderID);
+    this.friendshipService
+      .UnsendRequest(senderID, this.currentUser?.id!)
+      .subscribe({
+        next: (response) => {
+          const index = this.receivedFriendRequests.findIndex(
+            (user) => user.id === senderID
+          );
+          this.filteredItems.splice(index, 1);
+          this.CheckIfHasRequests();
+        },
         error: (error) => {
           console.log(error);
         },
@@ -177,6 +210,23 @@ export class PanelComponent implements OnInit, OnChanges {
   GoToSentRequests() {
     let dropdown = this.dropdown.nativeElement as HTMLDivElement;
     dropdown.style.display = 'none';
-    this.sendRequestsService.SeeSendRequests();
+    this.GoBack();
+    this.sendRequestsService.SeeSentRequests(this.currentUser?.id!);
+  }
+  Logout() {
+    this.isLoadingEvent.emit(true);
+    setTimeout(() => {
+      this.auth.Logout();
+      this.isLoadingEvent.emit(false);
+    }, 3000);
+  }
+
+  CheckIfHasRequests() {
+    this.friendshipService
+      .HasRequests(this.currentUser?.id!)
+      .subscribe((response) => {
+        console.log(response);
+        this.hasRequests = response;
+      });
   }
 }

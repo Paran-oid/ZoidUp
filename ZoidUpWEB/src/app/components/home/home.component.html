@@ -1,9 +1,14 @@
-<div class="container">
-  <app-panel [friends]="friends" [currentUser]="currentUser"></app-panel>
+<div class="container" *ngIf="!isLoading">
+  <app-panel
+    [friends]="friends"
+    [currentUser]="currentUser"
+    (isLoadingEvent)="ReceiveIsLoading($event)"
+  ></app-panel>
   <app-chat *ngIf="selectedUser"></app-chat>
   <app-about *ngIf="selectedUser"></app-about>
   <!-- add isLoading to the whole document -->
 </div>
-<div class="requests-popup" [hidden]="!isInSendRequest">
+<div class="requests-popup" [hidden]="!isInSendRequest" *ngIf="!isLoading">
   <app-requests-popup [currentUser]="currentUser"></app-requests-popup>
 </div>
+<app-spinner *ngIf="isLoading"></app-spinner>

@@ -12,6 +12,7 @@ import { FriendshipService } from '../../services/friendship.service';
 import { PassUserService } from '../../services/frontend/pass-user.service';
 import { RequestsPopupComponent } from './requests-popup/requests-popup.component';
 import { SendRequestsService } from '../../services/frontend/send-requests.service';
+import { SpinnerComponent } from '../../shared/components/spinner/spinner.component';
 
 @Component({
   selector: 'app-home',
@@ -23,6 +24,7 @@ import { SendRequestsService } from '../../services/frontend/send-requests.servi
     ChatComponent,
     AboutComponent,
     RequestsPopupComponent,
+    SpinnerComponent,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
@@ -32,6 +34,7 @@ export class HomeComponent implements OnInit {
   currentUser: User | null = null;
   selectedUser: User | null = null;
 
+  isLoading: boolean = false;
   isInSendRequest: boolean = false;
 
   constructor(
@@ -63,6 +66,10 @@ export class HomeComponent implements OnInit {
 
   Logout() {
     this.authService.Logout();
+  }
+
+  ReceiveIsLoading(value: boolean) {
+    this.isLoading = value;
   }
 }
 // update commit

@@ -13,7 +13,7 @@
           <hr />
           <li (click)="GoToSentRequests()">Sent Requests</li>
           <li>Settings</li>
-          <li (click)="auth.Logout()">Logout</li>
+          <li (click)="Logout()">Logout</li>
         </ul>
       </div>
     </div>
@@ -105,10 +105,13 @@
             <p>cool message</p>
           </div>
           <div class="status">
-            <div class="accept-request-icon">
+            <div class="accept-request-icon" (click)="AddFriend(user.id)">
               <img src="/Images/Icons/accept-friend-request.png" />
             </div>
-            <div class="decline-request-icon">
+            <div
+              class="decline-request-icon"
+              (click)="UnacceptRequest(user.id)"
+            >
               <img src="/Images/Icons/unaccept-friend-request.png" />
             </div>
           </div>
@@ -132,7 +135,7 @@
           <div class="btns">
             <button
               class="send-request-button"
-              (click)="SendRequest(user.id, $event)"
+              (click)="SendRequestRecommended(user.id, $event)"
             >
               Send Request
             </button>

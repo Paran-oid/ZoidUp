@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { RequestUserDTO } from '../../models/user/user.model';
+import { FriendshipService } from '../friendship.service';
 
 @Injectable({
   providedIn: 'root',
@@ -12,16 +13,13 @@ export class SendRequestsService {
   request = new BehaviorSubject<RequestUserDTO | null>(null);
   request$ = this.request.asObservable();
 
-  constructor() {}
+  constructor(private friendshipService: FriendshipService) {}
 
-  SeeSendRequests() {
+  SeeSentRequests(userID: number) {
+    this.friendshipService.GetAllSentRequests(userID).subscribe();
     this.sendRequests.next(true);
   }
   LeaveSendRequests() {
     this.sendRequests.next(false);
-  }
-  FetchData()
-  {
-    use it here and find a solution for the user problem
   }
 }

@@ -2,13 +2,18 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { RequestUserDTO, User } from '../models/user/user.model';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FriendshipService {
   url: string = environment.url + '/Request';
+
+  sentRequests: BehaviorSubject<RequestUserDTO[] | null> = new BehaviorSubject<
+    RequestUserDTO[] | null
+  >(null);
+  sentRequests$ = this.sentRequests.asObservable();
 
   constructor(private http: HttpClient) {}
 
@@ -41,8 +46,13 @@ export class FriendshipService {
     );
   }
   public GetAllSentRequests(senderID: number) {
-    return this.http.get<RequestUserDTO[]>(
-      this.url + '/GetAllSentRequests/' + senderID
-    );
+    return this.http
+      .get<RequestUserDTO[]>(this.url + '/GetAllSentRequests/' + senderID)
+      .pipe(
+        map((requests) => {
+          console.log(requests);
+          this.sentRequests.next(requests);
+        })
+      );
   }
 }

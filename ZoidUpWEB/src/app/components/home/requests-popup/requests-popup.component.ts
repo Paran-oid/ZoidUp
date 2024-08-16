@@ -18,7 +18,7 @@ import { SendRequestsService } from '../../../services/frontend/send-requests.se
   templateUrl: './requests-popup.component.html',
   styleUrl: './requests-popup.component.scss',
 })
-export class RequestsPopupComponent implements OnInit, OnChanges {
+export class RequestsPopupComponent implements OnInit {
   @Input() currentUser: User | null = null;
   requests: RequestUserDTO[] = [];
 
@@ -29,18 +29,10 @@ export class RequestsPopupComponent implements OnInit, OnChanges {
     private sendRequestsService: SendRequestsService
   ) {}
 
-  ngOnInit(): void {}
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (this.currentUser) {
-      this.friendshipService.GetAllSentRequests(this.currentUser.id).subscribe({
-        next: (requests) => {
-          console.log(requests);
-          this.requests = requests;
-        },
-      });
-    }
-    use this
+  ngOnInit(): void {
+    this.friendshipService.sentRequests$.subscribe((requests) => {
+      this.requests = requests!;
+    });
   }
 
   UnsendRequest(receiverID: number) {

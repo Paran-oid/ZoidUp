@@ -73,6 +73,7 @@ namespace API.Data.Services.RequestFriendshipService
                          join user in users on request.SenderID equals user.ID
                          select new RequestUserDTO
                          {
+                             id = user.ID,
                              username = user.Username,
                              time = request.RequestedOn
                          };

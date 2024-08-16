@@ -55,4 +55,10 @@ export class FriendshipService {
         })
       );
   }
+  public RemoveFriend(userID: number, friendID: number) {
+    return this.http.delete(
+      this.url + `/RemoveFriendship?userID=${userID}&friendID=${friendID}`,
+      { responseType: 'text' }
+    );
+  }
 }

@@ -21,26 +21,29 @@
     .info {
       @include flex(center, center);
       user-select: none;
-      div {
-        margin: 0px 15px;
-        button {
-          @include flex(center, center);
-          cursor: pointer;
+      .icon {
+        text-align: center;
+        .button-wrapper {
+          width: 100%;
+          margin-right: 30px;
+          button {
+            background-color: lighten($gray, 20%);
+            cursor: pointer;
 
-          background-color: lighten($gray, 20%);
-
-          padding: 5px;
-          border: none;
-          border-radius: 50%;
-          img {
-            width: 1.5rem;
-            height: 1.5rem;
+            padding: 5px;
+            border: none;
             border-radius: 50%;
-            object-fit: contain;
-          }
+            img {
+              margin: 0 auto;
+              width: 1.5rem;
+              height: 1.5rem;
+              border-radius: 50%;
+              object-fit: contain;
+            }
 
-          &:hover {
-            background-color: $gray;
+            &:hover {
+              background-color: $gray;
+            }
           }
         }
       }

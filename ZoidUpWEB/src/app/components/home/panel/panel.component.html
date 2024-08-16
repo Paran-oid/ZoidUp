@@ -9,7 +9,7 @@
       </div>
       <div class="dropdown" *ngIf="displayDropdown" #dropdown>
         <ul>
-          <p>{{ currentUser?.username }} actions</p>
+          <p class="dropdown-username">{{ currentUser?.username }}</p>
           <hr />
           <li (click)="GoToSentRequests()">Sent Requests</li>
           <li>Settings</li>
@@ -50,14 +50,14 @@
         />
         <div
           class="notification-icon"
-          *ngIf="!(findFriendsMode || notificationMode)"
+          *ngIf="!(findFriendsMode || notificationMode) && hasRequests"
         >
           <img
             class="bell"
             src="/Images/Icons/bell.png"
             (click)="FetchData('notifications')"
           />
-          <div class="circle" *ngIf="hasRequests"></div>
+          <div class="circle"></div>
         </div>
         <div class="go-back">
           <img

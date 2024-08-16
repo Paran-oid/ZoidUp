@@ -100,5 +100,9 @@
   }
   .right {
     justify-content: right !important;
+    img {
+      cursor: pointer;
+      width: 3rem;
+    }
   }
 }

@@ -22,6 +22,7 @@ export class RequestsPopupComponent implements OnInit {
   @Input() currentUser: User | null = null;
   requests: RequestUserDTO[] = [];
 
+  isEmpty: boolean = true;
   FormatRequestDate = FormatRequestDate;
 
   constructor(
@@ -32,6 +33,12 @@ export class RequestsPopupComponent implements OnInit {
   ngOnInit(): void {
     this.friendshipService.sentRequests$.subscribe((requests) => {
       this.requests = requests!;
+      if (requests == null) {
+        return;
+      }
+      if (this.requests.length > 0) {
+        this.isEmpty = false;
+      }
     });
   }
 

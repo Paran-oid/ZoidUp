@@ -70,6 +70,9 @@ export class ChatComponent implements OnInit {
     }
     return;
   }
+  ToggleAbout() {
+    this.passUserService.ToggleAbout();
+  }
 
   OnSubmit() {}
 }

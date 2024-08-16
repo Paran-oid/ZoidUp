@@ -19,6 +19,7 @@ import { FriendshipService } from '../../../services/friendship.service';
 import { Subject, timeInterval } from 'rxjs';
 import { PassUserService } from '../../../services/frontend/pass-user.service';
 import { SendRequestsService } from '../../../services/frontend/send-requests.service';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-panel',
@@ -50,7 +51,8 @@ export class PanelComponent implements OnInit, OnChanges {
     public auth: AuthService,
     public friendshipService: FriendshipService,
     private passUserService: PassUserService,
-    private sendRequestsService: SendRequestsService
+    private sendRequestsService: SendRequestsService,
+    private cookieService: CookieService
   ) {}
 
   ngOnInit() {
@@ -136,6 +138,7 @@ export class PanelComponent implements OnInit, OnChanges {
   DisplayFriend(id: number) {
     let friend = this.friends.find((friend) => friend.id === id);
     this.passUserService.passedUser.next(friend!);
+    this.cookieService.delete('first_time');
   }
 
   SendRequestRecommended(receiverID: number, event: Event) {
@@ -157,11 +160,11 @@ export class PanelComponent implements OnInit, OnChanges {
       });
   }
   AddFriend(senderID: number) {
-    console.log(this.filteredItems);
     this.friendshipService
-      .SendRequest(senderID, this.currentUser?.id!)
+      .SendRequest(this.currentUser?.id!, senderID)
       .subscribe({
         next: (response) => {
+          console.log(response);
           const index = this.filteredItems.findIndex(
             (user) => user.id === senderID
           );
@@ -174,7 +177,6 @@ export class PanelComponent implements OnInit, OnChanges {
       });
   }
   UnacceptRequest(senderID: number) {
-    console.log(senderID);
     this.friendshipService
       .UnsendRequest(senderID, this.currentUser?.id!)
       .subscribe({

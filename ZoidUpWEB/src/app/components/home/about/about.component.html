@@ -13,17 +13,25 @@
   </div>
 
   <div class="info">
-    <div>
-      <button><img src="/Images/Icons/profile.png" /></button>
-      <span>profile</span>
-    </div>
-    <div>
-      <button><img src="/Images/Icons/bell.png" /></button>
+    <div class="icon">
+      <div class="button-wrapper">
+        <button><img src="/Images/Icons/bell.png" /></button>
+      </div>
       <span>mute</span>
     </div>
-    <div>
-      <button><img src="/Images/Icons/search.png" /></button>
+    <div class="icon">
+      <div class="button-wrapper">
+        <button><img src="/Images/Icons/search.png" /></button>
+      </div>
       <span>search</span>
+    </div>
+    <div class="icon">
+      <div class="button-wrapper">
+        <button>
+          <img src="/Images/Icons/profile.png" (click)="UnfriendUser()" />
+        </button>
+      </div>
+      <span>unfriend</span>
     </div>
   </div>
   <div class="more">

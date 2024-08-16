@@ -21,6 +21,7 @@ import {
 } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { SpinnerComponent } from '../../shared/components/spinner/spinner.component';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-welcome',
@@ -38,7 +39,8 @@ export class WelcomeComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private cookieService: CookieService
   ) {}
 
   get username() {
@@ -75,6 +77,7 @@ export class WelcomeComponent implements OnInit {
       this.authService.Login(model).subscribe({
         next: (response) => {
           localStorage.setItem('token', response.token);
+          this.cookieService.set('first_time', 'true');
           window.location.reload();
         },
         error: (err: HttpErrorResponse) => {

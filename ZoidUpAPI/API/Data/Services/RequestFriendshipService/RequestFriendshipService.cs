@@ -155,10 +155,11 @@ namespace API.Data.Services.RequestFriendshipService
 
         public async Task<string> RemoveFriendship(int userID, int friendID)
         {
-            var friendship = await _context.Friendships.FirstOrDefaultAsync(f => f.UserID == userID && f.FriendID == friendID);
+            var friendship = await _context.Friendships.FirstOrDefaultAsync(f => (f.UserID == userID && f.FriendID == friendID) ||
+                (f.UserID == friendID && f.FriendID == userID));
             if (friendship == null)
             {
-                return null;
+                return "request doesn't exist";
             }
             _context.Remove(friendship);
             await _context.SaveChangesAsync();
@@ -191,19 +192,19 @@ namespace API.Data.Services.RequestFriendshipService
 
         public async Task<string> SendRequest(int senderID, int receiverID)
         {
-            var request = await _context.Requests.FirstOrDefaultAsync(r => r.SenderID == senderID && r.ReceiverID == receiverID);
-            if (request != null)
-            {
-                return "request already sent";
-            }
-
             var friendshipExists = await _context.Friendships.FirstOrDefaultAsync(f =>
-                (f.UserID == senderID && f.FriendID == receiverID)
-                || f.UserID == receiverID && f.FriendID == senderID);
+            (f.UserID == senderID && f.FriendID == receiverID)
+            || f.UserID == receiverID && f.FriendID == senderID);
 
             if (friendshipExists != null)
             {
                 return "friendship already exists, can't send request";
+            }
+
+            var request = await _context.Requests.FirstOrDefaultAsync(r => r.SenderID == senderID && r.ReceiverID == receiverID);
+            if (request != null)
+            {
+                return "request already sent";
             }
 
             RequestedFriendship model = new RequestedFriendship
@@ -224,6 +225,8 @@ namespace API.Data.Services.RequestFriendshipService
 
                 _context.Remove(model);
                 _context.Remove(exists);
+                await _context.SaveChangesAsync();
+
 
                 var friendship = new Friendship()
                 {
@@ -237,6 +240,8 @@ namespace API.Data.Services.RequestFriendshipService
 
                 return "friendship created!";
             }
+
+
 
             return "success!";
         }

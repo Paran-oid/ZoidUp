@@ -1,10 +1,10 @@
 <div class="container">
   <div class="wrapper">
     <div class="title">
-      <h3>Sent Requests</h3>
+      <h1>Sent Requests</h1>
       <img src="/Images/Icons/cancel.png" (click)="CloseTab()" />
     </div>
-    <div class="requests">
+    <div class="requests" *ngIf="!isEmpty">
       <div class="request" *ngFor="let request of requests">
         <div class="user">
           <img
@@ -27,6 +27,10 @@
           />
         </div>
       </div>
+    </div>
+    <div class="none" *ngIf="isEmpty">
+      <h3>You haven't sent any requests yet</h3>
+      <img src="/Images/Icons/empty.png" />
     </div>
   </div>
 </div>

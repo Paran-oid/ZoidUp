@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
-import { Router } from '@angular/router';
+import { NavigationStart, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
@@ -13,6 +13,7 @@ import { PassUserService } from '../../services/frontend/pass-user.service';
 import { RequestsPopupComponent } from './requests-popup/requests-popup.component';
 import { SendRequestsService } from '../../services/frontend/send-requests.service';
 import { SpinnerComponent } from '../../shared/components/spinner/spinner.component';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-home',
@@ -36,12 +37,16 @@ export class HomeComponent implements OnInit {
 
   isLoading: boolean = false;
   isInSendRequest: boolean = false;
+  isHiddenAbout: boolean = true;
+  hasCookie: boolean = false;
 
   constructor(
     private authService: AuthService,
     private friendshipService: FriendshipService,
     private passUserService: PassUserService,
-    private sendRequestsService: SendRequestsService
+    private sendRequestsService: SendRequestsService,
+    public cookieService: CookieService,
+    private router: Router
   ) {}
   ngOnInit() {
     this.SetCurrentUser();
@@ -50,6 +55,10 @@ export class HomeComponent implements OnInit {
     });
     this.sendRequestsService.sendRequests$.subscribe((response) => {
       this.isInSendRequest = response;
+    });
+    this.passUserService.hiddenAbout$.subscribe((response) => {
+      console.log(`hidden about inside home component ${response}`);
+      this.isHiddenAbout = response;
     });
   }
 

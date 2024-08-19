@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { SpinnerComponent } from './shared/components/spinner/spinner.component';
 import { PassUserService } from './services/frontend/pass-user.service';
 import { CookieService } from 'ngx-cookie-service';
+import { NotificationService } from './services/notification.service';
 
 @Component({
   selector: 'app-root',
@@ -13,7 +14,7 @@ import { CookieService } from 'ngx-cookie-service';
   imports: [RouterOutlet, CommonModule, SpinnerComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
-  providers: [AuthService, PassUserService, CookieService],
+  providers: [AuthService, PassUserService, CookieService, NotificationService],
 })
 export class AppComponent implements OnInit {
   constructor(public spinnerService: SpinnerService) {}

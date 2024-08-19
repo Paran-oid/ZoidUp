@@ -14,6 +14,7 @@ import { RequestsPopupComponent } from './requests-popup/requests-popup.componen
 import { SendRequestsService } from '../../services/frontend/send-requests.service';
 import { SpinnerComponent } from '../../shared/components/spinner/spinner.component';
 import { CookieService } from 'ngx-cookie-service';
+import { NotificationComponent } from '../../shared/components/notification/notification.component';
 
 @Component({
   selector: 'app-home',
@@ -26,6 +27,7 @@ import { CookieService } from 'ngx-cookie-service';
     AboutComponent,
     RequestsPopupComponent,
     SpinnerComponent,
+    NotificationComponent,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',

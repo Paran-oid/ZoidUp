@@ -9,7 +9,13 @@
       </div>
       <div class="dropdown" *ngIf="displayDropdown" #dropdown>
         <ul>
-          <p class="dropdown-username">{{ currentUser?.username }}</p>
+          <p class="dropdown-username">
+            {{
+              currentUser?.username != null
+                ? currentUser?.username
+                : "Loading..."
+            }}
+          </p>
           <hr />
           <li (click)="GoToSentRequests()">Sent Requests</li>
           <li>Settings</li>

@@ -68,13 +68,13 @@
             input:not([type="checkbox"]) {
               border: none;
               border-radius: 5px;
-              background-color: $white;
+              background-color: lighten($gray, 15%);
               padding: 8px;
               font-size: 18px;
               margin-top: 15px;
               width: 250px;
               &::placeholder {
-                color: $gray;
+                color: $black;
               }
 
               &:focus {

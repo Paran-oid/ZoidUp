@@ -1,0 +1,18 @@
+<div class="container" [ngClass]="">
+  <div class="title">
+    <img
+      class="icon"
+      src="/Images/Icons/Info.png"
+      *ngIf="model.type == 'Info' || model.type == ''"
+    />
+    <img
+      class="icon"
+      src="/Images/Icons/Warning.png"
+      *ngIf="model.type == 'Warning'"
+    />
+    <h3>{{ model.title }}</h3>
+  </div>
+  <div class="description">
+    <p>{{ model.description }}</p>
+  </div>
+</div>

@@ -1,6 +1,3 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
-
 name: Node.js CI
 
 on:
@@ -16,8 +13,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [20]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+        node-version: [20] # or 18, depending on your Node.js version
 
     steps:
     - uses: actions/checkout@v4
@@ -28,13 +24,13 @@ jobs:
         cache: 'npm'
         
     - name: Clean Installation
-      working-directory: "./ZoidUpWEB"
+      working-directory: "./ZoidUpWEB"  # Ensure this is correct
       run: npm ci
 
     - name: Run Tests
-      working-directory: "./ZoidUpWEB"
+      working-directory: "./ZoidUpWEB"  # Ensure this is correct
       run: npm run test:ci
 
     - name: Build
-      working-directory: "./ZoidUpWEB"
-      run: npm build
+      working-directory: "./ZoidUpWEB"  # Ensure this is correct
+      run: npm run build

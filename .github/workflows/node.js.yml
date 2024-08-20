@@ -1,0 +1,32 @@
+name: Node.js CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [20] # or 18, depending on your Node.js version
+
+    steps:
+    - uses: actions/checkout@v4   
+    - uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        cache-dependency-path: 'ZoidUpWEB/package-lock.json'        
+        
+    - name: Clean Installation
+      working-directory: "./ZoidUpWEB"  # Ensure this is correct
+      run: npm ci
+
+    - name: Build
+      working-directory: "./ZoidUpWEB"  # Ensure this is correct
+      run: npm run build

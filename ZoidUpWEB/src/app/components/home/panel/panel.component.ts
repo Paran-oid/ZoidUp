@@ -141,7 +141,6 @@ export class PanelComponent implements OnInit, OnChanges {
     let friend = this.friends.find((friend) => friend.id === id);
     this.passUserService.passedUser.next(friend!);
     this.cookieService.delete('first_time');
-    this.notificationService.Info('you picked a friend!');
   }
 
   SendRequestRecommended(receiverID: number, event: Event) {
@@ -156,7 +155,9 @@ export class PanelComponent implements OnInit, OnChanges {
     this.friendshipService
       .SendRequest(this.currentUser?.id!, receiverID)
       .subscribe({
-        next: (response) => {},
+        next: (response) => {
+          this.notificationService.Success('Friend request sent');
+        },
         error: (error) => {
           console.log(error);
         },
@@ -170,6 +171,11 @@ export class PanelComponent implements OnInit, OnChanges {
           console.log(response);
           const index = this.filteredItems.findIndex(
             (user) => user.id === senderID
+          );
+          this.notificationService.Info(
+            `You are now friends with ${
+              this.filteredItems.at(index)?.username
+            }!`
           );
           this.filteredItems.splice(index, 1);
           this.CheckIfHasRequests();
@@ -189,6 +195,7 @@ export class PanelComponent implements OnInit, OnChanges {
           );
           this.filteredItems.splice(index, 1);
           this.CheckIfHasRequests();
+          this.notificationService.Info('Unaccepted request');
         },
         error: (error) => {
           console.log(error);
@@ -207,7 +214,9 @@ export class PanelComponent implements OnInit, OnChanges {
     this.friendshipService
       .UnsendRequest(this.currentUser?.id!, receiverID)
       .subscribe({
-        next: (response) => {},
+        next: (response) => {
+          this.notificationService.Info('Friend request unsent');
+        },
         error: (error) => {},
       });
   }
@@ -220,6 +229,7 @@ export class PanelComponent implements OnInit, OnChanges {
   }
   Logout() {
     this.isLoadingEvent.emit(true);
+    this.notificationService.isDisplayed.next(false);
     setTimeout(() => {
       this.auth.Logout();
       this.isLoadingEvent.emit(false);

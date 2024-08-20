@@ -2,10 +2,10 @@
 
 .container {
   display: inline-flex;
-  background-color: $gray;
   min-width: 200px;
   padding: 15px 5px;
   border-radius: 5px;
+  z-index: 10;
   .title {
     @include flex(start, center);
     gap: 10px;
@@ -15,4 +15,21 @@
       width: 2rem;
     }
   }
+
+  &:hover {
+    cursor: pointer;
+    opacity: 0.8;
+  }
+}
+
+.info {
+  background-color: $gray;
+}
+.warning {
+  background-color: lighten($red, 30%);
+}
+
+.success {
+  background-color: darken($white, 10%);
+  color: $black;
 }

@@ -10,6 +10,7 @@ import { RequestUserDTO, User } from '../../../models/user/user.model';
 import { CommonModule } from '@angular/common';
 import { FormatRequestDate } from '../../../shared/functions/FormatRequestDate.function';
 import { SendRequestsService } from '../../../services/frontend/send-requests.service';
+import { NotificationService } from '../../../services/notification.service';
 
 @Component({
   selector: 'app-requests-popup',
@@ -27,7 +28,8 @@ export class RequestsPopupComponent implements OnInit {
 
   constructor(
     private friendshipService: FriendshipService,
-    private sendRequestsService: SendRequestsService
+    private sendRequestsService: SendRequestsService,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -50,7 +52,7 @@ export class RequestsPopupComponent implements OnInit {
       .UnsendRequest(this.currentUser?.id!, receiverID)
       .subscribe({
         next: (response) => {
-          console.log(response);
+          this.notificationService.Info('Friend request unsent');
         },
       });
   }

@@ -1,14 +1,27 @@
-<div class="container" [ngClass]="">
+<div
+  class="container"
+  [ngClass]="{
+    warning: model.type === 'Warning',
+    info: model.type === 'Info',
+    success: model.type === 'Success'
+  }"
+  (click)="notificationService.isDisplayed.next(false)"
+>
   <div class="title">
     <img
       class="icon"
-      src="/Images/Icons/Info.png"
+      src="/Images/Icons/info.png"
       *ngIf="model.type == 'Info' || model.type == ''"
     />
     <img
       class="icon"
-      src="/Images/Icons/Warning.png"
+      src="/Images/Icons/warning.png"
       *ngIf="model.type == 'Warning'"
+    />
+    <img
+      class="icon"
+      src="/Images/Icons/success.png"
+      *ngIf="model.type == 'Success'"
     />
     <h3>{{ model.title }}</h3>
   </div>

@@ -12,6 +12,7 @@ import { RegisterEntry } from '../../models/other/register-entry.model';
 import { mergeMap, of, throwError } from 'rxjs';
 import { HttpErrorResponse, HttpResponseBase } from '@angular/common/http';
 import { SpinnerComponent } from '../../shared/components/spinner/spinner.component';
+import { NotificationService } from '../../services/notification.service';
 
 @Component({
   selector: 'app-register',
@@ -28,7 +29,8 @@ export class RegisterComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -61,6 +63,9 @@ export class RegisterComponent implements OnInit {
       };
       this.authService.Register(model).subscribe({
         next: (response) => {
+          this.notificationService.Success(
+            'Your account was created! login now'
+          );
           this.router.navigate(['']);
         },
         error: (err: HttpErrorResponse) => {

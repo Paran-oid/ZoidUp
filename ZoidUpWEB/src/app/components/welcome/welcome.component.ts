@@ -22,6 +22,7 @@ import {
 import { HttpErrorResponse } from '@angular/common/http';
 import { SpinnerComponent } from '../../shared/components/spinner/spinner.component';
 import { CookieService } from 'ngx-cookie-service';
+import { NotificationService } from '../../services/notification.service';
 
 @Component({
   selector: 'app-welcome',
@@ -31,7 +32,6 @@ import { CookieService } from 'ngx-cookie-service';
   styleUrl: './welcome.component.scss',
 })
 export class WelcomeComponent implements OnInit {
-  isLoading: boolean = false;
   isSubmitted: boolean = false;
   message = '';
   test: string = '';
@@ -40,7 +40,8 @@ export class WelcomeComponent implements OnInit {
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private cookieService: CookieService
+    private cookieService: CookieService,
+    private notificationService: NotificationService
   ) {}
 
   get username() {
@@ -63,11 +64,9 @@ export class WelcomeComponent implements OnInit {
   }
 
   Login() {
-    this.isLoading = true;
     this.isSubmitted = true;
     if (this.form.invalid) {
       this.message = 'Please enter the following fields';
-      this.isLoading = false;
       return;
     } else {
       const model: LoginEntry = {
@@ -76,14 +75,18 @@ export class WelcomeComponent implements OnInit {
       };
       this.authService.Login(model).subscribe({
         next: (response) => {
-          localStorage.setItem('token', response.token);
-          this.cookieService.set('first_time', 'true');
-          window.location.reload();
+          this.notificationService.Success(
+            `Welcome back ${this.username?.value}`
+          );
+          setTimeout(() => {
+            localStorage.setItem('token', response.token);
+            this.cookieService.set('first_time', 'true');
+            window.location.reload();
+          }, 2000);
         },
         error: (err: HttpErrorResponse) => {
           this.message = err.error;
           this.form.reset();
-          this.isLoading = false;
         },
       });
     }

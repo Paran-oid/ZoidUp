@@ -31,7 +31,6 @@ export class NotificationService {
       title: title,
       type: 'Info',
     };
-    console.log('should display ');
     this.model.next(model);
   }
 
@@ -40,6 +39,15 @@ export class NotificationService {
     const model: NotificationModel = {
       title: title,
       type: 'Warning',
+    };
+    this.model.next(model);
+  }
+
+  Success(title: string) {
+    this.Display();
+    const model: NotificationModel = {
+      title: title,
+      type: 'Success',
     };
     this.model.next(model);
   }

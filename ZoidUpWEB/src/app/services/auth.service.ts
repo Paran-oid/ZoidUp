@@ -69,13 +69,13 @@ export class AuthService {
     let headers = new HttpHeaders();
     headers = headers.append('Content-Type', 'application/json');
 
-    let params = new HttpParams();
-    params = params.append('username', model.username);
-    params = params.append('password', model.password);
+    const body = {
+      username: model.username,
+      password: model.password,
+    };
 
-    return this.http.get<AccessTokenResponse>(this.url + '/User/Login', {
+    return this.http.post<AccessTokenResponse>(this.url + '/User/Login', body, {
       headers: headers,
-      params: params,
       responseType: 'json',
     });
   }

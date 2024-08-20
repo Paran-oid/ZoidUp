@@ -29,10 +29,13 @@ export class FriendshipService {
     return this.http.get<User[]>(this.url + '/GetAllFriends/' + userID);
   }
   public SendRequest(senderID: number, receiverID: number) {
-    return this.http.get(
-      this.url + `/SendRequest?senderID=${senderID}&receiverID=${receiverID}`,
-      { responseType: 'text' }
-    );
+    const body = {
+      senderID: senderID,
+      receiverID: receiverID,
+    };
+    return this.http.post(this.url + `/SendRequest`, body, {
+      responseType: 'text',
+    });
   }
   public UnsendRequest(senderID: number, receiverID: number) {
     return this.http.delete(

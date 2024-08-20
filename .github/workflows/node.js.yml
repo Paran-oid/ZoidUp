@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [22]
+        node-version: [20]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
@@ -28,13 +28,13 @@ jobs:
         cache: 'npm'
         
     - name: Clean Installation
-      working-directory: "./ZoidUpWeb"
+      working-directory: "./ZoidUpWEB"
       run: npm ci
 
     - name: Run Tests
-      working-directory: "./ZoidUpWeb"
+      working-directory: "./ZoidUpWEB"
       run: npm run test:ci
 
     - name: Build
-      working-directory: "./ZoidUpWeb"
+      working-directory: "./ZoidUpWEB"
       run: npm build

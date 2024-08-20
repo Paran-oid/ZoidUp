@@ -1,15 +1,15 @@
 @import "../../../../scss/global";
 
 .container {
+  display: inline-flex;
   background-color: $gray;
-  padding: 15px 5px 25px 5px;
-  width: 250px;
-  height: 100px;
+  min-width: 200px;
+  padding: 15px 5px;
   border-radius: 5px;
   .title {
     @include flex(start, center);
     gap: 10px;
-    margin-bottom: 15px;
+    font-size: 14px;
 
     .icon {
       width: 2rem;

@@ -7,17 +7,26 @@ import { SpinnerComponent } from './shared/components/spinner/spinner.component'
 import { PassUserService } from './services/frontend/pass-user.service';
 import { CookieService } from 'ngx-cookie-service';
 import { NotificationService } from './services/notification.service';
+import { NotificationComponent } from './shared/components/notification/notification.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, CommonModule, SpinnerComponent],
+  imports: [
+    RouterOutlet,
+    CommonModule,
+    SpinnerComponent,
+    NotificationComponent,
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
   providers: [AuthService, PassUserService, CookieService, NotificationService],
 })
 export class AppComponent implements OnInit {
-  constructor(public spinnerService: SpinnerService) {}
+  constructor(
+    public spinnerService: SpinnerService,
+    public notificationService: NotificationService
+  ) {}
 
   ngOnInit(): void {}
 }

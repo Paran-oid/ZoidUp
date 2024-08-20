@@ -1,4 +1,6 @@
-<app-spinner *ngIf="spinnerService.isLoading | async"></app-spinner>
 <router-outlet
   *ngIf="(spinnerService.isLoading | async) === false"
 ></router-outlet>
+<app-notification
+  *ngIf="notificationService.isDisplayed$ | async"
+></app-notification>

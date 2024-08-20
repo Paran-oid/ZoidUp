@@ -11,9 +11,8 @@ export class NotificationService {
   isDisplayed$ = this.isDisplayed.asObservable();
 
   model = new BehaviorSubject<NotificationModel>({
-    title: 'default',
+    title: 'CYKA BLYAT',
     type: 'Info',
-    description: 'hello there',
   });
   model$ = this.model.asObservable();
 
@@ -26,21 +25,20 @@ export class NotificationService {
     }, 5000);
   }
 
-  Info(description: string) {
+  Info(title: string) {
     this.Display();
     const model: NotificationModel = {
-      title: 'Info',
-      description: 'template',
+      title: title,
       type: 'Info',
     };
+    console.log('should display ');
     this.model.next(model);
   }
 
-  Warning(description: string) {
+  Warning(title: string) {
     this.Display();
     const model: NotificationModel = {
-      title: 'Warning',
-      description: 'template',
+      title: title,
       type: 'Warning',
     };
     this.model.next(model);

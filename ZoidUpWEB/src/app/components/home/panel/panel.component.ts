@@ -20,6 +20,7 @@ import { Subject, timeInterval } from 'rxjs';
 import { PassUserService } from '../../../services/frontend/pass-user.service';
 import { SendRequestsService } from '../../../services/frontend/send-requests.service';
 import { CookieService } from 'ngx-cookie-service';
+import { NotificationService } from '../../../services/notification.service';
 
 @Component({
   selector: 'app-panel',
@@ -52,7 +53,8 @@ export class PanelComponent implements OnInit, OnChanges {
     public friendshipService: FriendshipService,
     private passUserService: PassUserService,
     private sendRequestsService: SendRequestsService,
-    private cookieService: CookieService
+    private cookieService: CookieService,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit() {
@@ -139,6 +141,7 @@ export class PanelComponent implements OnInit, OnChanges {
     let friend = this.friends.find((friend) => friend.id === id);
     this.passUserService.passedUser.next(friend!);
     this.cookieService.delete('first_time');
+    this.notificationService.Info('you picked a friend!');
   }
 
   SendRequestRecommended(receiverID: number, event: Event) {

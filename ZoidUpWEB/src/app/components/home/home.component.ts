@@ -59,7 +59,6 @@ export class HomeComponent implements OnInit {
       this.isInSendRequest = response;
     });
     this.passUserService.hiddenAbout$.subscribe((response) => {
-      console.log(`hidden about inside home component ${response}`);
       this.isHiddenAbout = response;
     });
   }

@@ -7,7 +7,7 @@ on:
     branches: [ "master" ]
 
 jobs:
-  build:
+  angular-build:
 
     runs-on: ubuntu-latest
 
@@ -27,6 +27,9 @@ jobs:
       working-directory: "./ZoidUpWEB"  # Ensure this is correct
       run: npm ci
 
+    - name: Tests
+      run: npm test
+      
     - name: Build
       working-directory: "./ZoidUpWEB"  # Ensure this is correct
       run: npm run build

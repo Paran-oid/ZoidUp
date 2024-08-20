@@ -24,12 +24,13 @@ jobs:
         cache-dependency-path: 'ZoidUpWEB/package-lock.json'        
         
     - name: Clean Installation
-      working-directory: "./ZoidUpWEB"  # Ensure this is correct
+      working-directory: "./ZoidUpWEB" 
       run: npm ci
 
     - name: Tests
+      working-directory: "./ZoidUpWEB"  
       run: npm test
       
     - name: Build
-      working-directory: "./ZoidUpWEB"  # Ensure this is correct
+      working-directory: "./ZoidUpWEB"  
       run: npm run build

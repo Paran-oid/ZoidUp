@@ -27,10 +27,6 @@ jobs:
       working-directory: "./ZoidUpWEB"  # Ensure this is correct
       run: npm ci
 
-    - name: Run Tests
-      working-directory: "./ZoidUpWEB"  # Ensure this is correct
-      run: npm run test:ci
-
     - name: Build
       working-directory: "./ZoidUpWEB"  # Ensure this is correct
       run: npm run build

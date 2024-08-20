@@ -1,0 +1,12 @@
+name: Build Angular Appp
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  build-angular:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Greetings
+        run: echo "Hello, World!"

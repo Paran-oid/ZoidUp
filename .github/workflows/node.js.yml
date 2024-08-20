@@ -29,7 +29,7 @@ jobs:
 
     - name: Tests
       working-directory: "./ZoidUpWEB"  
-      run: npm test:ci
+      run: npm run test:ci
       
     - name: Build
       working-directory: "./ZoidUpWEB"  

@@ -1,0 +1,108 @@
+@import "../../../../scss/global";
+
+@media (min-width: 768px) {
+  .container {
+    height: 100vh;
+    position: relative;
+    .wrapper {
+      background-color: $green;
+      .header {
+        height: 64px;
+        padding: 10px 20px;
+        @include flex(space-between, center);
+        .left {
+          @include flex(center, center);
+          .profile-picture {
+            border-radius: 50%;
+            width: 3rem;
+            margin-right: 15px;
+            img {
+              border-radius: 50%;
+              width: 3rem;
+            }
+          }
+          .about-model {
+            p {
+              color: lighten(black, 20%);
+            }
+          }
+        }
+        .right {
+          img {
+            mix-blend-mode: multiply;
+            width: 2rem;
+            height: 2rem;
+            margin-left: 20px;
+          }
+        }
+      }
+    }
+    .messages {
+      overflow-y: hidden;
+      height: calc(100% - 64px);
+      padding: 20px;
+
+      .message {
+        @include flex(start, center);
+        margin-top: 15px;
+        .profile-picture {
+          border-radius: 50%;
+          width: 2rem;
+          margin-right: 10px;
+          img {
+            border-radius: 50%;
+            width: 2rem;
+          }
+        }
+        .message-body {
+          background-color: $gray;
+          padding: 10px;
+          border-radius: 25px;
+        }
+      }
+    }
+    .add-message {
+      position: absolute;
+      bottom: 0px;
+
+      padding: 20px;
+      background-color: white;
+      width: 100%;
+
+      form {
+        @include flex(center, center);
+        input {
+          width: 90%;
+          padding: 10px;
+          border-radius: 20px;
+          background-color: $gray;
+          color: lighten(black, 10%);
+          border: none;
+          outline: none;
+          font-weight: 500;
+          font-size: 18px;
+        }
+
+        img {
+          margin: 0px 10px;
+          mix-blend-mode: multiply;
+          width: 2rem;
+        }
+        .image {
+          width: 1.5rem;
+        }
+      }
+    }
+  }
+  .own-message {
+    background: darken($green, 10%) !important;
+    color: $white;
+  }
+  .right {
+    justify-content: right !important;
+    img {
+      cursor: pointer;
+      width: 3rem;
+    }
+  }
+}

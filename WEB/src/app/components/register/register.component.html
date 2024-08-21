@@ -1,0 +1,35 @@
+<div class="container">
+  <div class="wrapper" *ngIf="!isLoading">
+    <div class="title">
+      <img src="/Images/Logo/ZoidUp-No-Background.png" [routerLink]="['/']" />
+      <h1>Welcome to ZoidUp!</h1>
+      <p>Socialize anywhere, anytime, for free</p>
+    </div>
+    <form autocomplete="off" [formGroup]="form">
+      <h4 class="subtitle">Enter the following:</h4>
+      <div class="form-group">
+        <input
+          type="text"
+          formControlName="username"
+          placeholder="username"
+          [ngClass]="{
+            error: username?.invalid && hasSubmitted
+          }"
+        />
+      </div>
+      <div class="form-group">
+        <input
+          type="password"
+          formControlName="password"
+          placeholder="password"
+          [ngClass]="{ error: password?.invalid && hasSubmitted }"
+        />
+      </div>
+      <p class="error-text" *ngIf="message">{{ message }}</p>
+      <div class="btns">
+        <button type="button" (click)="Register()">Register</button>
+      </div>
+    </form>
+  </div>
+  <app-spinner *ngIf="isLoading"></app-spinner>
+</div>

@@ -1,0 +1,160 @@
+<div class="container">
+  <div class="header">
+    <div class="title">
+      <h3>Chats</h3>
+    </div>
+    <div class="dropdown-settings">
+      <div class="gear" (click)="displayDropdown = !displayDropdown">
+        <img src="/Images/Icons/gear.svg" />
+      </div>
+      <div class="dropdown" *ngIf="displayDropdown" #dropdown>
+        <ul>
+          <p class="dropdown-username">
+            {{
+              currentUser?.username != null
+                ? currentUser?.username
+                : "Loading..."
+            }}
+          </p>
+          <hr />
+          <li (click)="GoToSentRequests()">Sent Requests</li>
+          <li>Settings</li>
+          <li (click)="Logout()">Logout</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="users">
+    <div class="search">
+      <form [formGroup]="searchForm">
+        <div class="input-group">
+          <div class="icon">
+            <img src="/Images/Icons/search.png" />
+          </div>
+          <input
+            type="text"
+            placeholder="Search"
+            (input)="Search()"
+            formControlName="search"
+            *ngIf="!findFriendsMode"
+          />
+          <input
+            type="text"
+            placeholder="Search"
+            (input)="Search()"
+            formControlName="search"
+            *ngIf="findFriendsMode"
+          />
+        </div>
+      </form>
+      <div class="media">
+        <img
+          class="plus"
+          (click)="FetchData('recommendations')"
+          src="/Images/Icons/plus.png"
+          *ngIf="!(findFriendsMode || notificationMode)"
+        />
+        <div
+          class="notification-icon"
+          *ngIf="!(findFriendsMode || notificationMode) && hasRequests"
+        >
+          <img
+            class="bell"
+            src="/Images/Icons/bell.png"
+            (click)="FetchData('notifications')"
+          />
+          <div class="circle"></div>
+        </div>
+        <div class="go-back">
+          <img
+            src="/Images/Icons/cancel.png"
+            *ngIf="findFriendsMode || notificationMode"
+            (click)="GoBack()"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="friends" *ngIf="!findFriendsMode && !notificationMode">
+      <div
+        class="friend"
+        *ngFor="let friend of filteredItems"
+        (click)="DisplayFriend(friend.id)"
+      >
+        <div class="profile-picture">
+          <img
+            src="/User Images/AzizHmidi/ProfilePictures/profilepicture.png"
+          />
+        </div>
+        <div class="info">
+          <h4>{{ friend.username }}</h4>
+          <p>cool message</p>
+        </div>
+        <div class="status" [hidden]="true">
+          <div class="tick-icon">
+            <img src="/Images/Icons/tick.png" />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="notifications" *ngIf="notificationMode">
+      <h3>Friend requests</h3>
+      <hr />
+      <div class="friend-requests">
+        <div class="friend-request" *ngFor="let user of filteredItems">
+          <div class="profile-picture">
+            <img
+              src="/User Images/AzizHmidi/ProfilePictures/profilepicture.png"
+            />
+          </div>
+          <div class="info">
+            <h4>{{ user.username }}</h4>
+            <p>cool message</p>
+          </div>
+          <div class="status">
+            <div class="accept-request-icon" (click)="AddFriend(user.id)">
+              <img src="/Images/Icons/accept-friend-request.png" />
+            </div>
+            <div
+              class="decline-request-icon"
+              (click)="UnacceptRequest(user.id)"
+            >
+              <img src="/Images/Icons/unaccept-friend-request.png" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="other-members" *ngIf="findFriendsMode">
+      <h3>Add new friends</h3>
+      <hr />
+      <div class="member" *ngFor="let user of filteredItems">
+        <div class="profile-picture">
+          <img
+            src="/User Images/AzizHmidi/ProfilePictures/profilepicture.png"
+          />
+        </div>
+        <div class="info">
+          <h4>{{ user.username }}</h4>
+          <p>cool message</p>
+        </div>
+        <div class="status" [hidden]="true">
+          <div class="btns">
+            <button
+              class="send-request-button"
+              (click)="SendRequestRecommended(user.id, $event)"
+            >
+              Send Request
+            </button>
+            <button
+              class="unsend-request-button"
+              [ngStyle]="{ display: 'none' }"
+              (click)="UnsendRequest(user.id, $event)"
+            >
+              Unsend Request
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

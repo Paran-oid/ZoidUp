@@ -1,0 +1,73 @@
+@import "../../../../scss/global";
+
+@media (min-width: 768px) {
+  .container {
+    height: 100vh;
+
+    .user {
+      @include flex(center, center, column);
+      margin: 20px 0px;
+
+      .profile-picture {
+        width: 6rem;
+        border-radius: 50%;
+
+        img {
+          border-radius: 50%;
+          width: 6rem;
+        }
+      }
+    }
+    .info {
+      @include flex(center, center);
+      user-select: none;
+      .icon {
+        text-align: center;
+        .button-wrapper {
+          width: 100%;
+          margin-right: 30px;
+          button {
+            background-color: lighten($gray, 20%);
+            cursor: pointer;
+
+            padding: 5px;
+            border: none;
+            border-radius: 50%;
+            img {
+              margin: 0 auto;
+              width: 1.5rem;
+              height: 1.5rem;
+              border-radius: 50%;
+              object-fit: contain;
+            }
+
+            &:hover {
+              background-color: $gray;
+            }
+          }
+        }
+      }
+    }
+    .more {
+      margin-top: 30px;
+      ul {
+        margin-left: 15px;
+        li {
+          @include flex(space-between, center);
+
+          user-select: none;
+          cursor: pointer;
+          list-style: none;
+          padding: 10px;
+          &:hover {
+            background-color: lighten($gray, 10%);
+          }
+
+          img {
+            width: 1rem;
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,73 @@
+<div class="container">
+  <nav>
+    <div class="wrapper">
+      <div class="logo">
+        <img src="/Images/Logo/ZoidUp-No-Background.png" />
+      </div>
+      <div class="items">
+        <ul>
+          <li [routerLink]="['/register']">Register</li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <main>
+    <section class="login">
+      <div class="title">
+        <h1>
+          Hang Out<br />
+          anytime,<br />
+          anywhere
+        </h1>
+        <p>
+          ZoidUp makes it easy and fun to stay close to your favorite people
+        </p>
+      </div>
+      <p>{{ test }}</p>
+      <div class="form-part">
+        <form autocomplete="off" [formGroup]="form">
+          <input
+            formControlName="username"
+            type="text"
+            placeholder="Username"
+            [ngClass]="{
+              error: this.isSubmitted && username?.invalid
+            }"
+          />
+          <input
+            formControlName="password"
+            type="password"
+            placeholder="Password"
+            [ngClass]="{
+              error: this.isSubmitted && password?.invalid
+            }"
+          />
+          <div class="form-checkbox-group">
+            <label>
+              <input type="checkbox" />
+              <span>Keep me signed in</span>
+            </label>
+          </div>
+          <div class="actions">
+            <button type="button" (click)="Login()">Login</button>
+            <p class="forgot-password">Forgotten your password?</p>
+          </div>
+          <div class="error-text" *ngIf="message">
+            {{ message }}
+          </div>
+        </form>
+      </div>
+      <div class="information-text">
+        <p>
+          With private messaging and calling, you can be yourself, speak freely
+          and feel close to the most important people in your life no matter
+          where they are.
+        </p>
+      </div>
+    </section>
+    <section class="info">
+      <img src="/Images/App-Preview-1.png" />
+      <img class="text" src="/Images/App-Preview.png" />
+    </section>
+  </main>
+</div>

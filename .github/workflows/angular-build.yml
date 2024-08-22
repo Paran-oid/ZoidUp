@@ -21,16 +21,16 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-        cache-dependency-path: 'Web/package-lock.json'        
+        cache-dependency-path: 'WEB/package-lock.json'        
         
     - name: Clean Installation
-      working-directory: "./Web" 
+      working-directory: "./WEB" 
       run: npm ci
 
     - name: Tests
-      working-directory: "./Web"  
+      working-directory: "./WEB"  
       run: npm run test:ci
       
     - name: Build
-      working-directory: "./Web"  
+      working-directory: "./WEB"  
       run: npm run build

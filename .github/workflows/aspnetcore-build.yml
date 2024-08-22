@@ -22,13 +22,13 @@ jobs:
         dotnet-version: 8.0
         
     - name: Restore dependencies
-      working-directory: ./ZoidUpAPI
+      working-directory: ./Server
       run: dotnet restore
       
     - name: Build
-      working-directory: ./ZoidUpAPI
+      working-directory: ./Server
       run: dotnet build --no-restore
       
     - name: Test
-      working-directory: ./ZoidUpAPI
+      working-directory: ./Server
       run: dotnet test --no-build --verbosity normal

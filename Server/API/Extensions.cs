@@ -36,19 +36,6 @@ namespace API
                 opt.UseNpgsql(configuration.GetConnectionString("Default")));
         }
 
-        public static void ConfigureCors(this IServiceCollection services)
-        {
-            services.AddCors(options =>
-                options.AddPolicy("Default", builder =>
-                {
-                    builder
-                    .WithOrigins("http://localhost:4200")
-                    .AllowAnyHeader()
-                    .AllowAnyMethod()
-                    .AllowCredentials();
-                }));
-        }
-
         public static void ConfigureAppServices(this IServiceCollection services)
         {
             services.AddScoped<IRequestFriendshipService, RequestFriendshipService>();

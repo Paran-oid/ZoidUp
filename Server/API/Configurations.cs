@@ -11,9 +11,5 @@
             }
         }
 
-        public static void ConfigureCors(this IApplicationBuilder app)
-        {
-            app.UseCors("Default");
-        }
     }
 }

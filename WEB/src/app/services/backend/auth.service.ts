@@ -15,7 +15,6 @@ import {
   ReplaySubject,
   throwError,
 } from 'rxjs';
-import { environment } from '../../../environments/environment.development';
 import { User } from '../../models/user/user.model';
 import { RegisterEntry } from '../../models/auth/register-entry.model';
 import { Router } from '@angular/router';
@@ -24,7 +23,7 @@ import { Router } from '@angular/router';
   providedIn: 'root',
 })
 export class AuthService {
-  url: string = environment.url + '/auth';
+  url: string = 'api/auth';
 
   //subject gets data
   private user = new BehaviorSubject<User | null>(null);
@@ -76,9 +75,13 @@ export class AuthService {
   }
 
   public Logout() {
-    //make an actual endpoint here
-    localStorage.removeItem('token');
-    this.user.next(null);
-    this.router.navigate(['/']);
+    return this.http.get(this.url + '/logout').pipe(
+      map((response) => {
+        console.log('success');
+        localStorage.removeItem('token');
+        this.user.next(null);
+        this.router.navigate(['/']);
+      })
+    );
   }
 }

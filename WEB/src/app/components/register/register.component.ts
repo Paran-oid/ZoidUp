@@ -36,7 +36,7 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this.fb.group({
-      username: ['', [Validators.required, Validators.minLength(6)]],
+      username: ['', [Validators.required, Validators.maxLength(20)]],
       password: ['', [Validators.required, Validators.minLength(6)]],
     });
   }
@@ -70,8 +70,9 @@ export class RegisterComponent implements OnInit {
           this.router.navigate(['']);
         },
         error: (err: HttpErrorResponse) => {
-          this.message = err.error;
+          this.message = err.error.message;
           this.form.reset();
+          this.notificationService.Warning(this.message);
           this.spinnerService.isLoading.next(false);
         },
         complete: () => {

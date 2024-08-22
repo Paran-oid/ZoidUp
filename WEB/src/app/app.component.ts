@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { NavigationStart, Router, RouterOutlet } from '@angular/router';
 import { AuthService } from './services/backend/auth.service';
 import { SpinnerService } from './services/frontend/spinner.service';
 import { CommonModule } from '@angular/common';
@@ -32,8 +32,15 @@ import { FriendshipService } from './services/backend/friendship.service';
 export class AppComponent implements OnInit {
   constructor(
     public spinnerService: SpinnerService,
-    public notificationService: NotificationService
+    public notificationService: NotificationService,
+    private router: Router
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationStart) {
+        this.notificationService.isDisplayed.next(false);
+      }
+    });
+  }
 }

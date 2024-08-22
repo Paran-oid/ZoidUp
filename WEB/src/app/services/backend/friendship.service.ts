@@ -1,13 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '../../../environments/environment.development';
 import { User } from '../../models/user/user.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FriendshipService {
-  private readonly url = environment.url + '/friends';
+  private readonly url = 'api/friends';
   constructor(private http: HttpClient) {}
 
   public GetFriends(userId: number) {

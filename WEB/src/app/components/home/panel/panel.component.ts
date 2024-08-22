@@ -223,7 +223,7 @@ export class PanelComponent implements OnInit, OnChanges {
     this.spinnerService.isLoading.next(true);
     this.notificationService.isDisplayed.next(false);
     setTimeout(() => {
-      this.auth.Logout();
+      this.auth.Logout().subscribe();
       this.spinnerService.isLoading.next(false);
     }, 3000);
   }

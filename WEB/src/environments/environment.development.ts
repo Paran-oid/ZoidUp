@@ -1,3 +1,1 @@
-export const environment = {
-  url: 'https://localhost:7224',
-};
+export const environment = {};

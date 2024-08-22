@@ -23,6 +23,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { SpinnerComponent } from '../../shared/components/spinner/spinner.component';
 import { CookieService } from 'ngx-cookie-service';
 import { NotificationService } from '../../services/frontend/notification.service';
+import { SpinnerService } from '../../services/frontend/spinner.service';
 
 @Component({
   selector: 'app-welcome',
@@ -37,12 +38,24 @@ export class WelcomeComponent implements OnInit {
   test: string = '';
   form: FormGroup = new FormGroup({});
   constructor(
+    private spinnerService: SpinnerService,
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
     private cookieService: CookieService,
     private notificationService: NotificationService
   ) {}
+
+  ngOnInit(): void {
+    if (localStorage.getItem('token')) {
+      this.router.navigate(['/home']);
+    }
+
+    this.form = this.fb.group({
+      username: ['', [Validators.required, Validators.maxLength(20)]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
+    });
+  }
 
   get username() {
     return this.form.get('username');
@@ -52,19 +65,9 @@ export class WelcomeComponent implements OnInit {
     return this.form.get('password');
   }
 
-  ngOnInit(): void {
-    if (localStorage.getItem('token')) {
-      this.router.navigate(['/home']);
-    }
-
-    this.form = this.fb.group({
-      username: ['', [Validators.required, Validators.minLength(6)]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-    });
-  }
-
   Login() {
     this.isSubmitted = true;
+    this.spinnerService.isLoading.next(true);
     if (this.form.invalid) {
       this.message = 'Please enter the following fields';
       return;
@@ -83,10 +86,13 @@ export class WelcomeComponent implements OnInit {
             this.cookieService.set('first_time', 'true');
             window.location.reload();
           }, 2000);
+          this.spinnerService.isLoading.next(false);
         },
         error: (err: HttpErrorResponse) => {
-          this.message = err.error;
+          this.message = err.error.message;
+          this.notificationService.Warning(this.message);
           this.form.reset();
+          this.spinnerService.isLoading.next(false);
         },
       });
     }

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [Route("friends")]
+    [Route("api/friends")]
     [Authorize]
     [ApiController]
     public class FriendshipController : ControllerBase

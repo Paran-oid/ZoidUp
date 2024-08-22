@@ -7,10 +7,11 @@ using System.Security.Principal;
 using API.Data.Services.AuthService;
 using API.Models;
 using API.Models.DTOs.AuthRelated;
+using Microsoft.AspNetCore.Identity;
 
 namespace API.Controllers
 {
-    [Route("auth")]
+    [Route("api/auth")]
     [ApiController]
     public class AuthController(IAuthService _AuthService) : ControllerBase
     {
@@ -98,6 +99,11 @@ namespace API.Controllers
             }
         }
 
-        //create logout endpoint
+        [HttpGet("logout")]
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            return Ok(new { message = "successfully logged out" });
+        }
     }
 }

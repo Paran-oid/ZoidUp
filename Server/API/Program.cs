@@ -9,15 +9,16 @@ builder.Services.AddSwaggerGen();
 // Configure services using extension methods
 builder.Services.ConfigureAuthentication(builder.Configuration);
 builder.Services.ConfigureDbContext(builder.Configuration);
-builder.Services.ConfigureCors();
 builder.Services.ConfigureAppServices();
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
 var app = builder.Build();
 
+
 // Configure the HTTP request pipeline using extension methods
 app.ConfigureSwagger();
-app.ConfigureCors();
+
+app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();

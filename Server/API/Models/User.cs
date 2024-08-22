@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 namespace API.Models
@@ -7,7 +8,9 @@ namespace API.Models
     public class User
     {
         public int Id { get; set; }
+        [MaxLength(20)]
         public string Username { get; set; } = string.Empty;
+        [MinLength(6)]
         public string Password { get; set; } = string.Empty;
         public string Token { get; set; } = string.Empty;
         public string ProfilePicturePath { get; set; } = "default";

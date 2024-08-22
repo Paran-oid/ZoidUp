@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [Route("messages")]
+    [Route("api/messages")]
     [ApiController]
     [Authorize]
     public class MessageController : ControllerBase

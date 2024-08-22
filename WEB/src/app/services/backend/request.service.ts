@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../../../environments/environment.development';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { RequestUserDTO, User } from '../../models/user/user.model';
 import { BehaviorSubject, map } from 'rxjs';
@@ -8,7 +7,7 @@ import { BehaviorSubject, map } from 'rxjs';
   providedIn: 'root',
 })
 export class RequestService {
-  url: string = environment.url + '/requests';
+  url: string = 'api/requests';
 
   sentRequests: BehaviorSubject<RequestUserDTO[] | null> = new BehaviorSubject<
     RequestUserDTO[] | null

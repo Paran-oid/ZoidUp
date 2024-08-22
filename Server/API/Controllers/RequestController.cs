@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [Route("requests")]
+    [Route("api/requests")]
     [ApiController]
     [Authorize]
     public class RequestController : ControllerBase

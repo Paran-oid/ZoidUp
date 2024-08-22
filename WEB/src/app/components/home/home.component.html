@@ -1,13 +1,9 @@
 <div
   class="container"
-  *ngIf="!isLoading"
+  *ngIf="(spinnerService.isLoading$ | async) == false"
   [ngClass]="{ 'wide-container': !isHiddenAbout }"
 >
-  <app-panel
-    [friends]="friends"
-    [currentUser]="currentUser"
-    (isLoadingEvent)="ReceiveIsLoading($event)"
-  ></app-panel>
+  <app-panel [friends]="friends" [currentUser]="currentUser"></app-panel>
   <app-chat *ngIf="selectedUser"></app-chat>
   <app-about
     *ngIf="selectedUser && !isHiddenAbout"
@@ -24,7 +20,10 @@
     <p>We hope you have an amazing time talking with your friends</p>
   </div>
 </div>
-<div class="requests-popup" [hidden]="!isInSendRequest" *ngIf="!isLoading">
+<div
+  class="requests-popup"
+  [hidden]="!isInSendRequest"
+  *ngIf="(spinnerService.isLoading$ | async) == false"
+>
   <app-requests-popup [currentUser]="currentUser"></app-requests-popup>
 </div>
-<app-spinner *ngIf="isLoading"></app-spinner>

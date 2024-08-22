@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { SpinnerService } from '../../../services/spinner.service';
+import { SpinnerService } from '../../../services/frontend/spinner.service';
 import { CommonModule } from '@angular/common';
 
 @Component({

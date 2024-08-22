@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { RequestUserDTO } from '../../models/user/user.model';
-import { FriendshipService } from '../friendship.service';
+import { RequestService } from '../backend/request.service';
 
 @Injectable({
   providedIn: 'root',
@@ -13,10 +13,10 @@ export class SendRequestsService {
   request = new BehaviorSubject<RequestUserDTO | null>(null);
   request$ = this.request.asObservable();
 
-  constructor(private friendshipService: FriendshipService) {}
+  constructor(private RequestService: RequestService) {}
 
-  SeeSentRequests(userID: number) {
-    this.friendshipService.GetAllSentRequests(userID).subscribe();
+  SeeSentRequests(userId: number) {
+    this.RequestService.GetAllSentRequests(userId).subscribe();
     this.sendRequests.next(true);
   }
   LeaveSendRequests() {

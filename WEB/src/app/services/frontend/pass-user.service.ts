@@ -15,9 +15,8 @@ export class PassUserService {
   constructor() {}
 
   ToggleAbout() {
-    console.log(`before : ${this.hiddenAboutValue}`);
     this.hiddenAboutValue = !this.hiddenAboutValue;
-    console.log(`after : ${this.hiddenAboutValue}`);
+
     this.hiddenAbout.next(this.hiddenAboutValue);
   }
 }

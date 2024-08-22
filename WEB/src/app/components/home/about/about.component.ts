@@ -1,7 +1,8 @@
 import { Component, Input, input, OnInit } from '@angular/core';
 import { User } from '../../../models/user/user.model';
 import { PassUserService } from '../../../services/frontend/pass-user.service';
-import { FriendshipService } from '../../../services/friendship.service';
+import { RequestService } from '../../../services/backend/request.service';
+import { FriendshipService } from '../../../services/backend/friendship.service';
 
 @Component({
   selector: 'app-about',
@@ -15,6 +16,7 @@ export class AboutComponent implements OnInit {
   friend: User | null = null;
   constructor(
     private passUserService: PassUserService,
+    private RequestService: RequestService,
     private friendshipService: FriendshipService
   ) {}
   ngOnInit(): void {

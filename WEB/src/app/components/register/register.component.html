@@ -1,5 +1,5 @@
 <div class="container">
-  <div class="wrapper" *ngIf="!isLoading">
+  <div class="wrapper" *ngIf="!(spinnerService.isLoading$ | async)">
     <div class="title">
       <img src="/Images/Logo/ZoidUp-No-Background.png" [routerLink]="['/']" />
       <h1>Welcome to ZoidUp!</h1>
@@ -31,5 +31,5 @@
       </div>
     </form>
   </div>
-  <app-spinner *ngIf="isLoading"></app-spinner>
+  <app-spinner *ngIf="spinnerService.isLoading$ | async"></app-spinner>
 </div>

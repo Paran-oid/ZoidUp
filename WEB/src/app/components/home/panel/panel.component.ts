@@ -14,13 +14,14 @@ import {
 } from '@angular/core';
 import { User } from '../../../models/user/user.model';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { AuthService } from '../../../services/auth.service';
-import { FriendshipService } from '../../../services/friendship.service';
+import { AuthService } from '../../../services/backend/auth.service';
+import { RequestService } from '../../../services/backend/request.service';
 import { Subject, timeInterval } from 'rxjs';
 import { PassUserService } from '../../../services/frontend/pass-user.service';
 import { SendRequestsService } from '../../../services/frontend/send-requests.service';
 import { CookieService } from 'ngx-cookie-service';
-import { NotificationService } from '../../../services/notification.service';
+import { NotificationService } from '../../../services/frontend/notification.service';
+import { SpinnerService } from '../../../services/frontend/spinner.service';
 
 @Component({
   selector: 'app-panel',
@@ -43,14 +44,13 @@ export class PanelComponent implements OnInit, OnChanges {
   receivedFriendRequests: User[] = [];
   filteredItems: User[] = this.friends;
 
-  @Output() isLoadingEvent = new EventEmitter<boolean>();
-
   @ViewChild('dropdown') dropdown!: ElementRef;
   searchForm: FormGroup = new FormGroup({});
   constructor(
     private fb: FormBuilder,
     public auth: AuthService,
-    public friendshipService: FriendshipService,
+    public spinnerService: SpinnerService,
+    public RequestService: RequestService,
     private passUserService: PassUserService,
     private sendRequestsService: SendRequestsService,
     private cookieService: CookieService,
@@ -66,18 +66,18 @@ export class PanelComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     this.filteredItems = this.friends;
     if (this.currentUser) {
-      this.friendshipService
-        .HasRequests(this.currentUser?.id!)
-        .subscribe((response) => {
+      this.RequestService.HasRequests(this.currentUser?.id!).subscribe(
+        (response) => {
           this.hasRequests = response;
-        });
-      this.friendshipService
-        .GetAllReceivedRequests(this.currentUser.id)
-        .subscribe({
+        }
+      );
+      this.RequestService.GetAllReceivedRequests(this.currentUser.id).subscribe(
+        {
           next: (users) => {
             this.receivedFriendRequests = users;
           },
-        });
+        }
+      );
     }
   }
 
@@ -96,24 +96,24 @@ export class PanelComponent implements OnInit, OnChanges {
   FetchData(type: string) {
     if (type === 'recommendations') {
       if (!this.findFriendsMode) {
-        this.friendshipService
-          .GetAllRecommendedFriends(this.currentUser?.id!)
-          .subscribe((users) => {
-            this.selectedItems = users;
-            this.filteredItems = users;
-            this.findFriendsMode = true;
-          });
+        this.RequestService.GetAllRecommendedFriends(
+          this.currentUser?.id!
+        ).subscribe((users) => {
+          this.selectedItems = users;
+          this.filteredItems = users;
+          this.findFriendsMode = true;
+        });
       }
       return;
     } else if (type === 'notifications') {
       if (!this.notificationMode) {
-        this.friendshipService
-          .GetAllReceivedRequests(this.currentUser?.id!)
-          .subscribe((users) => {
-            this.selectedItems = users;
-            this.filteredItems = users;
-            this.notificationMode = true;
-          });
+        this.RequestService.GetAllReceivedRequests(
+          this.currentUser?.id!
+        ).subscribe((users) => {
+          this.selectedItems = users;
+          this.filteredItems = users;
+          this.notificationMode = true;
+        });
       }
     }
   }
@@ -143,7 +143,7 @@ export class PanelComponent implements OnInit, OnChanges {
     this.cookieService.delete('first_time');
   }
 
-  SendRequestRecommended(receiverID: number, event: Event) {
+  SendRequestRecommended(receiverId: number, event: Event) {
     // this will hide the current send button and display the below button for unsending requests
     const sendBtn = event.target as HTMLButtonElement;
     const parentEl = sendBtn.parentElement;
@@ -152,58 +152,49 @@ export class PanelComponent implements OnInit, OnChanges {
     sendBtn.style.display = 'none';
     unsendBtn.style.display = 'inline';
 
-    this.friendshipService
-      .SendRequest(this.currentUser?.id!, receiverID)
-      .subscribe({
-        next: (response) => {
-          this.notificationService.Success('Friend request sent');
-        },
-        error: (error) => {
-          console.log(error);
-        },
-      });
+    this.RequestService.SendRequest(
+      this.currentUser?.id!,
+      receiverId
+    ).subscribe({
+      next: (response) => {
+        this.notificationService.Success('Friend request sent');
+      },
+      error: (error) => {},
+    });
   }
-  AddFriend(senderID: number) {
-    this.friendshipService
-      .SendRequest(this.currentUser?.id!, senderID)
-      .subscribe({
-        next: (response) => {
-          console.log(response);
-          const index = this.filteredItems.findIndex(
-            (user) => user.id === senderID
-          );
-          this.notificationService.Info(
-            `You are now friends with ${
-              this.filteredItems.at(index)?.username
-            }!`
-          );
-          this.filteredItems.splice(index, 1);
-          this.CheckIfHasRequests();
-        },
-        error: (error) => {
-          console.log(error);
-        },
-      });
+  AddFriend(senderId: number) {
+    this.RequestService.SendRequest(this.currentUser?.id!, senderId).subscribe({
+      next: (response) => {
+        const index = this.filteredItems.findIndex(
+          (user) => user.id === senderId
+        );
+        this.notificationService.Info(
+          `You are now friends with ${this.filteredItems.at(index)?.username}!`
+        );
+        this.filteredItems.splice(index, 1);
+        this.CheckIfHasRequests();
+      },
+      error: (error) => {},
+    });
   }
-  UnacceptRequest(senderID: number) {
-    this.friendshipService
-      .UnsendRequest(senderID, this.currentUser?.id!)
-      .subscribe({
-        next: (response) => {
-          const index = this.receivedFriendRequests.findIndex(
-            (user) => user.id === senderID
-          );
-          this.filteredItems.splice(index, 1);
-          this.CheckIfHasRequests();
-          this.notificationService.Info('Unaccepted request');
-        },
-        error: (error) => {
-          console.log(error);
-        },
-      });
+  UnacceptRequest(senderId: number) {
+    this.RequestService.UnsendRequest(
+      senderId,
+      this.currentUser?.id!
+    ).subscribe({
+      next: (response) => {
+        const index = this.receivedFriendRequests.findIndex(
+          (user) => user.id === senderId
+        );
+        this.filteredItems.splice(index, 1);
+        this.CheckIfHasRequests();
+        this.notificationService.Info('Unaccepted request');
+      },
+      error: (error) => {},
+    });
   }
 
-  UnsendRequest(receiverID: number, event: Event) {
+  UnsendRequest(receiverId: number, event: Event) {
     const unsendBtn = event.target as HTMLButtonElement;
     const parentEl = unsendBtn.parentElement;
     const sendBtn = parentEl!.firstChild as HTMLButtonElement;
@@ -211,14 +202,15 @@ export class PanelComponent implements OnInit, OnChanges {
     unsendBtn.style.display = 'none';
     sendBtn.style.display = 'inline';
 
-    this.friendshipService
-      .UnsendRequest(this.currentUser?.id!, receiverID)
-      .subscribe({
-        next: (response) => {
-          this.notificationService.Info('Friend request unsent');
-        },
-        error: (error) => {},
-      });
+    this.RequestService.UnsendRequest(
+      this.currentUser?.id!,
+      receiverId
+    ).subscribe({
+      next: (response) => {
+        this.notificationService.Info('Friend request unsent');
+      },
+      error: (error) => {},
+    });
   }
 
   GoToSentRequests() {
@@ -228,20 +220,19 @@ export class PanelComponent implements OnInit, OnChanges {
     this.sendRequestsService.SeeSentRequests(this.currentUser?.id!);
   }
   Logout() {
-    this.isLoadingEvent.emit(true);
+    this.spinnerService.isLoading.next(true);
     this.notificationService.isDisplayed.next(false);
     setTimeout(() => {
       this.auth.Logout();
-      this.isLoadingEvent.emit(false);
+      this.spinnerService.isLoading.next(false);
     }, 3000);
   }
 
   CheckIfHasRequests() {
-    this.friendshipService
-      .HasRequests(this.currentUser?.id!)
-      .subscribe((response) => {
-        console.log(response);
+    this.RequestService.HasRequests(this.currentUser?.id!).subscribe(
+      (response) => {
         this.hasRequests = response;
-      });
+      }
+    );
   }
 }

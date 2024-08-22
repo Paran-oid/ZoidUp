@@ -5,12 +5,12 @@ import {
   OnInit,
   SimpleChanges,
 } from '@angular/core';
-import { FriendshipService } from '../../../services/friendship.service';
+import { RequestService } from '../../../services/backend/request.service';
 import { RequestUserDTO, User } from '../../../models/user/user.model';
 import { CommonModule } from '@angular/common';
 import { FormatRequestDate } from '../../../shared/functions/FormatRequestDate.function';
 import { SendRequestsService } from '../../../services/frontend/send-requests.service';
-import { NotificationService } from '../../../services/notification.service';
+import { NotificationService } from '../../../services/frontend/notification.service';
 
 @Component({
   selector: 'app-requests-popup',
@@ -27,13 +27,13 @@ export class RequestsPopupComponent implements OnInit {
   FormatRequestDate = FormatRequestDate;
 
   constructor(
-    private friendshipService: FriendshipService,
+    private RequestService: RequestService,
     private sendRequestsService: SendRequestsService,
     private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
-    this.friendshipService.sentRequests$.subscribe((requests) => {
+    this.RequestService.sentRequests$.subscribe((requests) => {
       this.requests = requests!;
       if (requests == null) {
         return;
@@ -44,17 +44,18 @@ export class RequestsPopupComponent implements OnInit {
     });
   }
 
-  UnsendRequest(receiverID: number) {
-    const index = this.requests.findIndex((req) => req.id === receiverID);
+  UnsendRequest(receiverId: number) {
+    const index = this.requests.findIndex((req) => req.id === receiverId);
     this.requests.splice(index, 1);
 
-    this.friendshipService
-      .UnsendRequest(this.currentUser?.id!, receiverID)
-      .subscribe({
-        next: (response) => {
-          this.notificationService.Info('Friend request unsent');
-        },
-      });
+    this.RequestService.UnsendRequest(
+      this.currentUser?.id!,
+      receiverId
+    ).subscribe({
+      next: (response) => {
+        this.notificationService.Info('Friend request unsent');
+      },
+    });
   }
 
   CloseTab() {

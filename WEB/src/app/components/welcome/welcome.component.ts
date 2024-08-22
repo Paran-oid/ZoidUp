@@ -5,10 +5,10 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../services/backend/auth.service';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { LoginEntry } from '../../models/other/login-entry.model';
+import { LoginEntry } from '../../models/auth/login-entry.model';
 import {
   BehaviorSubject,
   catchError,
@@ -22,7 +22,7 @@ import {
 import { HttpErrorResponse } from '@angular/common/http';
 import { SpinnerComponent } from '../../shared/components/spinner/spinner.component';
 import { CookieService } from 'ngx-cookie-service';
-import { NotificationService } from '../../services/notification.service';
+import { NotificationService } from '../../services/frontend/notification.service';
 
 @Component({
   selector: 'app-welcome',

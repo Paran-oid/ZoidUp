@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../services/backend/auth.service';
 import {
   FormBuilder,
   FormGroup,
@@ -8,11 +8,12 @@ import {
   Validators,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { RegisterEntry } from '../../models/other/register-entry.model';
+import { RegisterEntry } from '../../models/auth/register-entry.model';
 import { mergeMap, of, throwError } from 'rxjs';
 import { HttpErrorResponse, HttpResponseBase } from '@angular/common/http';
 import { SpinnerComponent } from '../../shared/components/spinner/spinner.component';
-import { NotificationService } from '../../services/notification.service';
+import { NotificationService } from '../../services/frontend/notification.service';
+import { SpinnerService } from '../../services/frontend/spinner.service';
 
 @Component({
   selector: 'app-register',
@@ -25,12 +26,12 @@ export class RegisterComponent implements OnInit {
   form: FormGroup = new FormGroup({});
   message: string = '';
   hasSubmitted: boolean = false;
-  isLoading: boolean = false;
   constructor(
     private authService: AuthService,
     private fb: FormBuilder,
     private router: Router,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    public spinnerService: SpinnerService
   ) {}
 
   ngOnInit(): void {
@@ -49,12 +50,12 @@ export class RegisterComponent implements OnInit {
   }
 
   Register() {
-    this.isLoading = true;
+    this.spinnerService.isLoading.next(true);
     this.hasSubmitted = true;
     if (this.form.invalid) {
       this.message =
         'All fields are required and must be at least 6 characters long.';
-      this.isLoading = false;
+      this.spinnerService.isLoading.next(false);
       return;
     } else {
       const model: RegisterEntry = {
@@ -71,10 +72,10 @@ export class RegisterComponent implements OnInit {
         error: (err: HttpErrorResponse) => {
           this.message = err.error;
           this.form.reset();
-          this.isLoading = false;
+          this.spinnerService.isLoading.next(false);
         },
         complete: () => {
-          this.isLoading = false;
+          this.spinnerService.isLoading.next(false);
         },
       });
     }

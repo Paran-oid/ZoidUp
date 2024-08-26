@@ -168,9 +168,11 @@ export class PanelComponent implements OnInit, OnChanges {
         const index = this.filteredItems.findIndex(
           (user) => user.id === senderId
         );
+        const friend = this.filteredItems.at(index);
         this.notificationService.Info(
-          `You are now friends with ${this.filteredItems.at(index)?.username}!`
+          `You are now friends with ${friend?.username}!`
         );
+        this.friends.push(friend!);
         this.filteredItems.splice(index, 1);
         this.CheckIfHasRequests();
       },

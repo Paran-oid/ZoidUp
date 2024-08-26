@@ -1,8 +1,11 @@
-<div class="container" [ngClass]="{ 'wide-container': !isHiddenAbout }">
+<div
+  class="container"
+  [ngClass]="{ 'wide-container': !passUserService.hiddenAboutValue }"
+>
   <app-panel [friends]="friends" [currentUser]="currentUser"></app-panel>
   <app-chat *ngIf="selectedUser"></app-chat>
   <app-about
-    *ngIf="selectedUser && !isHiddenAbout"
+    *ngIf="selectedUser && !passUserService.hiddenAboutValue"
     [currentUser]="currentUser"
   ></app-about>
   <div

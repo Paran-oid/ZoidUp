@@ -25,20 +25,6 @@ namespace API.Controllers
             return result;
         }
 
-        //add this to friendship controller and service preferably
-
-        //[HttpGet("{userId}")]
-        //public async Task<ActionResult<IEnumerable<User>>> GetAllFriends(int userId)
-        //{
-        //    var friends = await _rfs.GetAllFriends(userId);
-
-        //    if (friends == null)
-        //    {
-        //        return NotFound("User wasn't found");
-        //    }
-
-        //    return Ok(friends);
-        //}
 
         [HttpGet("recommendations/{userId}")]
         public async Task<IActionResult> GetAllRecommended(int userId)
@@ -102,11 +88,11 @@ namespace API.Controllers
         }
 
         [HttpDelete]
-        public async Task<IActionResult> UnsendRequest([FromBody] SendRequestDTO model)
+        public async Task<IActionResult> UnsendRequest([FromHeader] int senderId, [FromHeader] int receiverId)
         {
             try
             {
-                string result = await _rfs.UnsendRequest(model.senderId, model.receiverId);
+                string result = await _rfs.UnsendRequest(senderId, receiverId);
                 return Ok(result);
             }
             catch (Exception e)
@@ -125,21 +111,5 @@ namespace API.Controllers
                 }
             }
         }
-
-
-        //add this to friendship controller and service preferably
-
-        //[HttpDelete]
-        //public async Task<ActionResult<string>> RemoveFriendship([FromQuery] int userId, [FromQuery] int friendId)
-        //{
-        //    string result = await _rfs.RemoveFriendship(userId, friendId);
-        //    if (result == "request doesn't exist")
-        //    {
-        //        return NotFound(result);
-        //    }
-
-        //    return Ok(result);
-        //}
-
     }
 }

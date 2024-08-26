@@ -33,11 +33,15 @@ export class RequestService {
     });
   }
   public UnsendRequest(senderId: number, receiverId: number) {
-    const body = {
+    const headers = new HttpHeaders({
       senderId: senderId,
       receiverId: receiverId,
-    };
-    return this.http.delete(this.url, { responseType: 'text' });
+    });
+
+    return this.http.delete(this.url, {
+      responseType: 'text',
+      headers: headers,
+    });
   }
   public GetAllReceivedRequests(receiverId: number) {
     return this.http.get<User[]>(this.url + '/' + receiverId);

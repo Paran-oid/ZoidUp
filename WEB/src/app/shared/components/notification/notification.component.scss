@@ -6,6 +6,7 @@
   padding: 15px 5px;
   border-radius: 5px;
   z-index: 9999;
+  animation: fadeIn 6s ease-in-out;
   .title {
     @include flex(start, center);
     gap: 10px;
@@ -32,4 +33,13 @@
 .success {
   background-color: darken($white, 10%);
   color: $black;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
 }

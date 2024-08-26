@@ -40,13 +40,12 @@ export class HomeComponent implements OnInit {
   selectedUser: User | null = null;
 
   isInSendRequest: boolean = false;
-  isHiddenAbout: boolean = true;
   hasCookie: boolean = false;
 
   constructor(
     private authService: AuthService,
     private RequestService: RequestService,
-    private passUserService: PassUserService,
+    public passUserService: PassUserService,
     private sendRequestsService: SendRequestsService,
     public cookieService: CookieService,
     private router: Router,
@@ -60,9 +59,6 @@ export class HomeComponent implements OnInit {
     });
     this.sendRequestsService.sendRequests$.subscribe((response) => {
       this.isInSendRequest = response;
-    });
-    this.passUserService.hiddenAbout$.subscribe((response) => {
-      this.isHiddenAbout = response;
     });
   }
 

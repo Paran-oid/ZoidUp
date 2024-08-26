@@ -102,7 +102,6 @@ namespace API.Controllers
         [HttpGet("logout")]
         public IActionResult Logout()
         {
-            HttpContext.Session.Clear();
             return Ok(new { message = "successfully logged out" });
         }
     }

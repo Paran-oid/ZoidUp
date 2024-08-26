@@ -9,6 +9,7 @@ namespace API.Models
     {
         public int Id { get; set; }
         [MaxLength(20)]
+        [MinLength(3)]
         public string Username { get; set; } = string.Empty;
         [MinLength(6)]
         public string Password { get; set; } = string.Empty;

@@ -27,6 +27,7 @@
           font-size: 18px;
         }
         .form-group {
+          margin-bottom: 10px;
           input {
             border: none;
             border-radius: 5px;
@@ -34,13 +35,30 @@
             padding: 8px;
             font-size: 18px;
             width: 100%;
-            margin: 0 auto 10px auto;
+            margin: 0 auto 0px auto;
             &::placeholder {
               color: black;
             }
 
             &:focus {
               outline: none;
+            }
+          }
+        }
+
+        .password-group {
+          position: relative;
+          width: 100%;
+          .icon {
+            position: absolute;
+            right: 20px;
+            bottom: 50%;
+            transform: translateY(50%);
+            width: 1.5rem;
+            user-select: none;
+
+            &:hover {
+              cursor: pointer;
             }
           }
         }

@@ -67,8 +67,12 @@ namespace API.Controllers
         {
             try
             {
-                string result = await _rfs.SendRequest(model.senderId, model.receiverId);
-                return CreatedAtAction(nameof(SendRequest), result);
+                if (ModelState.IsValid)
+                {
+                    string result = await _rfs.SendRequest(model.senderId, model.receiverId);
+                    return CreatedAtAction(nameof(SendRequest), result);
+                }
+                return BadRequest(new { message = "something went wrong" });
             }
             catch (Exception e)
             {

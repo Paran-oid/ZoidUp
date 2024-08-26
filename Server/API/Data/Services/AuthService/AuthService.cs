@@ -55,8 +55,6 @@ namespace API.Data.Services.AuthService
 
         public async Task<AccessTokenResponse> Login(LoginEntry model)
         {
-
-
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == model.Username);
             if (user == null)
             {

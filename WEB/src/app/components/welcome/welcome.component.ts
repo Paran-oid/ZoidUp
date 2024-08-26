@@ -33,9 +33,9 @@ import { SpinnerService } from '../../services/frontend/spinner.service';
   styleUrl: './welcome.component.scss',
 })
 export class WelcomeComponent implements OnInit {
+  isHidden: boolean = false;
   isSubmitted: boolean = false;
   message = '';
-  test: string = '';
   form: FormGroup = new FormGroup({});
   constructor(
     private spinnerService: SpinnerService,

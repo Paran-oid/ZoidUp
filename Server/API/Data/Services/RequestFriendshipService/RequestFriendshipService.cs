@@ -26,6 +26,7 @@ namespace API.Data.Services.RequestFriendshipService
         public async Task<IEnumerable<RequestUserDTO>> GetAllReceivedRequests(int receiverId)
         {
             var temp = await _context.Users.FirstOrDefaultAsync(u => u.Id == receiverId);
+
             if (temp == null)
             {
                 return null;

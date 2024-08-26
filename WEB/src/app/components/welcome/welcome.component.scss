@@ -46,6 +46,7 @@
 
       .login {
         .title {
+          user-select: none;
           h1 {
             font-size: 72px;
             background: linear-gradient(90deg, $light-green, $green);
@@ -145,10 +146,27 @@
                 }
               }
             }
+            .password-group {
+              position: relative;
+              width: 250px;
+              .icon {
+                position: absolute;
+                right: 20px;
+                bottom: 50%;
+                transform: translate(50%, 50%);
+                width: 1.5rem;
+                user-select: none;
+
+                &:hover {
+                  cursor: pointer;
+                }
+              }
+            }
           }
         }
         .information-text {
           margin-top: 30px;
+          user-select: none;
           p {
             font-size: 36px;
             font-weight: 400;

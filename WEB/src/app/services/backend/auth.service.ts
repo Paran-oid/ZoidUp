@@ -31,7 +31,7 @@ export class AuthService {
   //observer reads data
   public user$ = this.user.asObservable();
 
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(private http: HttpClient) {
     const token: string | null = localStorage.getItem('token');
     if (token) {
       this.GetUser(token).subscribe();
@@ -44,12 +44,8 @@ export class AuthService {
         this.user.next(user);
       }),
       catchError((error) => {
-        console.error(error);
-        alert("We couldn't log you in. Going back to the home page");
-
         localStorage.removeItem('token');
         this.user.next(null);
-        this.router.navigate(['/']);
         return error;
       })
     );
@@ -77,10 +73,8 @@ export class AuthService {
   public Logout() {
     return this.http.get(this.url + '/logout').pipe(
       map((response) => {
-        console.log('success');
         localStorage.removeItem('token');
         this.user.next(null);
-        this.router.navigate(['/']);
       })
     );
   }

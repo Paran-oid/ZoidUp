@@ -26,6 +26,7 @@ export class RegisterComponent implements OnInit {
   form: FormGroup = new FormGroup({});
   message: string = '';
   hasSubmitted: boolean = false;
+  isHidden: boolean = false;
   constructor(
     private authService: AuthService,
     private fb: FormBuilder,
@@ -87,5 +88,12 @@ export class RegisterComponent implements OnInit {
         },
       });
     }
+  }
+
+  public HasUnsavedChanges() {
+    if (this.username?.touched || this.password?.touched) {
+      return true;
+    }
+    return false;
   }
 }

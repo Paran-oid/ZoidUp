@@ -28,7 +28,7 @@ namespace API.Controllers
             }
             catch (Exception e)
             {
-                if(e.Message == "message wasn't found")
+                if (e.Message == "message wasn't found")
                 {
                     return NotFound(new { message = e.Message });
                 }
@@ -46,7 +46,7 @@ namespace API.Controllers
             }
             catch (Exception e)
             {
-                if(e.Message == "user not found")
+                if (e.Message == "user not found")
                 {
                     return NotFound(new { message = e.Message });
                 }
@@ -67,11 +67,11 @@ namespace API.Controllers
                     var message = await _messageService.Post(model);
                     return CreatedAtAction(nameof(Get), message);
                 }
-                return BadRequest();
+                return BadRequest(new { message = "something went wrong" });
             }
             catch (Exception e)
             {
-                if(e.Message == "user not found")
+                if (e.Message == "user not found")
                 {
                     return NotFound(new { message = "user not found" });
                 }
@@ -96,7 +96,7 @@ namespace API.Controllers
             }
             catch (Exception e)
             {
-                if(e.Message == "message wasn't found")
+                if (e.Message == "message wasn't found")
                 {
                     return NotFound(new { message = "message not found" });
                 }
@@ -118,7 +118,7 @@ namespace API.Controllers
             catch (Exception e)
             {
 
-                if(e.Message == "message not found")
+                if (e.Message == "message not found")
                 {
                     return NotFound(new { message = e.Message });
                 }

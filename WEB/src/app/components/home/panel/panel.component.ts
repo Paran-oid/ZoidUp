@@ -48,7 +48,7 @@ export class PanelComponent implements OnInit, OnChanges {
   searchForm: FormGroup = new FormGroup({});
   constructor(
     private fb: FormBuilder,
-    public auth: AuthService,
+    public authService: AuthService,
     public spinnerService: SpinnerService,
     public RequestService: RequestService,
     private passUserService: PassUserService,
@@ -225,7 +225,9 @@ export class PanelComponent implements OnInit, OnChanges {
     this.spinnerService.isLoading.next(true);
     this.notificationService.isDisplayed.next(false);
     setTimeout(() => {
-      this.auth.Logout().subscribe();
+      this.authService.Logout().subscribe(() => {
+        window.location.reload();
+      });
       this.spinnerService.isLoading.next(false);
     }, 3000);
   }

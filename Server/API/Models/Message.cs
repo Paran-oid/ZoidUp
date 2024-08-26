@@ -6,6 +6,7 @@ namespace API.Models
     [Table("Messages", Schema = "com")]
     public class Message
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public string Body { get; set; } = string.Empty;
         public int SenderId { get; set; }

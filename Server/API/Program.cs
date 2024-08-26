@@ -1,4 +1,5 @@
 using API;
+using API.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,9 +16,10 @@ builder.Services.AddAutoMapper(typeof(Program).Assembly);
 var app = builder.Build();
 
 
-// Configure the HTTP request pipeline using extension methods
 app.ConfigureSwagger();
 
+//configure signalR
+app.MapHub<AppHub>("chathub");
 app.UseRouting();
 
 app.UseAuthentication();

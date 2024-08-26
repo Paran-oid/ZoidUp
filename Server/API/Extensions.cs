@@ -30,6 +30,11 @@ namespace API
 
         }
 
+        public static void ConfigureRealTimeCommunication(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddSignalR();
+        }
+
         public static void ConfigureDbContext(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<AppDbContext>(opt =>

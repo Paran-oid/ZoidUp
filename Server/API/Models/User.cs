@@ -7,6 +7,7 @@ namespace API.Models
     [Table(name: "Users", Schema = "ath")]
     public class User
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         [MaxLength(20)]
         [MinLength(3)]

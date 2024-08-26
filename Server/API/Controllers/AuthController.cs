@@ -54,8 +54,12 @@ namespace API.Controllers
         {
             try
             {
-                var result = await _AuthService.Login(model);
-                return Ok(result);
+                if(ModelState.IsValid)
+                {
+                    var result = await _AuthService.Login(model);
+                    return Ok(result);
+                }
+                return BadRequest(new { message = "please enter all fields" });
             }
             catch (Exception e)
             {
@@ -83,8 +87,13 @@ namespace API.Controllers
         {
             try
             {
-                var result = await _AuthService.Register(model);
-                return CreatedAtAction(nameof(Register), result);
+                if (ModelState.IsValid)
+                {
+                    var result = await _AuthService.Register(model);
+                    return CreatedAtAction(nameof(Register), result);
+                }
+                return BadRequest(new { message = "please enter all fields" });
+
             }
             catch (Exception e)
             {

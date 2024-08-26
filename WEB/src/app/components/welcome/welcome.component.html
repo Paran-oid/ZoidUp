@@ -23,7 +23,6 @@
           ZoidUp makes it easy and fun to stay close to your favorite people
         </p>
       </div>
-      <p>{{ test }}</p>
       <div class="form-part">
         <form autocomplete="off" [formGroup]="form">
           <input
@@ -34,14 +33,24 @@
               error: this.isSubmitted && username?.invalid
             }"
           />
-          <input
-            formControlName="password"
-            type="password"
-            placeholder="Password"
-            [ngClass]="{
-              error: this.isSubmitted && password?.invalid
-            }"
-          />
+          <div class="password-group">
+            <input
+              formControlName="password"
+              [type]="isHidden ? 'text' : 'password'"
+              placeholder="Password"
+              [ngClass]="{
+                error: this.isSubmitted && password?.invalid
+              }"
+            />
+            <img
+              class="icon"
+              [src]="
+                isHidden ? 'Images/Icons/view.png' : 'Images/Icons/hide.png'
+              "
+              (click)="isHidden = !isHidden"
+            />
+          </div>
+
           <div class="form-checkbox-group">
             <label>
               <input type="checkbox" />

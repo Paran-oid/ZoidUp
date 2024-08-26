@@ -17,14 +17,21 @@
           }"
         />
       </div>
-      <div class="form-group">
+
+      <div class="form-group password-group">
         <input
-          type="password"
           formControlName="password"
+          [type]="isHidden ? 'text' : 'password'"
           placeholder="password"
           [ngClass]="{ error: password?.invalid && hasSubmitted }"
         />
+        <img
+          class="icon"
+          [src]="isHidden ? 'Images/Icons/view.png' : 'Images/Icons/hide.png'"
+          (click)="isHidden = !isHidden"
+        />
       </div>
+
       <p class="error-text" *ngIf="message">{{ message }}</p>
       <div class="btns">
         <button type="button" (click)="Register()">Submit</button>

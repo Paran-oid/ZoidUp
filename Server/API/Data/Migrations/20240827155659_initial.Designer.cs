@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240826190101_switch from int ID to int")]
-    partial class switchfromintIDtoint
+    [Migration("20240827155659_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,13 +25,36 @@ namespace API.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("API.Models.Connection", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("SignalId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("Time")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Connections", "ath");
+                });
+
             modelBuilder.Entity("API.Models.Friendship", b =>
                 {
                     b.Property<int>("UserId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("integer");
 
                     b.Property<int>("FriendId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("Since")
                         .HasColumnType("timestamp with time zone");
@@ -59,10 +82,10 @@ namespace API.Migrations
                         .HasColumnType("text");
 
                     b.Property<int>("ReceiverId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("integer");
 
                     b.Property<int>("SenderId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -76,10 +99,10 @@ namespace API.Migrations
             modelBuilder.Entity("API.Models.RequestedFriendship", b =>
                 {
                     b.Property<int>("SenderId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("integer");
 
                     b.Property<int>("ReceiverId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("RequestedOn")
                         .HasColumnType("timestamp with time zone");
@@ -95,7 +118,9 @@ namespace API.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Password")
                         .IsRequired()

@@ -7,9 +7,14 @@ export const formGuard: CanDeactivateFn<RegisterComponent> = (
   currentState,
   nextState
 ) => {
-  if (component.HasUnsavedChanges()) {
-    let result = confirm('are you sure?');
-    return result;
+  if (component != null) {
+    if (component.HasUnsavedChanges()) {
+      let result = confirm('are you sure?');
+      return result;
+    } else {
+      return true;
+    }
+  } else {
+    return true;
   }
-  return true;
 };

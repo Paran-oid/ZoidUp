@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Signal } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -24,6 +24,9 @@ import { SpinnerComponent } from '../../shared/components/spinner/spinner.compon
 import { CookieService } from 'ngx-cookie-service';
 import { NotificationService } from '../../services/frontend/notification.service';
 import { SpinnerService } from '../../services/frontend/spinner.service';
+import { SignalrService } from '../../services/backend/signalr.service';
+import { jwtDecode, JwtPayload } from 'jwt-decode';
+import { User } from '../../models/user/user.model';
 
 @Component({
   selector: 'app-welcome',
@@ -43,17 +46,19 @@ export class WelcomeComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private cookieService: CookieService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private signalrService: SignalrService
   ) {}
 
   ngOnInit(): void {
-    if (localStorage.getItem('token')) {
+    if (localStorage.getItem('token') || sessionStorage.getItem('token')) {
       this.router.navigate(['/home']);
     }
 
     this.form = this.fb.group({
       username: ['', [Validators.required, Validators.maxLength(20)]],
       password: ['', [Validators.required, Validators.minLength(6)]],
+      remember: [false],
     });
   }
 
@@ -63,6 +68,10 @@ export class WelcomeComponent implements OnInit {
 
   get password() {
     return this.form.get('password');
+  }
+
+  get remember() {
+    return this.form.get('remember');
   }
 
   Login() {
@@ -82,10 +91,15 @@ export class WelcomeComponent implements OnInit {
             `Welcome back ${this.username?.value}`
           );
           setTimeout(() => {
-            localStorage.setItem('token', response.token);
+            if (this.remember?.value) {
+              localStorage.setItem('token', response.token);
+            } else {
+              sessionStorage.setItem('token', response.token);
+            }
             this.cookieService.set('first_time', 'true');
-            window.location.reload();
-          }, 2000);
+            const decoded: any = jwtDecode<JwtPayload>(response.token);
+            this.signalrService.Authenticate(parseInt(decoded.Id));
+          }, 3000);
           this.spinnerService.isLoading.next(false);
         },
         error: (err: HttpErrorResponse) => {

@@ -7,11 +7,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Configure services using extension methods
 builder.Services.ConfigureAuthentication(builder.Configuration);
 builder.Services.ConfigureDbContext(builder.Configuration);
 builder.Services.ConfigureAppServices();
-builder.Services.AddAutoMapper(typeof(Program).Assembly);
+builder.Services.ConfigureRealTimeCommunication(builder.Configuration);
+builder.Services.ConfigureMapper(builder.Configuration);
 
 var app = builder.Build();
 

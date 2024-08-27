@@ -1,7 +1,11 @@
 {
   "/api": {
     "target": "http://localhost:5012",
-    "secure": false,
-    "logLevel": "debug"
+    "secure": false
+  },
+  "/chathub": {
+    "target": "http://localhost:5012",
+    "ws": true,
+    "secure": false
   }
 }

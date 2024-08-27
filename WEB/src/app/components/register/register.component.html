@@ -2,7 +2,7 @@
   <div class="wrapper" *ngIf="!(spinnerService.isLoading$ | async)">
     <div class="title">
       <img src="/Images/Logo/ZoidUp-No-Background.png" [routerLink]="['/']" />
-      <h1>Welcome to ZoidUp!</h1>
+      <h1 class="app-title">Welcome to ZoidUp!</h1>
       <p>Socialize anywhere, anytime, for free</p>
     </div>
     <form autocomplete="off" [formGroup]="form">

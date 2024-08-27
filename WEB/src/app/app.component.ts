@@ -9,6 +9,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { NotificationService } from './services/frontend/notification.service';
 import { NotificationComponent } from './shared/components/notification/notification.component';
 import { FriendshipService } from './services/backend/friendship.service';
+import { SignalrService } from './services/backend/signalr.service';
 
 @Component({
   selector: 'app-root',
@@ -22,6 +23,7 @@ import { FriendshipService } from './services/backend/friendship.service';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
   providers: [
+    SignalrService,
     AuthService,
     PassUserService,
     CookieService,
@@ -33,7 +35,8 @@ export class AppComponent implements OnInit {
   constructor(
     public spinnerService: SpinnerService,
     public notificationService: NotificationService,
-    private router: Router
+    private router: Router,
+    private signalrService: SignalrService
   ) {}
 
   ngOnInit(): void {
@@ -42,5 +45,6 @@ export class AppComponent implements OnInit {
         this.notificationService.isDisplayed.next(false);
       }
     });
+    this.signalrService.StartConnection();
   }
 }

@@ -41,6 +41,11 @@ namespace API
                 opt.UseNpgsql(configuration.GetConnectionString("Default")));
         }
 
+        public static void ConfigureMapper(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddAutoMapper(typeof(Program).Assembly);
+        }
+
         public static void ConfigureAppServices(this IServiceCollection services)
         {
             services.AddScoped<IRequestFriendshipService, RequestFriendshipService>();

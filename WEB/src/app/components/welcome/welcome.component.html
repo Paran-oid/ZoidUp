@@ -53,7 +53,11 @@
 
           <div class="form-checkbox-group">
             <label>
-              <input type="checkbox" />
+              <input
+                [value]="false"
+                type="checkbox"
+                formControlName="remember"
+              />
               <span>Keep me signed in</span>
             </label>
           </div>

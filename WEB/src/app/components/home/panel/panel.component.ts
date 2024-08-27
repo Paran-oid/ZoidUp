@@ -39,6 +39,7 @@ export class PanelComponent implements OnInit, OnChanges {
   hasRequests: boolean = false;
 
   @Input() friends: User[] = [];
+  selectedFriend: User | null = null;
   selectedItems: User[] = [];
   sentFriendRequests: User[] = [];
   receivedFriendRequests: User[] = [];
@@ -139,7 +140,13 @@ export class PanelComponent implements OnInit, OnChanges {
 
   DisplayFriend(id: number) {
     let friend = this.friends.find((friend) => friend.id === id);
-    this.passUserService.passedUser.next(friend!);
+    if (friend == this.selectedFriend) {
+      this.passUserService.passedUser.next(null);
+      this.selectedFriend = null;
+    } else {
+      this.selectedFriend = friend!;
+      this.passUserService.passedUser.next(friend!);
+    }
     this.cookieService.delete('first_time');
   }
 
@@ -225,9 +232,7 @@ export class PanelComponent implements OnInit, OnChanges {
     this.spinnerService.isLoading.next(true);
     this.notificationService.isDisplayed.next(false);
     setTimeout(() => {
-      this.authService.Logout().subscribe(() => {
-        window.location.reload();
-      });
+      this.authService.Logout();
       this.spinnerService.isLoading.next(false);
     }, 3000);
   }

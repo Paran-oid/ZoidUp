@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AuthService } from '../../services/backend/auth.service';
-import { NavigationStart, Router } from '@angular/router';
+import { NavigationStart, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
@@ -17,6 +17,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { NotificationComponent } from '../../shared/components/notification/notification.component';
 import { SpinnerService } from '../../services/frontend/spinner.service';
 import { FriendshipService } from '../../services/backend/friendship.service';
+import { SignalrService } from '../../services/backend/signalr.service';
 
 @Component({
   selector: 'app-home',
@@ -50,7 +51,8 @@ export class HomeComponent implements OnInit {
     public cookieService: CookieService,
     private router: Router,
     public spinnerService: SpinnerService,
-    private friendshipService: FriendshipService
+    private friendshipService: FriendshipService,
+    private signalrService: SignalrService
   ) {}
   ngOnInit() {
     this.SetCurrentUser();

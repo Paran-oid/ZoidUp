@@ -72,16 +72,15 @@ export class RegisterComponent implements OnInit {
       };
       this.authService.Register(model).subscribe({
         next: (response) => {
-          this.notificationService.Success(
-            'Your account was created! login now'
-          );
-          this.router.navigate(['']);
+          this.form.reset();
+          this.router.navigate(['/']);
+          this.notificationService.Success('Your account was created!');
         },
         error: (err: HttpErrorResponse) => {
+          this.spinnerService.isLoading.next(false);
           this.message = err.error.message;
           this.form.reset();
           this.notificationService.Warning(this.message);
-          this.spinnerService.isLoading.next(false);
         },
         complete: () => {
           this.spinnerService.isLoading.next(false);
@@ -91,7 +90,7 @@ export class RegisterComponent implements OnInit {
   }
 
   public HasUnsavedChanges() {
-    if (this.username?.touched || this.password?.touched) {
+    if (this.username?.value != '' || this.password?.value != '') {
       return true;
     }
     return false;

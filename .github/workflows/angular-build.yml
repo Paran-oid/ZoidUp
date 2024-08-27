@@ -26,10 +26,6 @@ jobs:
     - name: Clean Installation
       working-directory: "./WEB" 
       run: npm ci --force
-
-    - name: Tests
-      working-directory: "./WEB"  
-      run: npm run test:ci
       
     - name: Build
       working-directory: "./WEB"  

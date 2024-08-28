@@ -4,7 +4,7 @@ import { NavigationStart, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { User } from '../../models/user/user.model';
+import { User } from '../../models/main/user.model';
 import { PanelComponent } from './panel/panel.component';
 import { ChatComponent } from './chat/chat.component';
 import { AboutComponent } from './about/about.component';
@@ -45,11 +45,9 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private RequestService: RequestService,
     public passUserService: PassUserService,
     private sendRequestsService: SendRequestsService,
     public cookieService: CookieService,
-    private router: Router,
     public spinnerService: SpinnerService,
     private friendshipService: FriendshipService,
     private signalrService: SignalrService

@@ -12,7 +12,7 @@ import {
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
-import { User } from '../../../models/user/user.model';
+import { User } from '../../../models/main/user.model';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../../services/backend/auth.service';
 import { RequestService } from '../../../services/backend/request.service';

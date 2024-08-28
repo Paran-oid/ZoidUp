@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { PassUserService } from '../../../services/frontend/pass-user.service';
-import { User } from '../../../models/user/user.model';
+import { User } from '../../../models/main/user.model';
 
 @Component({
   selector: 'app-chat',

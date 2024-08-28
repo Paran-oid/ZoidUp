@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { RequestUserDTO } from '../../models/user/user.model';
+import { RequestUserDTO } from '../../models/main/user.model';
 import { RequestService } from '../backend/request.service';
 
 @Injectable({

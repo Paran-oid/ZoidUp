@@ -68,7 +68,7 @@ namespace API.Controllers
                     return NotFound(new { message = e.Message });
                 }
 
-                else if (e.Message == "not same password")
+                else if (e.Message == "please verify your credentials")
                 {
                     return BadRequest(new { message = e.Message });
                 }
@@ -106,12 +106,6 @@ namespace API.Controllers
                     return Conflict();
                 }
             }
-        }
-
-        [HttpGet("logout")]
-        public IActionResult Logout()
-        {
-            return Ok(new { message = "successfully logged out" });
         }
     }
 }

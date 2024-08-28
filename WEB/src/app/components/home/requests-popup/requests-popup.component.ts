@@ -6,7 +6,7 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { RequestService } from '../../../services/backend/request.service';
-import { RequestUserDTO, User } from '../../../models/user/user.model';
+import { RequestUserDTO, User } from '../../../models/main/user.model';
 import { CommonModule } from '@angular/common';
 import { FormatRequestDate } from '../../../shared/functions/FormatRequestDate.function';
 import { SendRequestsService } from '../../../services/frontend/send-requests.service';

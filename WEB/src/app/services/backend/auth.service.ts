@@ -15,20 +15,18 @@ import {
   ReplaySubject,
   throwError,
 } from 'rxjs';
-import { User } from '../../models/user/user.model';
+import { User } from '../../models/main/user.model';
 import { RegisterEntry } from '../../models/auth/register-entry.model';
 import { Router } from '@angular/router';
 import { SignalrService } from './signalr.service';
+import { HubConnection, HubConnectionState } from '@microsoft/signalr';
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   url: string = 'api/auth';
 
-  //subject gets data
   private user = new BehaviorSubject<User | null>(null);
-
-  //observer reads data
   public user$ = this.user.asObservable();
 
   constructor(
@@ -41,16 +39,26 @@ export class AuthService {
     if (token) {
       this.GetUser(token).subscribe();
     }
-
-    //listeners
-    this.signalrService.AuthenticateListener();
   }
 
   public GetUser(token: string) {
-    let headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this.http.get<User>(this.url, { headers: headers }).pipe(
+    return this.http.get<User>(this.url).pipe(
       map((user) => {
         this.user.next(user);
+        //apparently we have to parseint here
+        const userId: number = parseInt(user.id.toString());
+        if (
+          this.signalrService.hubConnection.state ==
+          HubConnectionState.Connected
+        ) {
+          this.signalrService.Reauthenticate(userId);
+        } else {
+          this.signalrService.signalrSession$.subscribe((object: any) => {
+            if (object.type === HubConnectionState.Connected) {
+              this.signalrService.Reauthenticate(userId);
+            }
+          });
+        }
       }),
       catchError((error) => {
         localStorage.removeItem('token');

@@ -26,7 +26,7 @@ import { NotificationService } from '../../services/frontend/notification.servic
 import { SpinnerService } from '../../services/frontend/spinner.service';
 import { SignalrService } from '../../services/backend/signalr.service';
 import { jwtDecode, JwtPayload } from 'jwt-decode';
-import { User } from '../../models/user/user.model';
+import { User } from '../../models/main/user.model';
 
 @Component({
   selector: 'app-welcome',
@@ -87,9 +87,7 @@ export class WelcomeComponent implements OnInit {
       };
       this.authService.Login(model).subscribe({
         next: (response) => {
-          this.notificationService.Success(
-            `Welcome back ${this.username?.value}`
-          );
+          this.notificationService.Success(`Welcome ${this.username?.value}`);
           setTimeout(() => {
             if (this.remember?.value) {
               localStorage.setItem('token', response.token);

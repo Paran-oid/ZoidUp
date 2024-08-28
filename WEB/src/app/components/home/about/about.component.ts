@@ -1,5 +1,5 @@
 import { Component, Input, input, OnInit } from '@angular/core';
-import { User } from '../../../models/user/user.model';
+import { User } from '../../../models/main/user.model';
 import { PassUserService } from '../../../services/frontend/pass-user.service';
 import { RequestService } from '../../../services/backend/request.service';
 import { FriendshipService } from '../../../services/backend/friendship.service';

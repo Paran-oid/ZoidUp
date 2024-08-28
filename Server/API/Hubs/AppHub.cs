@@ -6,7 +6,7 @@ using API.Models;
 
 namespace API.Hubs
 {
-    public class AppHub : Hub<IChatClient>
+    public partial class AppHub : Hub<IChatClient>
     {
         private readonly AppDbContext _context;
 
@@ -17,8 +17,8 @@ namespace API.Hubs
 
         public override async Task OnConnectedAsync()
         {
-            string connectionId = Context.ConnectionId;
-            await Clients.All.Connected($"new connection : {connectionId}");
+            await Clients.All.Connected(Context.ConnectionId);
+            //verify if user exists on the db, if not there is a problem
         }
 
         public async Task Authenticate(int userId)
@@ -46,20 +46,36 @@ namespace API.Hubs
             }
         }
 
-        public async override Task OnDisconnectedAsync(Exception? exception)
+        public async Task Reauthenticate(int UserId)
         {
-            var connection = await _context.Connections.Where(c => c.SignalId == Context.ConnectionId).SingleOrDefaultAsync();
-            if (connection != null)
+            var user = await _context.Users
+                .Where(u => u.Id == UserId)
+                .SingleOrDefaultAsync();
+            if(user != null)
             {
-                _context.Connections.Remove(connection);
+                Connection connection = new Connection
+                {
+                    UserId = UserId,
+                    SignalId = Context.ConnectionId,
+                    Time = DateTime.UtcNow
+                };
+
+                _context.Connections.Add(connection);
                 await _context.SaveChangesAsync();
-                await Clients.Caller.Disconnected("You have disconnected from the hub");
+
+                await Clients.Caller.ReauthSuccess(connection);
+            }
+            else
+            {
+                await Clients.Caller.ReauthFailed("there was an error with reauthenticating");
             }
         }
-
-        public async Task SendTest()
+        public async override Task OnDisconnectedAsync(Exception? exception)
         {
-            await Clients.Caller.Test("it works bro");
+            await Clients.All.Disconnected(Context.ConnectionId);
+            var connection = await _context.Connections.Where(c => c.SignalId == Context.ConnectionId).ToListAsync();
+            _context.Remove(connection);
+            await _context.SaveChangesAsync();
         }
     }
 }

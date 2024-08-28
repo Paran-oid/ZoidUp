@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { RequestUserDTO, User } from '../../models/user/user.model';
+import { RequestUserDTO, User } from '../../models/main/user.model';
 import { BehaviorSubject, map } from 'rxjs';
 
 @Injectable({

@@ -8,7 +8,10 @@ namespace API.Utilities.AutoMapper
     {
         public AppProfile()
         {
-            CreateMap<CreateMessageDTO, Message>();
+            CreateMap<CreateMessageDTO, Message>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore());
+            CreateMap<EditMessageDTO, Message>();
+
         }
     }
 }

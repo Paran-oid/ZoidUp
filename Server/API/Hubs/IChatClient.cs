@@ -15,5 +15,10 @@ namespace API.Hubs
         public Task Connected(string connectedId);
         public Task Disconnected(string connectedId);
 
+        //Messages
+        public Task SendMessageSuccess(Message message);
+        public Task SendMessageFailure(string text);
+
+
     }
 }

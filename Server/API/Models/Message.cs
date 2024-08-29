@@ -15,6 +15,7 @@ namespace API.Models
         public int ReceiverId { get; set; }
         [JsonIgnore]
         public User Receiver { get; set; }
+        public DateTime Time { get; set; } = DateTime.UtcNow;
 
     }
 }

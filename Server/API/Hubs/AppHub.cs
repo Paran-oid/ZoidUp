@@ -3,16 +3,21 @@ using API.Hubs;
 using API.Data;
 using Microsoft.EntityFrameworkCore;
 using API.Models;
+using API.Data.Services.MessageService;
+using AutoMapper;
 
 namespace API.Hubs
 {
     public partial class AppHub : Hub<IChatClient>
     {
         private readonly AppDbContext _context;
+        private readonly IMessageService _messageService;
 
-        public AppHub(AppDbContext context)
+
+        public AppHub(AppDbContext context, IMessageService messageService)
         {
             _context = context;
+            _messageService = messageService;
         }
 
         public override async Task OnConnectedAsync()

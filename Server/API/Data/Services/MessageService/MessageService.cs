@@ -28,7 +28,7 @@ namespace API.Data.Services.MessageService
 
         }
 
-        public async Task<IEnumerable<Message>> GetAll(int userId)
+        public async Task<IEnumerable<Message>> GetAllMessagesBetweenUsers(int userId, int FriendId)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
             if (user == null)
@@ -36,7 +36,18 @@ namespace API.Data.Services.MessageService
                 throw new Exception("user not found");
             }
 
-            var messages = _context.Messages.Where(m => m.SenderId == userId).ToList();
+            var friend = await _context.Users.FirstOrDefaultAsync(u => u.Id == FriendId);
+            if (friend == null)
+            {
+                throw new Exception("user not found");
+            }
+
+            var messages = await _context.Messages
+                .Where(
+                m => (m.SenderId == userId && m.ReceiverId == FriendId) ||
+                (m.SenderId == FriendId && m.ReceiverId == userId))
+                .OrderBy(m => m.Time)
+                .ToListAsync();
 
             return messages;
         }
@@ -49,6 +60,8 @@ namespace API.Data.Services.MessageService
                 throw new Exception("sender or received not found");
             }
             var message = _mapper.Map<Message>(model);
+
+            //check if users are friends or not here
 
             _context.Add(message);
             await _context.SaveChangesAsync();

@@ -64,6 +64,7 @@ export class AuthService {
         localStorage.removeItem('token');
         sessionStorage.removeItem('token');
         this.user.next(null);
+        this.router.navigate(['/']);
         return error;
       })
     );

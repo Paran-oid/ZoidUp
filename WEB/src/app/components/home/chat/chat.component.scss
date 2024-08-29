@@ -38,13 +38,14 @@
       }
     }
     .messages {
-      overflow-y: hidden;
+      overflow-y: auto;
       height: calc(100% - 64px);
       padding: 20px;
 
       .message {
         @include flex(start, center);
         margin-top: 15px;
+
         .profile-picture {
           border-radius: 50%;
           width: 2rem;
@@ -58,6 +59,12 @@
           background-color: $gray;
           padding: 10px;
           border-radius: 25px;
+          min-width: 200px;
+          max-width: 500px;
+        }
+
+        &:last-child {
+          margin-bottom: 80px;
         }
       }
     }
@@ -90,6 +97,14 @@
         }
         .image {
           width: 1.5rem;
+        }
+
+        .submit-btn {
+          background-color: transparent;
+          border: none;
+          &:hover {
+            cursor: pointer;
+          }
         }
       }
     }

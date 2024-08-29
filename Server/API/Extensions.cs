@@ -9,6 +9,7 @@ using API.Data.Services.RequestFriendshipService;
 using API.Data.Services.MessageService;
 using API.Models;
 using API.Data.Services.FriendshipService;
+using API.Utilities.AutoMapper;
 
 namespace API
 {
@@ -43,7 +44,7 @@ namespace API
 
         public static void ConfigureMapper(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddAutoMapper(typeof(Program).Assembly);
+            services.AddAutoMapper(typeof(AppProfile));
         }
 
         public static void ConfigureAppServices(this IServiceCollection services)

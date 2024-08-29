@@ -36,12 +36,12 @@ namespace API.Controllers
             }
         }
 
-        [HttpGet("users/{userId}")]
-        public async Task<IActionResult> GetAll(int userId)
+        [HttpGet("users/{userId}/{friendId}")]
+        public async Task<IActionResult> GetAllMessagesBetweenUsers(int userId, int friendId)
         {
             try
             {
-                var messages = await _messageService.GetAll(userId);
+                var messages = await _messageService.GetAllMessagesBetweenUsers(userId, friendId);
                 return Ok(messages);
             }
             catch (Exception e)
@@ -65,7 +65,7 @@ namespace API.Controllers
                 if (ModelState.IsValid)
                 {
                     var message = await _messageService.Post(model);
-                    return CreatedAtAction(nameof(Get), message);
+                    return CreatedAtAction(nameof(Post), message);
                 }
                 return BadRequest(new { message = "something went wrong" });
             }

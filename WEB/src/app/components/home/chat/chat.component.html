@@ -10,7 +10,6 @@
         <div class="about-model">
           <h3>{{ friend?.username }}</h3>
           <p>status</p>
-          <!-- hello, work fast -->
         </div>
       </div>
       <div class="right">
@@ -24,31 +23,37 @@
     <div
       class="message"
       *ngFor="let message of messages"
-      [ngClass]="{ right: message.userId === currentUser.id }"
+      [ngClass]="{ right: message.senderId !== friend?.id }"
     >
-      <!-- user profile picture here -->
       <div
         class="profile-picture"
         [ngStyle]="{
-          display: message.userId === currentUser.id ? 'none' : 'block'
+          display: message.senderId !== friend?.id ? 'none' : 'block'
         }"
       >
         <img src="/User Images/AzizHmidi/ProfilePictures/profilepicture.png" />
       </div>
       <div
         class="message-body"
-        [ngClass]="{ 'own-message': message.userId === currentUser.id }"
+        [ngClass]="{ 'own-message': message.senderId !== friend?.id }"
       >
         {{ message.body }}
       </div>
     </div>
   </div>
   <div class="add-message">
-    <form (submit)="OnSubmit()">
-      <img src="Images/Icons/image.png" (click)="OnSubmit()" class="image" />
-      <img src="Images/Icons/gif.png" (click)="OnSubmit()" class="gif" />
-      <input type="text" placeholder="Aa" class="send-message" />
-      <img src="Images/Icons/send.png" (click)="OnSubmit()" class="send" />
+    <form [formGroup]="form">
+      <img src="Images/Icons/image.png" class="image" />
+      <img src="Images/Icons/gif.png" class="gif" />
+      <input
+        type="text"
+        placeholder="Aa"
+        class="send-message"
+        formControlName="send"
+      />
+      <button type="button" class="submit-btn" (click)="OnSubmit()">
+        <img src="Images/Icons/send.png" class="send" />
+      </button>
     </form>
   </div>
 </div>

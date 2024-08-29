@@ -10,6 +10,7 @@ import { NotificationService } from './services/frontend/notification.service';
 import { NotificationComponent } from './shared/components/notification/notification.component';
 import { FriendshipService } from './services/backend/friendship.service';
 import { SignalrService } from './services/backend/signalr.service';
+import { MessageService } from './services/backend/message.service';
 
 @Component({
   selector: 'app-root',
@@ -29,6 +30,7 @@ import { SignalrService } from './services/backend/signalr.service';
     CookieService,
     NotificationService,
     FriendshipService,
+    MessageService,
   ],
 })
 export class AppComponent implements OnInit {

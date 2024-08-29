@@ -22,6 +22,7 @@ import { SendRequestsService } from '../../../services/frontend/send-requests.se
 import { CookieService } from 'ngx-cookie-service';
 import { NotificationService } from '../../../services/frontend/notification.service';
 import { SpinnerService } from '../../../services/frontend/spinner.service';
+import { MessageService } from '../../../services/backend/message.service';
 
 @Component({
   selector: 'app-panel',
@@ -55,7 +56,8 @@ export class PanelComponent implements OnInit, OnChanges {
     private passUserService: PassUserService,
     private sendRequestsService: SendRequestsService,
     private cookieService: CookieService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private messageService: MessageService
   ) {}
 
   ngOnInit() {
@@ -146,6 +148,7 @@ export class PanelComponent implements OnInit, OnChanges {
     } else {
       this.selectedFriend = friend!;
       this.passUserService.passedUser.next(friend!);
+      this.messageService.LoadMessages(this.currentUser?.id!, id).subscribe();
     }
     this.cookieService.delete('first_time');
   }

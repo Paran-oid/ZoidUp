@@ -62,6 +62,8 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  //commit message
+
   SetCurrentUser() {
     this.authService.user$.subscribe((user) => {
       this.currentUser = user;

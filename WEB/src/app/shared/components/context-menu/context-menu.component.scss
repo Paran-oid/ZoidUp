@@ -1,0 +1,17 @@
+@import "../../../../scss/global";
+
+.container {
+  padding: 5px 10px;
+  width: 150px;
+  z-index: 1000;
+  background-color: black;
+  ul {
+    li {
+      margin-bottom: 5px;
+      color: white;
+      &:hover {
+        background-color: $yellowish-green;
+      }
+    }
+  }
+}

@@ -6,11 +6,18 @@ import { User } from '../../../models/main/user.model';
 import { AuthService } from '../../../services/backend/auth.service';
 import { CreateMessageDto, Message } from '../../../models/main/message.model';
 import { MessageService } from '../../../services/backend/message.service';
+import { MessageDirective } from '../../../shared/directives/message.directive';
+import { ContextMenuComponent } from '../../../shared/components/context-menu/context-menu.component';
 
 @Component({
   selector: 'app-chat',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MessageDirective,
+    ContextMenuComponent,
+  ],
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.scss',
 })

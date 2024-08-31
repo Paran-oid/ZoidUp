@@ -24,6 +24,9 @@
       class="message"
       *ngFor="let message of messages"
       [ngClass]="{ right: message.senderId !== friend?.id }"
+      [id]="message.id"
+      appMessage
+      [message]="message"
     >
       <div
         class="profile-picture"
@@ -57,3 +60,4 @@
     </form>
   </div>
 </div>
+<app-context-menu></app-context-menu>

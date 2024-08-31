@@ -71,9 +71,9 @@ namespace API.Controllers
             }
             catch (Exception e)
             {
-                if (e.Message == "user not found")
+                if (e.Message == "user not found" || e.Message == "users aren't friends")
                 {
-                    return NotFound(new { message = "user not found" });
+                    return NotFound(new { message = e.Message });
                 }
                 else
                 {

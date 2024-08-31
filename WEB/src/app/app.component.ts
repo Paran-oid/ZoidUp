@@ -11,6 +11,7 @@ import { NotificationComponent } from './shared/components/notification/notifica
 import { FriendshipService } from './services/backend/friendship.service';
 import { SignalrService } from './services/backend/signalr.service';
 import { MessageService } from './services/backend/message.service';
+import { ContextMenuService } from './services/frontend/context-menu.service';
 
 @Component({
   selector: 'app-root',
@@ -31,6 +32,7 @@ import { MessageService } from './services/backend/message.service';
     NotificationService,
     FriendshipService,
     MessageService,
+    ContextMenuService,
   ],
 })
 export class AppComponent implements OnInit {

@@ -61,12 +61,22 @@ namespace API.Data.Services.MessageService
             }
             var message = _mapper.Map<Message>(model);
 
-            //check if users are friends or not here
+            bool areFriends = await _context.Friendships
+                .Where(f => (f.UserId == sender.Id && f.FriendId == receiver.Id)||
+                (f.UserId == receiver.Id && f.FriendId == sender.Id))
+                .SingleOrDefaultAsync() != null;
 
-            _context.Add(message);
-            await _context.SaveChangesAsync();
+            if(areFriends)
+            {
+                _context.Add(message);
+                await _context.SaveChangesAsync();
+                return message;
+            }
+            else
+            {
+                throw new Exception("users aren't friends");
+            }
 
-            return message;
         }
         public async Task<Message> Put(EditMessageDTO model)
         {

@@ -24,10 +24,7 @@
       class="message"
       *ngFor="let message of messages"
       [ngClass]="{ right: message.senderId !== friend?.id }"
-      [id]="message.id"
-      appMessage
-      [messageId]="message.id"
-      [messageOwn]="message.senderId !== friend?.id ? true : false"
+      [id]="'message-' + message.id"
     >
       <div
         class="profile-picture"
@@ -40,6 +37,10 @@
       <div
         class="message-body"
         [ngClass]="{ 'own-message': message.senderId !== friend?.id }"
+        [id]="message.id"
+        appMessage
+        [messageId]="message.id"
+        [messageOwn]="message.senderId !== friend?.id ? true : false"
       >
         {{ message.body }}
       </div>
@@ -57,7 +58,6 @@
         appMessageInput
         (keydown)="OnSubmit($event)"
         [disabled]="isSending"
-        [ngClass]="{ 'disabled-input': isSending }"
       />
       <button type="button" class="submit-btn" (click)="OnSubmit()">
         <img src="Images/Icons/send.png" class="send" />

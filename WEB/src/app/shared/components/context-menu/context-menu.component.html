@@ -2,7 +2,7 @@
   <ul *ngIf="isOwnMessage">
     <li (click)="ReplyMessage()">reply</li>
     <li (click)="ForwardMessage()">forward</li>
-    <li (click)="EditMessage()">edit</li>
+    <li (click)="EditMessage(messageId)">edit</li>
     <li (click)="DeleteMessage(messageId)">delete</li>
   </ul>
   <ul *ngIf="!isOwnMessage">

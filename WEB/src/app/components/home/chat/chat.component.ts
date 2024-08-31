@@ -9,6 +9,7 @@ import { MessageService } from '../../../services/backend/message.service';
 import { MessageDirective } from '../../../shared/directives/message.directive';
 import { ContextMenuComponent } from '../../../shared/components/context-menu/context-menu.component';
 import { MessageInputDirective } from '../../../shared/directives/message-input.directive';
+import { NotificationService } from '../../../services/frontend/notification.service';
 
 @Component({
   selector: 'app-chat',
@@ -35,7 +36,8 @@ export class ChatComponent implements OnInit {
     private fb: FormBuilder,
     private passUserService: PassUserService,
     private authService: AuthService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit() {
@@ -51,10 +53,23 @@ export class ChatComponent implements OnInit {
     this.messageService.messages$.subscribe((messages) => {
       this.messages = messages!;
     });
+
+    //message service messages subscriptions
     this.messageService.removedMessages$.subscribe((messageId) => {
       if (this.messages) {
         const index = this.messages.findIndex((m) => m.id == messageId);
         this.messages.splice(index, 1);
+      }
+    });
+
+    this.messageService.editMessages$.subscribe((messageId) => {
+      if (this.messages) {
+        const item = this.messages.find((m) => m.id == messageId);
+        if (item) {
+          this.EditMessage(item);
+        } else {
+          this.notificationService.Warning("couldn't find the message");
+        }
       }
     });
   }
@@ -70,10 +85,25 @@ export class ChatComponent implements OnInit {
     }
     return;
   }
+  EditMessage(message: Message) {
+    //     make an is editing boolean
+    // follow this structure
+    //     <div *ngFor="let message of messages; let i = index">
+    //   <div *ngIf="!isEditing[i]; else editTemplate">
+    //     <div id="message-body">{{ message.body }}</div>
+    //     <button (click)="editMessage(i)">Edit</button>
+    //   </div>
+    //   <ng-template #editTemplate>
+    //     <input [(ngModel)]="message.body" />
+    //     <button (click)="saveMessage(i)">Save</button>
+    //   </ng-template>
+    // </div>
+    // we will add input element
+    // if user clicks outside either save or discard changes
+  }
   ToggleAbout() {
     this.passUserService.ToggleAbout();
   }
-
   OnSubmit(event?: KeyboardEvent) {
     if ((!event || event.key == 'Enter') && this.isSending == false) {
       if (this.send?.value) {

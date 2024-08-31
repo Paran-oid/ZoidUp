@@ -18,6 +18,9 @@ export class MessageService {
   messages = new BehaviorSubject<Message[] | null>(null);
   messages$ = this.messages.asObservable();
 
+  editMessages = new BehaviorSubject<number | null>(null);
+  editMessages$ = this.editMessages.asObservable();
+
   removedMessages = new BehaviorSubject<number | null>(null);
   removedMessages$ = this.removedMessages.asObservable();
 

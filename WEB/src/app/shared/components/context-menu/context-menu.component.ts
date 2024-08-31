@@ -61,21 +61,25 @@ export class ContextMenuComponent implements OnInit {
     this.clientWidth = window.innerWidth;
     this.clientHeight = window.innerHeight;
     this.maxWidth = this.clientWidth - 150;
-    let contextMenu = this.ContextMenu.nativeElement as HTMLDivElement;
-    this.mouseLocation = {
-      left: event.clientX > this.maxWidth ? this.maxWidth : event.clientX,
-      top:
-        event.clientY >= innerHeight - contextMenu.offsetHeight
-          ? innerHeight - contextMenu.offsetHeight
-          : event.clientY,
-    };
+    if (this.ContextMenu) {
+      let contextMenu = this.ContextMenu.nativeElement as HTMLDivElement;
+      this.mouseLocation = {
+        left: event.clientX > this.maxWidth ? this.maxWidth : event.clientX,
+        top:
+          event.clientY >= innerHeight - contextMenu.offsetHeight
+            ? innerHeight - contextMenu.offsetHeight
+            : event.clientY,
+      };
 
-    this.isOwnMessage = ownMessage;
-    this.messageId = messageId;
+      this.isOwnMessage = ownMessage;
+      this.messageId = messageId;
+    }
   }
 
   ReplyMessage() {}
-  EditMessage() {}
+  EditMessage(messageId: number) {
+    this.messageService.editMessages.next(messageId);
+  }
   DeleteMessage(messageId: number) {
     this.messageService.Delete(messageId).subscribe({
       next: (response) => {

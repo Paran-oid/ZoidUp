@@ -1,16 +1,26 @@
 @import "../../../../scss/global";
 
 .container {
-  padding: 5px 10px;
   width: 150px;
+  border-radius: 15px;
   z-index: 1000;
-  background-color: black;
+  background-color: $white;
   ul {
     li {
-      margin-bottom: 5px;
-      color: white;
+      list-style: none;
+      color: black;
+      cursor: pointer;
+      padding: 10px;
       &:hover {
         background-color: $yellowish-green;
+      }
+      &:first-child {
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+      }
+      &:last-child {
+        border-bottom-left-radius: 15px;
+        border-bottom-right-radius: 15px;
       }
     }
   }

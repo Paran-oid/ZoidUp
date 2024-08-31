@@ -8,6 +8,7 @@ import {
 } from '../../models/main/message.model';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, map } from 'rxjs';
+import { Subject } from '@microsoft/signalr';
 
 @Injectable({
   providedIn: 'root',
@@ -16,6 +17,9 @@ export class MessageService {
   url: string = '/api/messages';
   messages = new BehaviorSubject<Message[] | null>(null);
   messages$ = this.messages.asObservable();
+
+  removedMessages = new BehaviorSubject<number | null>(null);
+  removedMessages$ = this.removedMessages.asObservable();
 
   constructor(private http: HttpClient) {}
 
@@ -38,7 +42,7 @@ export class MessageService {
     return this.http.put<Message>(this.url, model);
   }
   Delete(messageId: number) {
-    return this.http.delete(this.url + `${messageId}`, {
+    return this.http.delete(this.url + `/${messageId}`, {
       responseType: 'text',
     });
   }

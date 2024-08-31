@@ -1,5 +1,13 @@
-<div class="container" [ngStyle]="LocationCSS" *ngIf="isShown">
-  <ul>
-    <li *ngFor="let item of items">{{ item }}</li>
+<div class="container" #menu [ngStyle]="LocationCSS" *ngIf="isShown">
+  <ul *ngIf="isOwnMessage">
+    <li (click)="ReplyMessage()">reply</li>
+    <li (click)="ForwardMessage()">forward</li>
+    <li (click)="EditMessage()">edit</li>
+    <li (click)="DeleteMessage(messageId)">delete</li>
+  </ul>
+  <ul *ngIf="!isOwnMessage">
+    <li (click)="ReplyMessage()">reply</li>
+    <li (click)="ForwardMessage()">forward</li>
+    <li (click)="RemoveMessage(messageId)">remove</li>
   </ul>
 </div>

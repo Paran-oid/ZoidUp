@@ -19,6 +19,7 @@ export class NotificationService {
   constructor() {}
 
   Display() {
+    this.isDisplayed.next(false);
     this.isDisplayed.next(true);
     setTimeout(() => {
       this.isDisplayed.next(false);

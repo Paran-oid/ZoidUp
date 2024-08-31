@@ -102,7 +102,7 @@ namespace API.Data.Services.MessageService
             _context.Remove(message);
             await _context.SaveChangesAsync();
 
-            return "success!";
+            return "message deleted";
         }
     }
 }

@@ -6,9 +6,10 @@ import { Message } from '../../models/main/message.model';
   providedIn: 'root',
 })
 export class ContextMenuService {
-  public show: Subject<{ event: MouseEvent; obj: Message }> = new Subject<{
+  public show = new Subject<{
     event: MouseEvent;
-    obj: Message;
+    messageId: number;
+    isOwnMessage: boolean;
   }>();
   constructor() {}
 }

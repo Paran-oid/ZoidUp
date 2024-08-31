@@ -26,7 +26,8 @@
       [ngClass]="{ right: message.senderId !== friend?.id }"
       [id]="message.id"
       appMessage
-      [message]="message"
+      [messageId]="message.id"
+      [messageOwn]="message.senderId !== friend?.id ? true : false"
     >
       <div
         class="profile-picture"
@@ -53,6 +54,10 @@
         placeholder="Aa"
         class="send-message"
         formControlName="send"
+        appMessageInput
+        (keydown)="OnSubmit($event)"
+        [disabled]="isSending"
+        [ngClass]="{ 'disabled-input': isSending }"
       />
       <button type="button" class="submit-btn" (click)="OnSubmit()">
         <img src="Images/Icons/send.png" class="send" />

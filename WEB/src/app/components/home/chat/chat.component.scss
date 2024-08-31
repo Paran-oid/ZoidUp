@@ -59,7 +59,6 @@
           background-color: $gray;
           padding: 10px;
           border-radius: 25px;
-          min-width: 200px;
           max-width: 500px;
         }
 
@@ -119,5 +118,8 @@
       cursor: pointer;
       width: 3rem;
     }
+  }
+  .disabled-input {
+    background-color: lighten($gray, 10%);
   }
 }

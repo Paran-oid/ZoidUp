@@ -8,6 +8,7 @@ import { CreateMessageDto, Message } from '../../../models/main/message.model';
 import { MessageService } from '../../../services/backend/message.service';
 import { MessageDirective } from '../../../shared/directives/message.directive';
 import { ContextMenuComponent } from '../../../shared/components/context-menu/context-menu.component';
+import { MessageInputDirective } from '../../../shared/directives/message-input.directive';
 
 @Component({
   selector: 'app-chat',
@@ -17,6 +18,7 @@ import { ContextMenuComponent } from '../../../shared/components/context-menu/co
     ReactiveFormsModule,
     MessageDirective,
     ContextMenuComponent,
+    MessageInputDirective,
   ],
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.scss',
@@ -25,6 +27,7 @@ export class ChatComponent implements OnInit {
   currentUser: User | null = null;
   friend: User | null = null;
   messages: Message[] = [];
+  isSending: boolean = false;
 
   form: FormGroup = new FormGroup({});
 
@@ -48,6 +51,12 @@ export class ChatComponent implements OnInit {
     this.messageService.messages$.subscribe((messages) => {
       this.messages = messages!;
     });
+    this.messageService.removedMessages$.subscribe((messageId) => {
+      if (this.messages) {
+        const index = this.messages.findIndex((m) => m.id == messageId);
+        this.messages.splice(index, 1);
+      }
+    });
   }
 
   get send() {
@@ -65,17 +74,22 @@ export class ChatComponent implements OnInit {
     this.passUserService.ToggleAbout();
   }
 
-  OnSubmit() {
-    if (this.send?.value) {
-      const model: CreateMessageDto = {
-        senderId: this.currentUser?.id!,
-        receiverId: this.friend?.id!,
-        body: this.send.value,
-      };
-      this.messageService.SendMessage(model).subscribe((message) => {
-        this.messages.push(message);
-        this.form.reset();
-      });
+  OnSubmit(event?: KeyboardEvent) {
+    if ((!event || event.key == 'Enter') && this.isSending == false) {
+      if (this.send?.value) {
+        this.isSending = true;
+        let body: string = (this.send.value as string).trim();
+        const model: CreateMessageDto = {
+          senderId: this.currentUser?.id!,
+          receiverId: this.friend?.id!,
+          body: body,
+        };
+        this.messageService.SendMessage(model).subscribe((message) => {
+          this.messages.push(message);
+          this.form.reset();
+          this.isSending = false;
+        });
+      }
     }
   }
 }

@@ -1,7 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  inject,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { ContextMenuService } from '../../../services/frontend/context-menu.service';
 import { Message } from '../../../models/main/message.model';
+import { MessageService } from '../../../services/backend/message.service';
+import { NotificationService } from '../../../services/frontend/notification.service';
 
 @Component({
   selector: 'app-context-menu',
@@ -13,16 +21,28 @@ import { Message } from '../../../models/main/message.model';
   templateUrl: './context-menu.component.html',
   styleUrl: './context-menu.component.scss',
 })
-export class ContextMenuComponent {
+export class ContextMenuComponent implements OnInit {
+  clientWidth!: number;
+  clientHeight!: number;
+  maxWidth!: number;
+  isOwnMessage: boolean = true;
   isShown: boolean = false;
-  items: string[] = ['edit', 'delete'];
-  private mouseLocation: { left: number; top: number } = { left: 0, top: 0 };
+  messageId!: number;
 
-  constructor(public contextMenuService: ContextMenuService) {
+  @ViewChild('menu') ContextMenu!: ElementRef;
+  private mouseLocation: { left?: number; top?: number } = { left: 0, top: 0 };
+
+  constructor(
+    public contextMenuService: ContextMenuService,
+    private messageService: MessageService,
+    private notificationService: NotificationService
+  ) {
     contextMenuService.show.subscribe((e) => {
-      this.ShowMenu(e.event, e.obj);
+      this.ShowMenu(e.event, e.messageId, e.isOwnMessage);
     });
   }
+
+  ngOnInit() {}
 
   get LocationCSS() {
     return {
@@ -36,12 +56,37 @@ export class ContextMenuComponent {
     this.isShown = false;
   }
 
-  ShowMenu(event: MouseEvent, message: Message) {
+  ShowMenu(event: MouseEvent, messageId: number, ownMessage: boolean) {
     this.isShown = true;
-    this.items = ['edit', 'delete'];
+    this.clientWidth = window.innerWidth;
+    this.clientHeight = window.innerHeight;
+    this.maxWidth = this.clientWidth - 150;
+    let contextMenu = this.ContextMenu.nativeElement as HTMLDivElement;
     this.mouseLocation = {
-      left: event.clientX,
-      top: event.clientY,
+      left: event.clientX > this.maxWidth ? this.maxWidth : event.clientX,
+      top:
+        event.clientY >= innerHeight - contextMenu.offsetHeight
+          ? innerHeight - contextMenu.offsetHeight
+          : event.clientY,
     };
+
+    this.isOwnMessage = ownMessage;
+    this.messageId = messageId;
   }
+
+  ReplyMessage() {}
+  EditMessage() {}
+  DeleteMessage(messageId: number) {
+    this.messageService.Delete(messageId).subscribe({
+      next: (response) => {
+        this.messageService.removedMessages.next(messageId);
+        this.notificationService.Info(response);
+      },
+    });
+  }
+  RemoveMessage(messageId: number) {
+    this.messageService.removedMessages.next(messageId);
+    this.notificationService.Info('message was removed only for this session');
+  }
+  ForwardMessage() {}
 }

@@ -13,12 +13,17 @@ import { ContextMenuService } from '../../services/frontend/context-menu.service
   standalone: true,
 })
 export class MessageDirective {
-  @Input('message') message!: Message;
+  @Input('messageId') messageId!: number;
+  @Input('messageOwn') ownMessage!: boolean;
   constructor(private contextMenuService: ContextMenuService) {}
   @HostListener('contextmenu', ['$event']) DisplayContextMenu(
     event: MouseEvent
   ) {
-    this.contextMenuService.show.next({ event: event, obj: this.message });
+    this.contextMenuService.show.next({
+      event: event,
+      messageId: this.messageId,
+      isOwnMessage: this.ownMessage,
+    });
     event.preventDefault();
   }
 }

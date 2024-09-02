@@ -87,7 +87,7 @@
         </div>
         <div class="info">
           <h4>{{ friend.username }}</h4>
-          <p>cool message</p>
+          <p>{{ ReturnHours(friend.loggedOn) }}</p>
         </div>
         <div class="status" [hidden]="true">
           <div class="tick-icon">
@@ -108,7 +108,7 @@
           </div>
           <div class="info">
             <h4>{{ user.username }}</h4>
-            <p>cool message</p>
+            <p>last logged on {{ ReturnHours(user.loggedOn) }}</p>
           </div>
           <div class="status">
             <div class="accept-request-icon" (click)="AddFriend(user.id)">
@@ -135,7 +135,6 @@
         </div>
         <div class="info">
           <h4>{{ user.username }}</h4>
-          <p>cool message</p>
         </div>
         <div class="status" [hidden]="true">
           <div class="btns">

@@ -1,6 +1,8 @@
-﻿using API.Models;
+﻿using API.Hubs;
+using API.Models;
 using API.Models.DTOs;
 using AutoMapper;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Data.Services.MessageService
@@ -62,11 +64,11 @@ namespace API.Data.Services.MessageService
             var message = _mapper.Map<Message>(model);
 
             bool areFriends = await _context.Friendships
-                .Where(f => (f.UserId == sender.Id && f.FriendId == receiver.Id)||
+                .Where(f => (f.UserId == sender.Id && f.FriendId == receiver.Id) ||
                 (f.UserId == receiver.Id && f.FriendId == sender.Id))
                 .SingleOrDefaultAsync() != null;
 
-            if(areFriends)
+            if (areFriends)
             {
                 _context.Add(message);
                 await _context.SaveChangesAsync();

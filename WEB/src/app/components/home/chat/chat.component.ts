@@ -10,6 +10,7 @@ import { MessageDirective } from '../../../shared/directives/message.directive';
 import { ContextMenuComponent } from '../../../shared/components/context-menu/context-menu.component';
 import { MessageInputDirective } from '../../../shared/directives/message-input.directive';
 import { NotificationService } from '../../../services/frontend/notification.service';
+import { SignalrService } from '../../../services/backend/signalr.service';
 
 @Component({
   selector: 'app-chat',
@@ -37,7 +38,8 @@ export class ChatComponent implements OnInit {
     private passUserService: PassUserService,
     private authService: AuthService,
     private messageService: MessageService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private signalrService: SignalrService
   ) {}
 
   ngOnInit() {
@@ -110,11 +112,12 @@ export class ChatComponent implements OnInit {
         this.isSending = true;
         let body: string = (this.send.value as string).trim();
         const model: CreateMessageDto = {
-          senderId: this.currentUser?.id!,
-          receiverId: this.friend?.id!,
           body: body,
+          senderId: parseInt(this.currentUser?.id!.toString()!),
+          receiverId: this.friend?.id!,
         };
         this.messageService.SendMessage(model).subscribe((message) => {
+          this.signalrService.SendMessage(message);
           this.messages.push(message);
           this.form.reset();
           this.isSending = false;

@@ -153,6 +153,28 @@ export class PanelComponent implements OnInit, OnChanges {
     this.cookieService.delete('first_time');
   }
 
+  ReturnHours(time: string) {
+    const today: any = new Date();
+    const previousDate: any = new Date(time);
+    const diffTime = Math.abs(today - previousDate);
+
+    let difference = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    let result = Math.floor(difference).toString() + ' day(s) ago';
+    if (difference == 0) {
+      result =
+        Math.floor(diffTime / (1000 * 60 * 60)).toString() + 'hour(s) ago';
+      if (difference == 0) {
+        const diffMinutes =
+          Math.floor(diffTime / (1000 * 60)).toString() + 'minute(s) ago';
+        if (difference == 0) {
+          result = 'Online';
+        }
+      }
+    }
+    const final = result != 'Online' ? 'was logged in:' + result : result;
+    return final;
+  }
+
   SendRequestRecommended(receiverId: number, event: Event) {
     // this will hide the current send button and display the below button for unsending requests
     const sendBtn = event.target as HTMLButtonElement;

@@ -10,6 +10,8 @@ import { BehaviorSubject, Subject } from 'rxjs';
 import { NotificationService } from '../frontend/notification.service';
 import { ActivatedRoute } from '@angular/router';
 import { Connection } from '../../models/main/connection.model';
+import { CreateMessageDto } from '../../models/main/message.model';
+import { MessageService } from './message.service';
 
 @Injectable({
   providedIn: 'root',
@@ -20,7 +22,10 @@ export class SignalrService {
   public signalrSession$ = this.signalrSession.asObservable();
   private connection: Connection | null = null;
 
-  constructor(private notificationService: NotificationService) {}
+  constructor(
+    private notificationService: NotificationService,
+    private messageService: MessageService
+  ) {}
   StartConnection() {
     this.hubConnection = new HubConnectionBuilder()
       .withUrl('/chathub', {
@@ -36,6 +41,7 @@ export class SignalrService {
       this.ReauthenticateListener();
       this.AuthenticateListener();
       this.ConnectionListener();
+      this.SendMessageListener();
     });
   }
 
@@ -53,6 +59,15 @@ export class SignalrService {
     });
   }
 
+  SendMessage(message: CreateMessageDto) {
+    this.hubConnection
+      .invoke('SendMessage', message)
+      .then((message) => {
+        this.messageService.messages.next(message);
+      })
+      .catch((err) => console.error(err));
+  }
+
   //Listeners
 
   //used for logging in
@@ -68,6 +83,15 @@ export class SignalrService {
       this.notificationService.Success('Reauthenticated!');
     });
     this.hubConnection.on('ReauthFailed', (response) => {});
+  }
+
+  SendMessageListener() {
+    this.hubConnection.on('SendMessageSuccess', (response) => {
+      console.log(response);
+    });
+    this.hubConnection.on('SendMessageFailure', (response) => {
+      console.log(response);
+    });
   }
 
   ConnectionListener() {

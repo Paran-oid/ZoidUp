@@ -12,12 +12,14 @@ namespace API.Hubs
     {
         private readonly AppDbContext _context;
         private readonly IMessageService _messageService;
+        private readonly IMapper _mapper;
 
 
-        public AppHub(AppDbContext context, IMessageService messageService)
+        public AppHub(AppDbContext context, IMessageService messageService, IMapper mapper)
         {
             _context = context;
             _messageService = messageService;
+            _mapper = mapper;
         }
 
         public override async Task OnConnectedAsync()
@@ -34,6 +36,7 @@ namespace API.Hubs
 
             if (user != null)
             {
+                user.LoggedOn = DateTime.UtcNow;
                 Connection conn = new Connection
                 {
                     SignalId = Context.ConnectionId,
@@ -56,8 +59,12 @@ namespace API.Hubs
             var user = await _context.Users
                 .Where(u => u.Id == UserId)
                 .SingleOrDefaultAsync();
-            if(user != null)
+            if (user != null)
             {
+                var oldConnections = await _context.Connections.Where(c => c.UserId == user.Id && c.SignalId != Context.ConnectionId).ToListAsync();
+                _context.RemoveRange(oldConnections);
+
+                user.LoggedOn = DateTime.UtcNow;
                 Connection connection = new Connection
                 {
                     UserId = UserId,
@@ -78,9 +85,14 @@ namespace API.Hubs
         public async override Task OnDisconnectedAsync(Exception? exception)
         {
             await Clients.All.Disconnected(Context.ConnectionId);
-            var connection = await _context.Connections.Where(c => c.SignalId == Context.ConnectionId).ToListAsync();
-            _context.Remove(connection);
+            var user = await _context.Connections.Where(c => c.SignalId == Context.ConnectionId).FirstOrDefaultAsync();
+            var connections = await _context.Connections.Where(c => c.SignalId == Context.ConnectionId || c.UserId == user.Id).ToListAsync();
+            foreach(var connection in connections)
+            {
+                _context.Remove(connection);
+            }
             await _context.SaveChangesAsync();
         }
+
     }
 }

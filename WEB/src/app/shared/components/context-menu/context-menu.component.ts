@@ -36,19 +36,20 @@ export class ContextMenuComponent implements OnInit {
     public contextMenuService: ContextMenuService,
     private messageService: MessageService,
     private notificationService: NotificationService
-  ) {
-    contextMenuService.show.subscribe((e) => {
+  ) {}
+
+  ngOnInit() {
+    this.contextMenuService.show.subscribe((e) => {
       this.ShowMenu(e.event, e.messageId, e.isOwnMessage);
     });
   }
-
-  ngOnInit() {}
 
   get LocationCSS() {
     return {
       position: 'fixed',
       left: this.mouseLocation.left + 'px',
       top: this.mouseLocation.top + 'px',
+      display: this.isShown ? 'block' : 'none',
     };
   }
 
@@ -70,7 +71,7 @@ export class ContextMenuComponent implements OnInit {
             ? innerHeight - contextMenu.offsetHeight
             : event.clientY,
       };
-
+      console.log(this.mouseLocation);
       this.isOwnMessage = ownMessage;
       this.messageId = messageId;
     }

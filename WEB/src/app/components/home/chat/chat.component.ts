@@ -1,5 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { Component, HostListener, Input, OnInit } from '@angular/core';
+import {
+  AfterViewChecked,
+  Component,
+  ElementRef,
+  HostListener,
+  Input,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { PassUserService } from '../../../services/frontend/pass-user.service';
 import { User } from '../../../models/main/user.model';
@@ -25,7 +33,9 @@ import { SignalrService } from '../../../services/backend/signalr.service';
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.scss',
 })
-export class ChatComponent implements OnInit {
+export class ChatComponent implements OnInit, AfterViewChecked {
+  @ViewChild('main') chatContainer!: ElementRef;
+
   currentUser: User | null = null;
   friend: User | null = null;
   messages: Message[] = [];
@@ -42,7 +52,7 @@ export class ChatComponent implements OnInit {
     private signalrService: SignalrService
   ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.form = this.fb.group({
       send: [''],
     });
@@ -55,7 +65,6 @@ export class ChatComponent implements OnInit {
     this.messageService.messages$.subscribe((messages) => {
       this.messages = messages!;
     });
-
     //message service messages subscriptions
     this.messageService.removedMessages$.subscribe((messageId) => {
       if (this.messages) {
@@ -74,10 +83,21 @@ export class ChatComponent implements OnInit {
         }
       }
     });
+    this.ScrollBottom();
+  }
+
+  ngAfterViewChecked(): void {
+    this.ScrollBottom();
   }
 
   get send() {
     return this.form.get('send');
+  }
+
+  ScrollBottom(): void {
+    (this.chatContainer.nativeElement as HTMLDivElement).scrollTop = (
+      this.chatContainer.nativeElement as HTMLDivElement
+    ).scrollHeight;
   }
 
   @HostListener('keydown', ['$event']) ListenForSubmit(event: KeyboardEvent) {
@@ -108,6 +128,7 @@ export class ChatComponent implements OnInit {
   }
   OnSubmit(event?: KeyboardEvent) {
     if ((!event || event.key == 'Enter') && this.isSending == false) {
+      this.send?.disable();
       if (this.send?.value) {
         this.isSending = true;
         let body: string = (this.send.value as string).trim();
@@ -118,7 +139,6 @@ export class ChatComponent implements OnInit {
         };
         this.messageService.SendMessage(model).subscribe((message) => {
           this.signalrService.SendMessage(message);
-          this.messages.push(message);
           this.form.reset();
           this.isSending = false;
         });

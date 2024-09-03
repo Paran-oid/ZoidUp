@@ -10,7 +10,7 @@ import { BehaviorSubject, Subject } from 'rxjs';
 import { NotificationService } from '../frontend/notification.service';
 import { ActivatedRoute } from '@angular/router';
 import { Connection } from '../../models/main/connection.model';
-import { CreateMessageDto } from '../../models/main/message.model';
+import { CreateMessageDto, Message } from '../../models/main/message.model';
 import { MessageService } from './message.service';
 
 @Injectable({
@@ -21,6 +21,8 @@ export class SignalrService {
   private signalrSession = new Subject();
   public signalrSession$ = this.signalrSession.asObservable();
   private connection: Connection | null = null;
+
+  public messages: Message[] | null = [];
 
   constructor(
     private notificationService: NotificationService,
@@ -38,6 +40,9 @@ export class SignalrService {
       this.signalrSession.next({ type: HubConnectionState.Connected });
 
       //listeners
+      this.messageService.messages$.subscribe((messages) => {
+        this.messages = messages;
+      });
       this.ReauthenticateListener();
       this.AuthenticateListener();
       this.ConnectionListener();
@@ -62,9 +67,7 @@ export class SignalrService {
   SendMessage(message: CreateMessageDto) {
     this.hubConnection
       .invoke('SendMessage', message)
-      .then((message) => {
-        this.messageService.messages.next(message);
-      })
+      .then(() => {})
       .catch((err) => console.error(err));
   }
 
@@ -86,8 +89,9 @@ export class SignalrService {
   }
 
   SendMessageListener() {
-    this.hubConnection.on('SendMessageSuccess', (response) => {
-      console.log(response);
+    this.hubConnection.on('SendMessageSuccess', (message) => {
+      this.messages?.push(message);
+      this.messageService.messages.next(this.messages);
     });
     this.hubConnection.on('SendMessageFailure', (response) => {
       console.log(response);

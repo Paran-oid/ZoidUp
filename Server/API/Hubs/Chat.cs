@@ -19,7 +19,7 @@ namespace API.Hubs
             .SingleOrDefaultAsync();
 
 
-            if(friendConn != null || userConn != null)
+            if (friendConn != null || userConn != null)
             {
 
                 await Clients.Client(userConn!.SignalId).SendMessageSuccess(message);

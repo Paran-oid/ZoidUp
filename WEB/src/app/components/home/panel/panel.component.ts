@@ -161,17 +161,18 @@ export class PanelComponent implements OnInit, OnChanges {
     let difference = Math.floor(diffTime / (1000 * 60 * 60 * 24));
     let result = Math.floor(difference).toString() + ' day(s) ago';
     if (difference == 0) {
-      result =
-        Math.floor(diffTime / (1000 * 60 * 60)).toString() + 'hour(s) ago';
+      difference = Math.floor(diffTime / (1000 * 60 * 60));
+      result = difference.toString() + ' hour(s) ago';
       if (difference == 0) {
-        const diffMinutes =
-          Math.floor(diffTime / (1000 * 60)).toString() + 'minute(s) ago';
+        difference = Math.floor(diffTime / (1000 * 60));
+        const diffMinutes = difference.toString() + ' minute(s) ago';
+
         if (difference == 0) {
           result = 'Online';
         }
       }
     }
-    const final = result != 'Online' ? 'was logged in:' + result : result;
+    const final = result != 'Online' ? 'Offline:' + result : result;
     return final;
   }
 

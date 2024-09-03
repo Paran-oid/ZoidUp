@@ -19,7 +19,7 @@
       </div>
     </div>
   </div>
-  <div class="messages">
+  <div class="messages" #main>
     <div
       class="message"
       *ngFor="let message of messages"
@@ -32,7 +32,7 @@
           display: message.senderId !== friend?.id ? 'none' : 'block'
         }"
       >
-        <img src="/User Images/AzizHmidi/ProfilePictures/profilepicture.png" />
+        <img src="User Images/profilepicture.png" />
       </div>
       <div
         class="message-body"
@@ -59,7 +59,12 @@
         (keydown)="OnSubmit($event)"
         [disabled]="isSending"
       />
-      <button type="button" class="submit-btn" (click)="OnSubmit()">
+      <button
+        type="button"
+        class="submit-btn"
+        [disabled]="isSending"
+        (click)="OnSubmit()"
+      >
         <img src="Images/Icons/send.png" class="send" />
       </button>
     </form>

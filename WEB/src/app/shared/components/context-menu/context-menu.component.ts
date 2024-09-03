@@ -25,6 +25,8 @@ export class ContextMenuComponent implements OnInit {
   clientWidth!: number;
   clientHeight!: number;
   maxWidth!: number;
+  maxHeight!: number;
+
   isOwnMessage: boolean = true;
   isShown: boolean = false;
   messageId!: number;
@@ -62,16 +64,22 @@ export class ContextMenuComponent implements OnInit {
     this.clientWidth = window.innerWidth;
     this.clientHeight = window.innerHeight;
     this.maxWidth = this.clientWidth - 150;
+
     if (this.ContextMenu) {
       let contextMenu = this.ContextMenu.nativeElement as HTMLDivElement;
+
+      contextMenu.style.visibility = 'hidden';
+      contextMenu.style.display = 'block';
+      const _ = contextMenu.offsetHeight; // Trigger reflow by reading offsetHeight
+      contextMenu.style.visibility = 'visible';
+
+      this.maxHeight = this.clientHeight - contextMenu.offsetHeight;
+
       this.mouseLocation = {
         left: event.clientX > this.maxWidth ? this.maxWidth : event.clientX,
-        top:
-          event.clientY >= innerHeight - contextMenu.offsetHeight
-            ? innerHeight - contextMenu.offsetHeight
-            : event.clientY,
+        top: event.clientY > this.maxHeight ? this.maxHeight : event.clientY,
       };
-      console.log(this.mouseLocation);
+
       this.isOwnMessage = ownMessage;
       this.messageId = messageId;
     }

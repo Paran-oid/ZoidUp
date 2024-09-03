@@ -10,6 +10,8 @@ using API.Data.Services.MessageService;
 using API.Models;
 using API.Data.Services.FriendshipService;
 using API.Utilities.AutoMapper;
+using API.Data.Services.UserService;
+using API.Data.Services.HubService;
 
 namespace API
 {
@@ -53,6 +55,8 @@ namespace API
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IMessageService, MessageService>();
             services.AddScoped<IFriendshipService, FriendshipService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IHubService, HubService>();
             services.AddScoped<Hash>();
             services.AddScoped<TokenAuth>();
         }

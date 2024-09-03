@@ -10,14 +10,11 @@ namespace API.Hubs
     {
         public async Task SendMessage(Message message)
         {
-            var userConn = await _context.Connections
-                .Where(c => c.UserId == message.SenderId)
-                .SingleOrDefaultAsync();
+            var userConnections = await _hubService.GetUserConnections(message.SenderId);
+            var friendConnections = await _hubService.GetUserConnections(message.ReceiverId);
 
-            var friendConn = await _context.Connections
-                .Where(c => c.UserId == message.ReceiverId)
-            .SingleOrDefaultAsync();
-
+            var userConn = userConnections.FirstOrDefault();
+            var friendConn = friendConnections.FirstOrDefault();
 
             if (friendConn != null || userConn != null)
             {

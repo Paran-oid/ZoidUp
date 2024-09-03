@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import {
+  ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
@@ -23,6 +24,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { NotificationService } from '../../../services/frontend/notification.service';
 import { SpinnerService } from '../../../services/frontend/spinner.service';
 import { MessageService } from '../../../services/backend/message.service';
+import { FormatLoginDate } from '../../../shared/functions/FormatLoginDate.function';
 
 @Component({
   selector: 'app-panel',
@@ -46,9 +48,11 @@ export class PanelComponent implements OnInit, OnChanges {
   receivedFriendRequests: User[] = [];
   filteredItems: User[] = this.friends;
 
+  FormatLoginDate = FormatLoginDate;
   @ViewChild('dropdown') dropdown!: ElementRef;
   searchForm: FormGroup = new FormGroup({});
   constructor(
+    private cdr: ChangeDetectorRef,
     private fb: FormBuilder,
     public authService: AuthService,
     public spinnerService: SpinnerService,
@@ -121,8 +125,6 @@ export class PanelComponent implements OnInit, OnChanges {
     }
   }
 
-  LoadNotifications() {}
-
   GoBack() {
     this.filteredItems = this.friends;
     this.findFriendsMode = false;
@@ -136,7 +138,7 @@ export class PanelComponent implements OnInit, OnChanges {
         friend.username.toLowerCase().includes(search)
       );
     } else {
-      return;
+      this.filteredItems = this.friends;
     }
   }
 
@@ -151,29 +153,6 @@ export class PanelComponent implements OnInit, OnChanges {
       this.messageService.LoadMessages(this.currentUser?.id!, id).subscribe();
     }
     this.cookieService.delete('first_time');
-  }
-
-  ReturnHours(time: string) {
-    const today: any = new Date();
-    const previousDate: any = new Date(time);
-    const diffTime = Math.abs(today - previousDate);
-
-    let difference = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-    let result = Math.floor(difference).toString() + ' day(s) ago';
-    if (difference == 0) {
-      difference = Math.floor(diffTime / (1000 * 60 * 60));
-      result = difference.toString() + ' hour(s) ago';
-      if (difference == 0) {
-        difference = Math.floor(diffTime / (1000 * 60));
-        const diffMinutes = difference.toString() + ' minute(s) ago';
-
-        if (difference == 0) {
-          result = 'Online';
-        }
-      }
-    }
-    const final = result != 'Online' ? 'Offline:' + result : result;
-    return final;
   }
 
   SendRequestRecommended(receiverId: number, event: Event) {

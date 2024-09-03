@@ -1,10 +1,4 @@
-import {
-  Component,
-  Input,
-  OnChanges,
-  OnInit,
-  SimpleChanges,
-} from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { RequestService } from '../../../services/backend/request.service';
 import { RequestUserDTO, User } from '../../../models/main/user.model';
 import { CommonModule } from '@angular/common';

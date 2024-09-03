@@ -78,8 +78,6 @@ export class ChatComponent implements OnInit, AfterViewChecked {
         const item = this.messages.find((m) => m.id == messageId);
         if (item) {
           this.EditMessage(item);
-        } else {
-          this.notificationService.Warning("couldn't find the message");
         }
       }
     });
@@ -95,9 +93,11 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   }
 
   ScrollBottom(): void {
-    (this.chatContainer.nativeElement as HTMLDivElement).scrollTop = (
-      this.chatContainer.nativeElement as HTMLDivElement
-    ).scrollHeight;
+    if (this.chatContainer) {
+      (this.chatContainer.nativeElement as HTMLDivElement).scrollTop = (
+        this.chatContainer.nativeElement as HTMLDivElement
+      ).scrollHeight;
+    }
   }
 
   @HostListener('keydown', ['$event']) ListenForSubmit(event: KeyboardEvent) {

@@ -12,6 +12,10 @@ export class PassUserService {
   hiddenAboutValue = true;
   hiddenAbout = new BehaviorSubject<boolean>(true);
   hiddenAbout$ = this.hiddenAbout.asObservable();
+
+  passState = new BehaviorSubject<string>('');
+  passState$ = this.passState.asObservable();
+
   constructor() {}
 
   ToggleAbout() {

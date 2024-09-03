@@ -5,47 +5,44 @@ using Microsoft.EntityFrameworkCore;
 using API.Models;
 using API.Data.Services.MessageService;
 using AutoMapper;
+using API.Data.Services.UserService;
+using API.Data.Services.HubService;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace API.Hubs
 {
     public partial class AppHub : Hub<IChatClient>
     {
-        private readonly AppDbContext _context;
-        private readonly IMessageService _messageService;
-        private readonly IMapper _mapper;
+        private readonly IUserService _userService;
+        private readonly IHubService _hubService;
 
 
-        public AppHub(AppDbContext context, IMessageService messageService, IMapper mapper)
+        public AppHub(AppDbContext context, IMessageService messageService, IMapper mapper, IHubService hubService, IUserService userService)
         {
-            _context = context;
-            _messageService = messageService;
-            _mapper = mapper;
+            _hubService = hubService;
+            _userService = userService;
         }
 
         public override async Task OnConnectedAsync()
         {
-            await Clients.All.Connected(Context.ConnectionId);
             //verify if user exists on the db, if not there is a problem
         }
 
         public async Task Authenticate(int userId)
         {
-            var user = await _context.Users
-                .Where(u => u.Id == userId)
-                .SingleOrDefaultAsync();
+            var user = await _userService.GetUser(userId);
 
             if (user != null)
             {
                 user.LoggedOn = DateTime.UtcNow;
-                Connection conn = new Connection
+                Models.Connection conn = new Models.Connection
                 {
                     SignalId = Context.ConnectionId,
                     UserId = userId,
                     Time = DateTime.UtcNow
                 };
-                _context.Connections.Add(conn);
-                await _context.SaveChangesAsync();
 
+                await _hubService.CreateConnection(conn);
                 await Clients.Caller.AuthSuccess($"you're signed in now as {user.Username}");
             }
             else
@@ -54,28 +51,22 @@ namespace API.Hubs
             }
         }
 
-        public async Task Reauthenticate(int UserId)
+        public async Task Reauthenticate(int userId)
         {
-            var user = await _context.Users
-                .Where(u => u.Id == UserId)
-                .SingleOrDefaultAsync();
+            var user = await _userService.GetUser(userId);
             if (user != null)
             {
-                var oldConnections = await _context.Connections.Where(c => c.UserId == user.Id && c.SignalId != Context.ConnectionId).ToListAsync();
-                _context.RemoveRange(oldConnections);
-
+                await RemoveConnections();
                 user.LoggedOn = DateTime.UtcNow;
-                Connection connection = new Connection
+                Models.Connection conn = new Models.Connection
                 {
-                    UserId = UserId,
+                    UserId = userId,
                     SignalId = Context.ConnectionId,
                     Time = DateTime.UtcNow
                 };
 
-                _context.Connections.Add(connection);
-                await _context.SaveChangesAsync();
-
-                await Clients.Caller.ReauthSuccess(connection);
+                await _hubService.CreateConnection(conn);
+                await Clients.Caller.ReauthSuccess(conn);
             }
             else
             {
@@ -84,14 +75,29 @@ namespace API.Hubs
         }
         public async override Task OnDisconnectedAsync(Exception? exception)
         {
-            await Clients.All.Disconnected(Context.ConnectionId);
-            var user = await _context.Connections.Where(c => c.SignalId == Context.ConnectionId).FirstOrDefaultAsync();
-            var connections = await _context.Connections.Where(c => c.SignalId == Context.ConnectionId || c.UserId == user.Id).ToListAsync();
-            foreach(var connection in connections)
+            await RemoveConnections(allConnections: true);
+
+        }
+
+        public async Task RemoveConnections(bool allConnections = false)
+        {
+            var userId = _hubService.GetConnection(Context.ConnectionId).Result.UserId;
+            var user = _userService.GetUser(userId);
+            if (user == null)
             {
-                _context.Remove(connection);
+                return;
             }
-            await _context.SaveChangesAsync();
+
+            if (allConnections)
+            {
+                var connections = await _hubService.GetConnections(Context.ConnectionId, userId, true);
+                await _hubService.RemoveConnections(connections);
+            }
+            else
+            {
+                var oldConnections = await _hubService.GetConnections(Context.ConnectionId, userId, false);
+                await _hubService.RemoveConnections(oldConnections);
+            }
         }
 
     }
